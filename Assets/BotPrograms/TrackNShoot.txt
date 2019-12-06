@@ -1,0 +1,20 @@
+Sync: 0
+Async: 1
+
+Near: 0
+Far: 1
+
+TRN_Left: 0
+TRN_Right: 1
+
+TAR R0 Near
+
+TrackNShoot:
+HED R1 R0
+TRN TRN_Left R1 Async
+HED R1 R0
+ABS R1 R1
+BGT TrackNShoot R1 10
+SHT
+SLP 20
+BEQ TrackNShoot R0 R0

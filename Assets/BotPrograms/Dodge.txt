@@ -1,0 +1,38 @@
+Inf: 1000000000
+
+Sync: 0
+Async: 1
+
+TAR_Near: 0
+TAR_Far: 1
+
+DRV_Forward: 0
+DRV_Backward: 1
+DRV_Left: 2
+DRV_Right: 3
+
+TRN_Left: 0
+TRN_Right: 1
+
+SCN_Projectiles: 0
+SCN_Obstacles: 1
+
+TAR R0 TAR_Near
+
+TrackNDodge:
+; Face opponent
+HED R1 R0
+TRN TRN_Left R1 Async
+
+; If bullet within range
+SCN R1 SCN_Projectiles 0 5 90
+BEQ NotInRange R1 0
+
+; Go left
+DRV DRV_Left Inf Async
+BEQ TrackNDodge R0 R0
+
+; Else halt
+NotInRange:
+DRV DRV_Left 0 Async
+BEQ TrackNDodge R0 R0
