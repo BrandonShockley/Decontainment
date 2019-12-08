@@ -1,13 +1,27 @@
+; TODO: Make some of these integrated?
+
+Inf: 1000000000
+
 Sync: 0
 Async: 1
 
-Near: 0
-Far: 1
+TAR_Near: 0
+TAR_Far: 1
+
+DRV_Forward: 0
+DRV_Backward: 1
+DRV_Left: 2
+DRV_Right: 3
 
 TRN_Left: 0
 TRN_Right: 1
 
-TAR R0 Near
+SCN_Projectiles: 0
+SCN_Obstacles: 1
+SCN_Allies: 2
+SCN_Enemies: 3
+
+TAR R0 TAR_Near
 
 TrackNShoot:
 HED R1 R0
@@ -15,6 +29,7 @@ TRN TRN_Left R1 Async
 HED R1 R0
 ABS R1 R1
 BGT TrackNShoot R1 10
-SHT
+;SHT
+DRV DRV_Forward Inf Async
 SLP 20
 BEQ TrackNShoot R0 R0

@@ -51,12 +51,18 @@ namespace Bot
             List<Collider2D> results = new List<Collider2D>();
             ContactFilter2D filter = new ContactFilter2D();
             filter.useLayerMask = true;
+            filter.useTriggers = true;
 
             filter.layerMask = LayerMask.GetMask(targetLayerMap[target]);
             int numResults = pc.OverlapCollider(filter, results);
 
             if (target == Target.ALLIES || target == Target.ENEMIES) {
                 // TODO: Extra filtering for bot allegiance
+                foreach (Collider2D result in results) {
+                    if (result.transform == transform.parent) {
+                        --numResults;
+                    }
+                }
             }
 
             return numResults;
