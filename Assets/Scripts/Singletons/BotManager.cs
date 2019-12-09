@@ -2,7 +2,7 @@ using Bot;
 using System.Collections.Generic;
 using UnityEngine;
 
-class BotManager : Singleton<BotManager>
+class BotManager : PersistentSingleton<BotManager>
 {
     public enum DistanceType
     {
