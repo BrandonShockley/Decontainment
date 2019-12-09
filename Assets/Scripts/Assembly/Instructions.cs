@@ -90,7 +90,7 @@ namespace Asm
 
             {OpCode.DRV, 3},
             {OpCode.TRN, 3},
-            {OpCode.SHT, 0},
+            {OpCode.SHT, 1},
             {OpCode.SLP, 1},
         };
         /// OpCode to immediate value argument validity array map

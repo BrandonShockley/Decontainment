@@ -27,7 +27,7 @@ HED R1 R0
 TRN TRN_Left R1 Async
 
 ; If bullet within range
-SCN R1 SCN_Enemies 0 5 90
+SCN R1 SCN_Projectiles 0 5 90
 BEQ NotInRange R1 0
 
 ; Go left

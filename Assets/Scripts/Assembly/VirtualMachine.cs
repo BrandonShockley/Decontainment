@@ -102,17 +102,17 @@ public class VirtualMachine
 
                 // Actions
                 case OpCode.DRV:
-                    controller.Drive((Driving.Direction)GetArgValue(i.args[0]),
+                    controller.Drive((Driver.Direction)GetArgValue(i.args[0]),
                         GetArgValue(i.args[1]),
                         GetArgValue(i.args[2]) != 0);
                     break;
                 case OpCode.TRN:
-                    controller.Turn((Turning.Direction)GetArgValue(i.args[0]),
+                    controller.Turn((Turner.Direction)GetArgValue(i.args[0]),
                         GetArgValue(i.args[1]),
                         GetArgValue(i.args[2]) != 0);
                     break;
                 case OpCode.SHT:
-                    controller.Shoot();
+                    controller.Shoot(GetArgValue(i.args[0]) == 1);
                     break;
                 case OpCode.SLP:
                     sleepTickThreshold = tickCounter + GetArgValue(i.args[0]);

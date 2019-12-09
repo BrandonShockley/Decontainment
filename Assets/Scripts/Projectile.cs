@@ -3,9 +3,9 @@ using UnityEngine;
 
 public abstract class Projectile : MonoBehaviour
 {
-    public Controller shooter;
+    public Shooter shooter;
 
-    public static void CreateProjectile(Controller shooter, GameObject prefab, Vector2 position, Vector2 look)
+    public static void CreateProjectile(Shooter shooter, GameObject prefab, Vector2 position, Vector2 look)
     {
         GameObject go = Instantiate(prefab, position, Quaternion.identity);
         Projectile proj = go.GetComponent<Projectile>();

@@ -11,6 +11,9 @@ GameObject:
   - component: {fileID: 3528470376585942941}
   - component: {fileID: 3528470376585942940}
   - component: {fileID: 3528470376585942943}
+  - component: {fileID: 5491903226993273825}
+  - component: {fileID: 3292094439366990565}
+  - component: {fileID: 5963678336845588416}
   - component: {fileID: 3942664367601112698}
   - component: {fileID: 7664877444064244165}
   - component: {fileID: 7595162700242697401}
@@ -98,13 +101,54 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbf6cc87087728f4d930cff5c970ff2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5
-  turnSpeed: 120
   code: {fileID: 0}
   clockInterval: 0.02
+--- !u!114 &5491903226993273825
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3528470376585942942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8721b8eb36b5e5e4785d9fdac9fcbabd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 3
+  remainingDistance: 0
+  direction: 0
+--- !u!114 &3292094439366990565
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3528470376585942942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bcde968f30f7e4a459517916a3b83557, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 90
+  remainingDegrees: 0
+  direction: 0
+--- !u!114 &5963678336845588416
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3528470376585942942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4b5dfe619508da4f809c1c55283f236, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cooldown: 1
   projectilePrefab: {fileID: 5202299059419044755, guid: 27e0a792cb0a06b4f966045d1ffd499e,
     type: 3}
-  projectileClip: {fileID: 8300000, guid: ad47c1249e426c844af34b69d3aba624, type: 3}
+  projectileSound: {fileID: 8300000, guid: ad47c1249e426c844af34b69d3aba624, type: 3}
 --- !u!114 &3942664367601112698
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -260,7 +304,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7671476661706181031}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a3a3f8e5592e3cf4184b299d1f58b5cb, type: 3}
+  m_Script: {fileID: 11500000, guid: 62e804ea6633ca1449f4f81c5405f956, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   idealDegreesPerPoint: 10

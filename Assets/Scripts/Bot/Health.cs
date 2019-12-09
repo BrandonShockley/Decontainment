@@ -26,7 +26,6 @@ namespace Bot
         /// Invulnerability timer
         private float iTimer;
 
-        private Collider2D hitbox;
         private GameObject healthBarGO;
         private SoundModulator sm;
         private SpriteRenderer sr;
@@ -53,7 +52,6 @@ namespace Bot
 
         void Awake()
         {
-            hitbox = GetComponent<Collider2D>();
             sm = GetComponent<SoundModulator>();
             sr = GetComponent<SpriteRenderer>();
 
@@ -99,7 +97,7 @@ namespace Bot
 
         private IEnumerator InvulnerableRoutine()
         {
-            hitbox.enabled = false;
+            vulnerable = false;
             iTimer = invulnerabilityDuration;
             while (iTimer > 0)
             {
@@ -107,7 +105,7 @@ namespace Bot
                 yield return new WaitForSeconds(flashInterval);
             }
             sr.enabled = true;
-            hitbox.enabled = true;
+            vulnerable = true;
         }
     }
 }

@@ -24,12 +24,26 @@ SCN_Enemies: 3
 TAR R0 TAR_Near
 
 TrackNShoot:
+; Turn to face enemy
 HED R1 R0
 TRN TRN_Left R1 Async
+
+; If within 10 degrees
 HED R1 R0
 ABS R1 R1
 BGT TrackNShoot R1 10
-;SHT
+
+; If not within range
+SCN R1 SCN_Enemies 0 3 10
+BGT Shoot R1 0
+
+; Drive
 DRV DRV_Forward Inf Async
-SLP 20
+BEQ TrackNShoot R0 R0
+
+; Else stop and shoot
+Shoot:
+DRV     ; Halt
+SHT Async
+;SLP 20
 BEQ TrackNShoot R0 R0

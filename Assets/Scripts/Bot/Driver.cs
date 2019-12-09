@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Bot
 {
-    public class Driving : BaseAction
+    public class Driver : MonoBehaviour
     {
         public enum Direction
         {
@@ -13,25 +13,31 @@ namespace Bot
             RIGHT,
         }
 
-        public Direction direction;
+        public Action onComplete;
+
+        public float speed = 1;
         public float remainingDistance;
+        public Direction direction;
 
-        public Driving(Controller controller) : base(controller) {}
+        void Awake()
+        {
+            GetComponent<Health>().OnDisable += HandleDisabled;
+        }
 
-        override public void Update()
+        void Update()
         {
             if (remainingDistance > 0 || remainingDistance < 0) {
                 int sign = Math.Sign(remainingDistance);
-                float maxDeltaDistance = Time.deltaTime * c.moveSpeed;
+                float maxDeltaDistance = Time.deltaTime * speed;
 
                 bool willArrive = remainingDistance * sign <= maxDeltaDistance;
                 float deltaDistance = willArrive ? remainingDistance : maxDeltaDistance * sign;
 
-                Vector3 directionVector = direction == Direction.FORWARD ? c.transform.right
-                    : direction == Direction.BACKWARD ? -c.transform.right
-                    : direction == Direction.LEFT ? c.transform.up
-                    : -c.transform.up;
-                c.transform.position += directionVector * deltaDistance;
+                Vector3 directionVector = direction == Direction.FORWARD ? transform.right
+                    : direction == Direction.BACKWARD ? -transform.right
+                    : direction == Direction.LEFT ? transform.up
+                    : -transform.up;
+                transform.position += directionVector * deltaDistance;
                 remainingDistance -= deltaDistance;
 
                 if (willArrive) {
@@ -42,6 +48,11 @@ namespace Bot
                 onComplete?.Invoke();
                 onComplete = null;
             }
+        }
+
+        private void HandleDisabled()
+        {
+            enabled = false;
         }
     }
 }

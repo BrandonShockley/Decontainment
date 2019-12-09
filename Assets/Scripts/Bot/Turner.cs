@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Bot
 {
-    public class Turning : BaseAction
+    public class Turner : MonoBehaviour
     {
         public enum Direction
         {
@@ -11,22 +11,28 @@ namespace Bot
             RIGHT,
         }
 
-        public Direction direction;
+        public Action onComplete;
+
+        public float speed = 45;
         public float remainingDegrees;
+        public Direction direction;
 
-        public Turning(Controller controller) : base(controller) {}
+        void Awake()
+        {
+            GetComponent<Health>().OnDisable += HandleDisabled;
+        }
 
-        override public void Update()
+        void Update()
         {
             if (remainingDegrees > 0 || remainingDegrees < 0) {
                 int sign = Math.Sign(remainingDegrees);
-                float maxDeltaDegrees = Time.deltaTime * c.turnSpeed;
+                float maxDeltaDegrees = Time.deltaTime * speed;
 
                 bool willArrive = remainingDegrees * sign <= maxDeltaDegrees;
                 float deltaDegrees = willArrive ? remainingDegrees : maxDeltaDegrees * sign;
 
                 float directionVector = direction == Direction.LEFT ? 1 : -1;
-                c.transform.Rotate(0, 0, deltaDegrees * directionVector);
+                transform.Rotate(0, 0, deltaDegrees * directionVector);
                 remainingDegrees -= deltaDegrees;
 
                 if (willArrive) {
@@ -37,6 +43,11 @@ namespace Bot
                 onComplete?.Invoke();
                 onComplete = null;
             }
+        }
+
+        private void HandleDisabled()
+        {
+            enabled = false;
         }
     }
 }
