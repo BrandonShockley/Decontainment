@@ -17,11 +17,14 @@ public class Pulse : Projectile
         col = GetComponent<Collider2D>();
         lr = GetComponent<LineRenderer>();
         rb = GetComponent<Rigidbody2D>();
+    }
 
+    void OnEnable()
+    {
         col.enabled = false;
     }
 
-    void Start()
+    public override void Init()
     {
         rb.velocity = transform.right * speed;
         col.enabled = true;
@@ -31,7 +34,7 @@ public class Pulse : Projectile
     {
         if (c.gameObject != shooter.gameObject && c.TryGetComponent<Health>(out Health health)) {
             health.TakeDamage(1);
-            Destroy(gameObject);
+            Pools.Instance.Free(gameObject);
         }
     }
 }
