@@ -30,8 +30,8 @@ namespace Asm
                         if (instruction != null) {
                             // Check that register arguments are assigned
                             for (int argNum = 0; argNum < instruction.args.Length; ++argNum) {
-                                bool regRequired = !InstructionMaps.opArgValidImmMap[instruction.opCode][argNum];
-                                if (regRequired && !instruction.args[argNum].isReg) {
+                                ArgumentMeta argMeta = InstructionMaps.opArgMetaMap[instruction.opCode][argNum];
+                                if (argMeta.regOnly && !instruction.args[argNum].isReg) {
                                     Debug.LogError("Register number not provided for argument " + argNum
                                         + " for operation " + instruction.opCode.ToString()
                                         + " on line " + lineCount);
@@ -73,19 +73,29 @@ namespace Asm
                             }
 
                             bool isReg = word[0] == 'R';
-                            bool immediateValid = InstructionMaps.opArgValidImmMap[opCode][argCount];
+                            ArgumentMeta argMeta = InstructionMaps.opArgMetaMap[opCode][argCount];
                             if (isReg) {
                                 word = word.Substring(1, word.Length - 1);
-                            } else if (!immediateValid) {
+                            } else if (argMeta.regOnly) {
                                 Debug.LogError("Invalid use of immediate value as argument " + argCount
                                     + " for operation " + opCode.ToString() + " on line " + lineCount);
                             }
 
                             bool valid = int.TryParse(word, out int argVal);
                             if (!valid) {
-                                Debug.LogError("Invalid argument " + argCount + " for operation " + opCode.ToString()
-                                    + " on line " + lineCount);
-                                return null;
+                                // Could be a built-in macro
+                                int macroValue = -1;
+                                if (argMeta.macros != null) {
+                                    macroValue = Array.FindIndex<string>(argMeta.macros, s => s == word);
+                                }
+
+                                if (macroValue != -1) {
+                                    argVal = macroValue;
+                                } else {
+                                    Debug.LogError("Invalid argument " + argCount + " for operation " + opCode.ToString()
+                                        + " on line " + lineCount);
+                                    return null;
+                                }
                             } else if (isReg && (argVal < 0 || argVal >= VirtualMachine.NUM_REGS)) {
                                 Debug.LogError("Invalid register number " + argVal + " for operation " + opCode.ToString()
                                      + " on line " + lineCount + ". Max register number is " + (VirtualMachine.NUM_REGS - 1));

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Asm
 {
@@ -56,6 +57,23 @@ namespace Asm
         }
     }
 
+    public struct ArgumentMeta
+    {
+        public static readonly ArgumentMeta OPEN = new ArgumentMeta(false, null);
+        public static readonly ArgumentMeta REG_ONLY = new ArgumentMeta(true, null);
+        public static readonly ArgumentMeta SYNC_MACROS = new ArgumentMeta(false, new string[]{ "Sync", "Async" });
+
+        public bool regOnly;
+        /// Array of built-in macros
+        /// Only valid if regOnly == false
+        public string[] macros;
+        public ArgumentMeta(bool regOnly, string[] macros)
+        {
+            this.regOnly = regOnly;
+            this.macros = macros;
+        }
+    }
+
     public class Instruction
     {
         public OpCode opCode;
@@ -70,8 +88,6 @@ namespace Asm
 
     public static class InstructionMaps
     {
-        /// OpCode string name to OpCode value map
-        public static Dictionary<string, OpCode> nameOpMap = new Dictionary<string, OpCode>();
 
         /// OpCode to argument number map
         public static Dictionary<OpCode, int> opArgNumMap = new Dictionary<OpCode, int>()
@@ -102,20 +118,33 @@ namespace Asm
             {OpCode.SLP, 1},
         };
 
-        /// OpCode to immediate value argument validity array map
-        public static Dictionary<OpCode, bool[]> opArgValidImmMap = new Dictionary<OpCode, bool[]>()
+        /// OpCode to argument metadata array map
+        public static Dictionary<OpCode, ArgumentMeta[]> opArgMetaMap = new Dictionary<OpCode, ArgumentMeta[]>()
         {
-            {OpCode.SET, new bool[]{ false, true }},
-            {OpCode.ADD, new bool[]{ false, true, true }},
-            {OpCode.SUB, new bool[]{ false, true, true }},
-            {OpCode.MUL, new bool[]{ false, true, true }},
-            {OpCode.DIV, new bool[]{ false, true, true }},
-            {OpCode.MOD, new bool[]{ false, true, true }},
-            {OpCode.ABS, new bool[]{ false, true }},
+            {OpCode.SET, new ArgumentMeta[]{ ArgumentMeta.REG_ONLY, ArgumentMeta.OPEN }},
+            {OpCode.ADD, new ArgumentMeta[]{ ArgumentMeta.REG_ONLY, ArgumentMeta.OPEN, ArgumentMeta.OPEN }},
+            {OpCode.SUB, new ArgumentMeta[]{ ArgumentMeta.REG_ONLY, ArgumentMeta.OPEN, ArgumentMeta.OPEN }},
+            {OpCode.MUL, new ArgumentMeta[]{ ArgumentMeta.REG_ONLY, ArgumentMeta.OPEN, ArgumentMeta.OPEN }},
+            {OpCode.DIV, new ArgumentMeta[]{ ArgumentMeta.REG_ONLY, ArgumentMeta.OPEN, ArgumentMeta.OPEN }},
+            {OpCode.MOD, new ArgumentMeta[]{ ArgumentMeta.REG_ONLY, ArgumentMeta.OPEN, ArgumentMeta.OPEN }},
+            {OpCode.ABS, new ArgumentMeta[]{ ArgumentMeta.REG_ONLY, ArgumentMeta.OPEN }},
 
-            {OpCode.TAR, new bool[]{ false, true }},
-            {OpCode.HED, new bool[]{ false, true }},
-            {OpCode.SCN, new bool[]{ false, true, true, true, true }},
+            {OpCode.TAR, new ArgumentMeta[]{ ArgumentMeta.REG_ONLY,
+                new ArgumentMeta(false, new string[]{ "Nearest", "Farthest" }) }},
+            {OpCode.HED, new ArgumentMeta[]{ ArgumentMeta.REG_ONLY, ArgumentMeta.OPEN }},
+            {OpCode.SCN, new ArgumentMeta[]{ ArgumentMeta.REG_ONLY,
+                new ArgumentMeta(false, new string[]{ "Projectiles", "Obstacles", "Allies", "Enemies" }),
+                ArgumentMeta.OPEN, ArgumentMeta.OPEN, ArgumentMeta.OPEN }},
+
+            {OpCode.DRV, new ArgumentMeta[]{
+                new ArgumentMeta(false, new string[]{ "Forward", "Backward", "Left", "Right"}),
+                ArgumentMeta.OPEN, ArgumentMeta.SYNC_MACROS }},
+            {OpCode.TRN, new ArgumentMeta[]{
+                new ArgumentMeta(false, new string[]{ "Left", "Right" }),
+                ArgumentMeta.OPEN, ArgumentMeta.SYNC_MACROS }},
+            {OpCode.SHT, new ArgumentMeta[]{ ArgumentMeta.SYNC_MACROS }},
+            {OpCode.SLP, new ArgumentMeta[]{ ArgumentMeta.OPEN }},
+
         };
 
         /// OpCode to OpCategory map
@@ -147,6 +176,9 @@ namespace Asm
             {OpCode.SLP, OpCategory.ACTION},
         };
 
+        /// OpCode string name to OpCode value map
+        public static Dictionary<string, OpCode> nameOpMap = new Dictionary<string, OpCode>();
+
         static InstructionMaps()
         {
             for (int i = 0; i < (int)OpCode._SIZE; ++i) {
@@ -155,15 +187,24 @@ namespace Asm
                 nameOpMap.Add(opCode.ToString(), opCode);
 
                 // Init any leftover entries in opArgValidImmMap
-                // Defaults to all valid
-                if (!opArgValidImmMap.ContainsKey(opCode)) {
-                    bool[] validArgs = new bool[opArgNumMap[opCode]];
-                    for (int b = 0; b < validArgs.Length; ++b) {
-                        validArgs[b] = true;
+                // Defaults to immediate allowed with no defined macros
+                if (!opArgMetaMap.ContainsKey(opCode)) {
+                    ArgumentMeta[] argMetas = new ArgumentMeta[opArgNumMap[opCode]];
+                    for (int b = 0; b < argMetas.Length; ++b) {
+                        argMetas[b] = ArgumentMeta.OPEN;
                     }
-                    opArgValidImmMap.Add(opCode, validArgs);
+                    opArgMetaMap.Add(opCode, argMetas);
                 }
+
+                // Validate opArgMetaMap is filled out
+                int numArgs = opArgNumMap[opCode];
+                Debug.Assert(opArgMetaMap[opCode].Length == numArgs);
             }
+
+            // Validate sizes of maps
+            Debug.Assert(opArgNumMap.Count == (int)OpCode._SIZE);
+            Debug.Assert(opArgMetaMap.Count == (int)OpCode._SIZE);
+            Debug.Assert(opCategoryMap.Count == (int)OpCode._SIZE);
         }
     }
 }
