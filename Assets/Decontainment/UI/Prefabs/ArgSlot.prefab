@@ -62,7 +62,7 @@ GameObject:
   - component: {fileID: 3892481773246294657}
   - component: {fileID: 57394884683567635}
   m_Layer: 5
-  m_Name: Imm_RegSlot
+  m_Name: ArgSlot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -110,7 +110,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0.9056604, g: 0.9056604, b: 0.9056604, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -162,7 +162,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 3892481773246294657}
   m_TextViewport: {fileID: 7431927284336989178}
   m_TextComponent: {fileID: 8528619823040115840}
@@ -211,7 +211,7 @@ MonoBehaviour:
   m_Text: 0
   m_CaretBlinkRate: 0
   m_CaretWidth: 1
-  m_ReadOnly: 0
+  m_ReadOnly: 1
   m_RichText: 1
   m_GlobalFontAsset: {fileID: 11400000, guid: 18191b0a675e2f743a26492009ec6912, type: 2}
   m_OnFocusSelectAll: 1

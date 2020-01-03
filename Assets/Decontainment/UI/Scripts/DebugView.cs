@@ -13,7 +13,7 @@ public class DebugView : MonoBehaviour
     [SerializeField]
     private Transform codeBlockList = null;
     [SerializeField]
-    private RectTransform instructionPointerRT = null;
+    private Transform instructionPointerTransform = null;
 
     private Canvas canvas;
 
@@ -37,12 +37,8 @@ public class DebugView : MonoBehaviour
 
     private void HandleTick()
     {
-        RectTransform codeBlockRT = codeBlockList.GetChild(controller.vm.pc).GetComponent<RectTransform>();
-        Vector3[] corners = new Vector3[4];
-        codeBlockRT.GetWorldCorners(corners);
-        Vector2 oldPos = instructionPointerRT.position;
-        Vector2 newPos = new Vector2(oldPos.x, (corners[0].y + corners[1].y) / 2);
-        instructionPointerRT.position = newPos;
-        // Debug.Log(codeBlockRect.position.y);
+        // Update instruction pointer
+        Transform codeBlockTransform = codeBlockList.GetChild(controller.vm.pc);
+        instructionPointerTransform.SetParent(codeBlockTransform, false);
     }
 }
