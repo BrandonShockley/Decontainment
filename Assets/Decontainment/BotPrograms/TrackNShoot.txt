@@ -19,7 +19,7 @@ ABS R1 R1
 BGT TrackNShoot R1 10
 
 ; If not within range
-SCN R1 Enemies 0 3 10
+SCN R1 Enemies 0 10 3
 BGT Shoot R1 0
 
 ; Drive

@@ -24,11 +24,11 @@ namespace Bot
             GetComponent<Health>().OnDisable += HandleDisabled;
         }
 
-        void Update()
+        void FixedUpdate()
         {
             if (remainingDistance > 0 || remainingDistance < 0) {
                 int sign = Math.Sign(remainingDistance);
-                float maxDeltaDistance = Time.deltaTime * speed;
+                float maxDeltaDistance = Time.fixedDeltaTime * speed;
 
                 bool willArrive = remainingDistance * sign <= maxDeltaDistance;
                 float deltaDistance = willArrive ? remainingDistance : maxDeltaDistance * sign;

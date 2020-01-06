@@ -25,9 +25,9 @@ namespace Bot
             sm = GetComponent<SoundModulator>();
         }
 
-        void Update()
+        void FixedUpdate()
         {
-            cooldownTimer -= Time.deltaTime;
+            cooldownTimer -= Time.fixedDeltaTime;
             if (cooldownTimer <= 0 && shotRequested.Value) {
                 cooldownTimer = cooldown;
 

@@ -30,8 +30,8 @@ namespace Asm
                         if (instruction != null) {
                             // Check that register arguments are assigned
                             for (int argNum = 0; argNum < instruction.args.Length; ++argNum) {
-                                ArgumentMeta argMeta = InstructionMaps.opArgMetaMap[instruction.opCode][argNum];
-                                if (argMeta.regOnly && !instruction.args[argNum].isReg) {
+                                ArgumentSpec argSpec = InstructionMaps.opArgSpecMap[instruction.opCode][argNum];
+                                if (argSpec.regOnly && !instruction.args[argNum].isReg) {
                                     Debug.LogError("Register number not provided for argument " + argNum
                                         + " for operation " + instruction.opCode.ToString()
                                         + " on line " + lineCount);
@@ -73,10 +73,10 @@ namespace Asm
                             }
 
                             bool isReg = word[0] == 'R';
-                            ArgumentMeta argMeta = InstructionMaps.opArgMetaMap[opCode][argCount];
+                            ArgumentSpec argSpec = InstructionMaps.opArgSpecMap[opCode][argCount];
                             if (isReg) {
                                 word = word.Substring(1, word.Length - 1);
-                            } else if (argMeta.regOnly) {
+                            } else if (argSpec.regOnly) {
                                 Debug.LogError("Invalid use of immediate value as argument " + argCount
                                     + " for operation " + opCode.ToString() + " on line " + lineCount);
                             }
@@ -85,8 +85,8 @@ namespace Asm
                             if (!valid) {
                                 // Could be a built-in macro
                                 int macroValue = -1;
-                                if (argMeta.macros != null) {
-                                    macroValue = Array.FindIndex<string>(argMeta.macros, s => s == word);
+                                if (argSpec.macros != null) {
+                                    macroValue = Array.FindIndex<string>(argSpec.macros, s => s == word);
                                 }
 
                                 if (macroValue != -1) {

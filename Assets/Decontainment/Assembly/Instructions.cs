@@ -17,12 +17,13 @@ namespace Asm
     {
         // Control flow
         NOP,
-        BEQ,
-        BNE,
-        BLT,
-        BLE,
-        BGT,
-        BGE,
+        BUN, // Branch unconditionally
+        BEQ, // Branch if equal to
+        BNE, // Branch if not equal to
+        BLT, // Branch if less than
+        BLE, // Branch if less than or equal to
+        BGT, // Branch if greater than
+        BGE, // Branch if greater than or equal to
 
         // Data manipulation
         SET,
@@ -57,18 +58,51 @@ namespace Asm
         }
     }
 
-    public struct ArgumentMeta
+    public struct ArgumentSpec
     {
-        public static readonly ArgumentMeta OPEN = new ArgumentMeta(false, null);
-        public static readonly ArgumentMeta REG_ONLY = new ArgumentMeta(true, null);
-        public static readonly ArgumentMeta SYNC_MACROS = new ArgumentMeta(false, new string[]{ "Sync", "Async" });
+        public static readonly ArgumentSpec BRANCH_LABEL = ArgumentSpec.MakeOpen("Branch To");
+        public static readonly ArgumentSpec DEST_REG = ArgumentSpec.MakeRegOnly("Result");
+        public static readonly ArgumentSpec VAL = ArgumentSpec.MakeOpen("Value");
+        public static readonly ArgumentSpec VAL1 = ArgumentSpec.MakeOpen("Value 1");
+        public static readonly ArgumentSpec VAL2 = ArgumentSpec.MakeOpen("Value 2");
+        public static readonly ArgumentSpec SYNC_MACROS = new ArgumentSpec("Concurrent", false, new string[]{ "Sync", "Async" });
 
+        public static readonly ArgumentSpec[] TWO_INPUT_CONTROL_FLOW_SPECS = new ArgumentSpec[]
+        {
+            ArgumentSpec.BRANCH_LABEL,
+            ArgumentSpec.VAL1,
+            ArgumentSpec.VAL2
+        };
+        public static readonly ArgumentSpec[] ONE_INPUT_DATA_MANIP_SPECS = new ArgumentSpec[]
+        {
+            DEST_REG,
+            ArgumentSpec.VAL
+        };
+        public static readonly ArgumentSpec[] TWO_INPUT_DATA_MANIP_SPECS = new ArgumentSpec[]
+        {
+            DEST_REG,
+            ArgumentSpec.VAL1,
+            ArgumentSpec.VAL2
+        };
+
+        /// Open arguments can take registers or immediate values
+        public static ArgumentSpec MakeOpen(string name)
+        {
+            return new ArgumentSpec(name, false, null);
+        }
+        public static ArgumentSpec MakeRegOnly(string name)
+        {
+            return new ArgumentSpec(name, true, null);
+        }
+
+        public string name;
         public bool regOnly;
         /// Array of built-in macros
         /// Only valid if regOnly == false
         public string[] macros;
-        public ArgumentMeta(bool regOnly, string[] macros)
+        public ArgumentSpec(string name, bool regOnly, string[] macros)
         {
+            this.name = name;
             this.regOnly = regOnly;
             this.macros = macros;
         }
@@ -93,6 +127,7 @@ namespace Asm
         public static Dictionary<OpCode, int> opArgNumMap = new Dictionary<OpCode, int>()
         {
             {OpCode.NOP, 0},
+            {OpCode.BUN, 1},
             {OpCode.BEQ, 3},
             {OpCode.BNE, 3},
             {OpCode.BLT, 3},
@@ -118,32 +153,65 @@ namespace Asm
             {OpCode.SLP, 1},
         };
 
-        /// OpCode to argument metadata array map
-        public static Dictionary<OpCode, ArgumentMeta[]> opArgMetaMap = new Dictionary<OpCode, ArgumentMeta[]>()
+
+        /// OpCode to argument specification array map
+        public static Dictionary<OpCode, ArgumentSpec[]> opArgSpecMap = new Dictionary<OpCode, ArgumentSpec[]>()
         {
-            {OpCode.SET, new ArgumentMeta[]{ ArgumentMeta.REG_ONLY, ArgumentMeta.OPEN }},
-            {OpCode.ADD, new ArgumentMeta[]{ ArgumentMeta.REG_ONLY, ArgumentMeta.OPEN, ArgumentMeta.OPEN }},
-            {OpCode.SUB, new ArgumentMeta[]{ ArgumentMeta.REG_ONLY, ArgumentMeta.OPEN, ArgumentMeta.OPEN }},
-            {OpCode.MUL, new ArgumentMeta[]{ ArgumentMeta.REG_ONLY, ArgumentMeta.OPEN, ArgumentMeta.OPEN }},
-            {OpCode.DIV, new ArgumentMeta[]{ ArgumentMeta.REG_ONLY, ArgumentMeta.OPEN, ArgumentMeta.OPEN }},
-            {OpCode.MOD, new ArgumentMeta[]{ ArgumentMeta.REG_ONLY, ArgumentMeta.OPEN, ArgumentMeta.OPEN }},
-            {OpCode.ABS, new ArgumentMeta[]{ ArgumentMeta.REG_ONLY, ArgumentMeta.OPEN }},
+            {OpCode.NOP, new ArgumentSpec[0]},
+            {OpCode.BUN, new ArgumentSpec[]{ ArgumentSpec.BRANCH_LABEL }},
+            {OpCode.BEQ, ArgumentSpec.TWO_INPUT_CONTROL_FLOW_SPECS},
+            {OpCode.BNE, ArgumentSpec.TWO_INPUT_CONTROL_FLOW_SPECS},
+            {OpCode.BLT, ArgumentSpec.TWO_INPUT_CONTROL_FLOW_SPECS},
+            {OpCode.BLE, ArgumentSpec.TWO_INPUT_CONTROL_FLOW_SPECS},
+            {OpCode.BGT, ArgumentSpec.TWO_INPUT_CONTROL_FLOW_SPECS},
+            {OpCode.BGE, ArgumentSpec.TWO_INPUT_CONTROL_FLOW_SPECS},
 
-            {OpCode.TAR, new ArgumentMeta[]{ ArgumentMeta.REG_ONLY,
-                new ArgumentMeta(false, new string[]{ "Nearest", "Farthest" }) }},
-            {OpCode.HED, new ArgumentMeta[]{ ArgumentMeta.REG_ONLY, ArgumentMeta.OPEN }},
-            {OpCode.SCN, new ArgumentMeta[]{ ArgumentMeta.REG_ONLY,
-                new ArgumentMeta(false, new string[]{ "Projectiles", "Obstacles", "Allies", "Enemies" }),
-                ArgumentMeta.OPEN, ArgumentMeta.OPEN, ArgumentMeta.OPEN }},
+            {OpCode.SET, ArgumentSpec.ONE_INPUT_DATA_MANIP_SPECS},
+            {OpCode.ADD, ArgumentSpec.TWO_INPUT_DATA_MANIP_SPECS},
+            {OpCode.SUB, ArgumentSpec.TWO_INPUT_DATA_MANIP_SPECS},
+            {OpCode.MUL, ArgumentSpec.TWO_INPUT_DATA_MANIP_SPECS},
+            {OpCode.DIV, ArgumentSpec.TWO_INPUT_DATA_MANIP_SPECS},
+            {OpCode.MOD, ArgumentSpec.TWO_INPUT_DATA_MANIP_SPECS},
+            {OpCode.ABS, ArgumentSpec.ONE_INPUT_DATA_MANIP_SPECS},
 
-            {OpCode.DRV, new ArgumentMeta[]{
-                new ArgumentMeta(false, new string[]{ "Forward", "Backward", "Left", "Right"}),
-                ArgumentMeta.OPEN, ArgumentMeta.SYNC_MACROS }},
-            {OpCode.TRN, new ArgumentMeta[]{
-                new ArgumentMeta(false, new string[]{ "Left", "Right" }),
-                ArgumentMeta.OPEN, ArgumentMeta.SYNC_MACROS }},
-            {OpCode.SHT, new ArgumentMeta[]{ ArgumentMeta.SYNC_MACROS }},
-            {OpCode.SLP, new ArgumentMeta[]{ ArgumentMeta.OPEN }},
+            {OpCode.TAR, new ArgumentSpec[]
+                {
+                    ArgumentSpec.DEST_REG,
+                    new ArgumentSpec("Filter", false, new string[]{ "Nearest", "Farthest" })
+                }
+            },
+            {OpCode.HED, new ArgumentSpec[]
+                {
+                    ArgumentSpec.DEST_REG,
+                    ArgumentSpec.MakeOpen("Target Index")
+                }
+            },
+            {OpCode.SCN, new ArgumentSpec[]
+                {
+                    ArgumentSpec.DEST_REG,
+                    new ArgumentSpec("Type", false, new string[]{ "Projectiles", "Obstacles", "Allies", "Enemies" }),
+                    ArgumentSpec.MakeOpen("Radial Offset"),
+                    ArgumentSpec.MakeOpen("Radial Width"),
+                    ArgumentSpec.MakeOpen("Distance")
+                }
+            },
+
+            {OpCode.DRV, new ArgumentSpec[]
+                {
+                    new ArgumentSpec("Direction", false, new string[]{ "Forward", "Backward", "Left", "Right"}),
+                    ArgumentSpec.MakeOpen("Distance"),
+                    ArgumentSpec.SYNC_MACROS
+                }
+            },
+            {OpCode.TRN, new ArgumentSpec[]
+                {
+                    new ArgumentSpec("Direction", false, new string[]{ "Left", "Right" }),
+                    ArgumentSpec.MakeOpen("Degrees"),
+                    ArgumentSpec.SYNC_MACROS
+                }
+            },
+            {OpCode.SHT, new ArgumentSpec[]{ ArgumentSpec.SYNC_MACROS }},
+            {OpCode.SLP, new ArgumentSpec[]{ ArgumentSpec.MakeOpen("Duration") }},
 
         };
 
@@ -151,6 +219,7 @@ namespace Asm
         public static Dictionary<OpCode, OpCategory> opCategoryMap = new Dictionary<OpCode, OpCategory>()
         {
             {OpCode.NOP, OpCategory.CONTROL_FLOW},
+            {OpCode.BUN, OpCategory.CONTROL_FLOW},
             {OpCode.BEQ, OpCategory.CONTROL_FLOW},
             {OpCode.BNE, OpCategory.CONTROL_FLOW},
             {OpCode.BLT, OpCategory.CONTROL_FLOW},
@@ -186,24 +255,14 @@ namespace Asm
                 // Init nameOpMap
                 nameOpMap.Add(opCode.ToString(), opCode);
 
-                // Init any leftover entries in opArgValidImmMap
-                // Defaults to immediate allowed with no defined macros
-                if (!opArgMetaMap.ContainsKey(opCode)) {
-                    ArgumentMeta[] argMetas = new ArgumentMeta[opArgNumMap[opCode]];
-                    for (int b = 0; b < argMetas.Length; ++b) {
-                        argMetas[b] = ArgumentMeta.OPEN;
-                    }
-                    opArgMetaMap.Add(opCode, argMetas);
-                }
-
-                // Validate opArgMetaMap is filled out
+                // Validate opArgSpecMap is filled out
                 int numArgs = opArgNumMap[opCode];
-                Debug.Assert(opArgMetaMap[opCode].Length == numArgs);
+                Debug.Assert(opArgSpecMap[opCode].Length == numArgs);
             }
 
             // Validate sizes of maps
             Debug.Assert(opArgNumMap.Count == (int)OpCode._SIZE);
-            Debug.Assert(opArgMetaMap.Count == (int)OpCode._SIZE);
+            Debug.Assert(opArgSpecMap.Count == (int)OpCode._SIZE);
             Debug.Assert(opCategoryMap.Count == (int)OpCode._SIZE);
         }
     }

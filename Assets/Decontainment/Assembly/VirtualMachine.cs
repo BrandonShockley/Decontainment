@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class VirtualMachine
 {
-    public static readonly int NUM_REGS = 10;
+    public static readonly int NUM_REGS = 5;
 
     public int pc;
     public Instruction[] instructions;
@@ -38,6 +38,9 @@ public class VirtualMachine
             {
                 // Control flow
                 case OpCode.NOP:
+                    break;
+                case OpCode.BUN:
+                    newPC = GetArgValue(i.args[0]);
                     break;
                 case OpCode.BEQ:
                     if (GetArgValue(i.args[1]) == GetArgValue(i.args[2])) {

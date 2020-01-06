@@ -53,7 +53,7 @@ namespace Bot
         void FixedUpdate()
         {
             if (!opRunning) {
-                clockTimer -= Time.deltaTime;
+                clockTimer -= Time.fixedDeltaTime;
                 if (clockTimer <= 0) {
                     clockTimer = clockInterval;
                     vm.Tick();

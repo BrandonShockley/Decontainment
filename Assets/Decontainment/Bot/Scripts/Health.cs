@@ -65,9 +65,9 @@ namespace Bot
             Amount = maxAmount;
         }
 
-        void Update()
+        void FixedUpdate()
         {
-            iTimer -= Time.deltaTime;
+            iTimer -= Time.fixedDeltaTime;
         }
 
         void OnDestroy()

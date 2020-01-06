@@ -22,11 +22,11 @@ namespace Bot
             GetComponent<Health>().OnDisable += HandleDisabled;
         }
 
-        void Update()
+        void FixedUpdate()
         {
             if (remainingDegrees > 0 || remainingDegrees < 0) {
                 int sign = Math.Sign(remainingDegrees);
-                float maxDeltaDegrees = Time.deltaTime * speed;
+                float maxDeltaDegrees = Time.fixedDeltaTime * speed;
 
                 bool willArrive = remainingDegrees * sign <= maxDeltaDegrees;
                 float deltaDegrees = willArrive ? remainingDegrees : maxDeltaDegrees * sign;
