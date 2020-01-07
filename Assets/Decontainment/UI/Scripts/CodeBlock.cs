@@ -54,8 +54,6 @@ public class CodeBlock : MonoBehaviour
                     // Dropdown field
                     field = Instantiate(dropdownFieldPrefab, Vector3.zero, Quaternion.identity, contentParent);
 
-                    field.GetComponent<Image>().color = bg.color;
-
                     // Configure dropdown options
                     TMP_Dropdown dropdown = field.GetComponent<TMP_Dropdown>();
                     TextMeshProUGUI tm = field.GetComponentInChildren<TextMeshProUGUI>();

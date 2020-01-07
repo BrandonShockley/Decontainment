@@ -1,6 +1,7 @@
 using Asm;
 using Bot;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class VirtualMachine
@@ -9,6 +10,7 @@ public class VirtualMachine
 
     public int pc;
     public Instruction[] instructions;
+    public List<Tuple<string, int>> labelList;
 
     private int tickCounter;
     private int sleepTickThreshold;
@@ -21,9 +23,10 @@ public class VirtualMachine
         this.controller = controller;
     }
 
-    public void LoadProgram(Instruction[] instructions)
+    public void LoadProgram(Instruction[] instructions, List<Tuple<string, int>> labelList = null)
     {
         this.instructions = instructions;
+        this.labelList = labelList;
     }
 
     public event Action OnTick;

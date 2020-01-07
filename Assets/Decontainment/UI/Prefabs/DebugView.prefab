@@ -543,6 +543,8 @@ MonoBehaviour:
   controller: {fileID: 0}
   codeBlockPrefab: {fileID: 3789034097312089564, guid: 53c82f9e4126a41429b71f2ef510a6c3,
     type: 3}
+  labelBlockPrefab: {fileID: 8057640436278862642, guid: 185623e904d102d41808bec8befd39dc,
+    type: 3}
   codeBlockList: {fileID: 7775971502459746165}
   instructionPointerTransform: {fileID: 8866921111344339734}
 --- !u!114 &8647798933790731392

@@ -7,6 +7,8 @@ namespace Bot
 {
     public class Controller : MonoBehaviour
     {
+        private readonly Instruction[] FALLBACK_INSTRUCTIONS = new Instruction[] { new Instruction(OpCode.NOP) };
+
         public VirtualMachine vm;
 
         [SerializeField]
@@ -32,18 +34,19 @@ namespace Bot
             health = GetComponent<Health>();
 
             vm = new VirtualMachine(this);
-            Instruction[] instructions = null;
+
             if (code == null) {
-                Debug.LogWarning("No code provided. Using default program.");
-                instructions = new Instruction[] { new Instruction(OpCode.NOP) };
+                Debug.LogWarning("No code provided. Using fallback program.");
+                vm.LoadProgram(FALLBACK_INSTRUCTIONS);
             } else {
-                instructions = Assembler.Assemble(code.text);
-                if (instructions == null) {
-                    Debug.LogWarning("Assembly failed. Using default program.");
-                    instructions = new Instruction[] { new Instruction(OpCode.NOP) };
+                Assembler.Output output = Assembler.Assemble(code.text);
+                if (output == null) {
+                    Debug.LogWarning("Assembly failed. Using fallback program.");
+                    vm.LoadProgram(FALLBACK_INSTRUCTIONS);
+                } else {
+                    vm.LoadProgram(output.instructions, output.labelList);
                 }
             }
-            vm.LoadProgram(instructions);
 
             health.OnDisable += HandleDisabled;
 

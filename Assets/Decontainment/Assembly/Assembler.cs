@@ -5,11 +5,20 @@ using UnityEngine;
 
 namespace Asm
 {
+
+
     public static class Assembler
     {
-        public static Instruction[] Assemble(string codeString)
+        public class Output
         {
-            codeString = Preprocess(codeString);
+            public Instruction[] instructions;
+            public List<Tuple<string, int>> labelList = new List<Tuple<string, int>>();
+        }
+
+        public static Output Assemble(string codeString)
+        {
+            Output output = new Output();
+            codeString = Preprocess(codeString, output.labelList);
 
             List<Instruction> instructions = new List<Instruction>();
             char[] endChars = {' ', '\n', '\r'};
@@ -110,14 +119,16 @@ namespace Asm
             if (instruction != null) {
                 instructions.Add(instruction);
             }
-            return instructions.ToArray();
+            output.instructions = instructions.ToArray();
+            return output;
         }
 
         // NOTE: Possible optimization could be to use the macro map in the assembler
         // and just sub the values into the instruction initialization
 
         /// Finds macros and replaces them with their defined values
-        private static string Preprocess(string codeString)
+        /// labelList if non-null is filled with each branch label
+        public static string Preprocess(string codeString, List<Tuple<string, int>> labelList = null)
         {
             Dictionary<string, string> macros = new Dictionary<string, string>();
 
@@ -153,10 +164,15 @@ namespace Asm
                         if (word.Length > 1 && word.IndexOf(':') == word.Length - 1) {
                             // We've found a macro defenition
                             int macroEnd = codeString.IndexOfAnyToEnd(lineEndChars, i);
+                            bool isBranchLabel = macroEnd == wordEnd;
                             string macroName = word.Substring(0, word.Length - 1);
-                            string macroDef = (macroEnd == wordEnd
-                                ? pseudoPC.ToString() // Branch label
-                                : codeString.Substring(wordEnd, macroEnd - wordEnd)); // Text macro
+                            string macroDef = (isBranchLabel
+                                ? pseudoPC.ToString()
+                                : codeString.Substring(wordEnd, macroEnd - wordEnd));
+
+                            if (isBranchLabel && labelList != null) {
+                                labelList.Add(new Tuple<string, int>(macroName, pseudoPC));
+                            }
 
                             macros.Add(macroName, macroDef);
                             // Delete definition
