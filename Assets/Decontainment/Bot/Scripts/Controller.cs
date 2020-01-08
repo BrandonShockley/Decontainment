@@ -7,7 +7,7 @@ namespace Bot
 {
     public class Controller : MonoBehaviour
     {
-        private readonly Instruction[] FALLBACK_INSTRUCTIONS = new Instruction[] { new Instruction(OpCode.NOP) };
+        private readonly Program FALLBACK_PROGRAM = new Program(){ instructions = new Instruction[] { new Instruction(OpCode.NOP) }};
 
         public VirtualMachine vm;
 
@@ -37,14 +37,14 @@ namespace Bot
 
             if (code == null) {
                 Debug.LogWarning("No code provided. Using fallback program.");
-                vm.LoadProgram(FALLBACK_INSTRUCTIONS);
+                vm.LoadProgram(FALLBACK_PROGRAM);
             } else {
-                Assembler.Output output = Assembler.Assemble(code.text);
-                if (output == null) {
+                Program program = Assembler.Assemble(code.text);
+                if (program == null) {
                     Debug.LogWarning("Assembly failed. Using fallback program.");
-                    vm.LoadProgram(FALLBACK_INSTRUCTIONS);
+                    vm.LoadProgram(FALLBACK_PROGRAM);
                 } else {
-                    vm.LoadProgram(output.instructions, output.labelList);
+                    vm.LoadProgram(program);
                 }
             }
 

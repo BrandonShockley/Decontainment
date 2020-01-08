@@ -5,20 +5,23 @@ using UnityEngine;
 
 namespace Asm
 {
-
-
     public static class Assembler
     {
-        public class Output
+        public static Program Assemble(string codeString)
         {
-            public Instruction[] instructions;
-            public List<Tuple<string, int>> labelList = new List<Tuple<string, int>>();
-        }
+            Program output = new Program();
+            if (!Preprocess(ref codeString, out output.branchLabelList, out output.constLabelList)) {
+                return null;
+            }
 
-        public static Output Assemble(string codeString)
-        {
-            Output output = new Output();
-            codeString = Preprocess(codeString, output.labelList);
+            // Build label maps
+            output.labelMap = new Dictionary<string, Label>();
+            foreach (var label in output.branchLabelList) {
+                output.labelMap.Add(label.name, label);
+            }
+            foreach (var label in output.constLabelList) {
+                output.labelMap.Add(label.name, label);
+            }
 
             List<Instruction> instructions = new List<Instruction>();
             char[] endChars = {' ', '\n', '\r'};
@@ -26,7 +29,6 @@ namespace Asm
 
             Instruction instruction = null;
             int argCount = 0;
-
 
             for (int i = 0; i < codeString.Length;) {
                 char c = codeString[i];
@@ -40,7 +42,7 @@ namespace Asm
                             // Check that register arguments are assigned
                             for (int argNum = 0; argNum < instruction.args.Length; ++argNum) {
                                 ArgumentSpec argSpec = InstructionMaps.opArgSpecMap[instruction.opCode][argNum];
-                                if (argSpec.regOnly && !instruction.args[argNum].isReg) {
+                                if (argSpec.regOnly && instruction.args[argNum].type != Argument.Type.REGISTER) {
                                     Debug.LogError("Register number not provided for argument " + argNum
                                         + " for operation " + instruction.opCode.ToString()
                                         + " on line " + lineCount);
@@ -81,35 +83,58 @@ namespace Asm
                                 return null;
                             }
 
-                            bool isReg = word[0] == 'R';
                             ArgumentSpec argSpec = InstructionMaps.opArgSpecMap[opCode][argCount];
-                            if (isReg) {
-                                word = word.Substring(1, word.Length - 1);
-                            } else if (argSpec.regOnly) {
-                                Debug.LogError("Invalid use of immediate value as argument " + argCount
-                                    + " for operation " + opCode.ToString() + " on line " + lineCount);
+                            // Check for preset value
+                            int presetValue = -1;
+                            if (argSpec.presets != null) {
+                                presetValue = Array.FindIndex<string>(argSpec.presets, s => s == word);
                             }
 
-                            bool valid = int.TryParse(word, out int argVal);
-                            if (!valid) {
-                                // Could be a built-in macro
-                                int macroValue = -1;
-                                if (argSpec.macros != null) {
-                                    macroValue = Array.FindIndex<string>(argSpec.macros, s => s == word);
-                                }
+                            Argument.Type type;
+                            if (word[0] == '%') {
+                                type = Argument.Type.REGISTER;
+                                word = word.Substring(1, word.Length - 1);
+                            } else if (word[0] == '$') {
+                                type = Argument.Type.IMMEDIATE;
+                                word = word.Substring(1, word.Length - 1);
+                            } else if (presetValue != -1) {
+                                type = Argument.Type.IMMEDIATE;
+                            } else {
+                                type = Argument.Type.LABEL;
+                            }
 
-                                if (macroValue != -1) {
-                                    argVal = macroValue;
+                            if (argSpec.regOnly && type != Argument.Type.REGISTER) {
+                                Debug.LogError("Argument " + argCount
+                                    + " for operation " + opCode.ToString() + " on line " + lineCount
+                                    + " must be a register value");
+                                return null;
+                            }
+
+                            if (type == Argument.Type.IMMEDIATE || type == Argument.Type.REGISTER) {
+                                int argVal;
+                                if (presetValue != -1) {
+                                    argVal = presetValue;
+                                } else if (int.TryParse(word, out argVal)) {
+                                    if (type == Argument.Type.REGISTER && (argVal < 0 || argVal >= VirtualMachine.NUM_REGS)) {
+                                        Debug.LogError("Invalid register number " + argVal + " for operation " + opCode.ToString()
+                                            + " on line " + lineCount + ". Max register number is " + (VirtualMachine.NUM_REGS - 1));
+                                        return null;
+                                    }
                                 } else {
                                     Debug.LogError("Invalid argument " + argCount + " for operation " + opCode.ToString()
                                         + " on line " + lineCount);
                                     return null;
                                 }
-                            } else if (isReg && (argVal < 0 || argVal >= VirtualMachine.NUM_REGS)) {
-                                Debug.LogError("Invalid register number " + argVal + " for operation " + opCode.ToString()
-                                     + " on line " + lineCount + ". Max register number is " + (VirtualMachine.NUM_REGS - 1));
+
+                                instruction.args[argCount++] = new Argument(type, argVal);
+                            } else {
+                                bool validLabel = output.labelMap.ContainsKey(word);
+                                if (!validLabel) {
+                                    Debug.LogError("Invalid label " + word + " on line " + lineCount);
+                                    return null;
+                                }
+                                instruction.args[argCount++] = new Argument(type, output.labelMap[word]);
                             }
-                            instruction.args[argCount++] = new Argument(argVal, isReg);
                         }
                         i = wordEnd;
                         break;
@@ -123,18 +148,17 @@ namespace Asm
             return output;
         }
 
-        // NOTE: Possible optimization could be to use the macro map in the assembler
-        // and just sub the values into the instruction initialization
-
-        /// Finds macros and replaces them with their defined values
-        /// labelList if non-null is filled with each branch label
-        public static string Preprocess(string codeString, List<Tuple<string, int>> labelList = null)
+        /// Discovers and removes label definitions
+        /// Returns map of discovered labels
+        public static bool Preprocess(ref string codeString, out List<Label> branchLabels, out List<Label> constLabels)
         {
-            Dictionary<string, string> macros = new Dictionary<string, string>();
+            branchLabels = new List<Label>();
+            constLabels = new List<Label>();
 
             char[] wordEndChars = {' ', '\n', '\r'};
             char[] lineEndChars = {';', '\n', '\r'};
 
+            int lineCount = 1;
             int pseudoPC = 0;
             bool parsingInstruction = false;
 
@@ -152,6 +176,7 @@ namespace Asm
                             parsingInstruction = false;
                         }
                         i = codeString.IndexOfToEnd('\n', i) + 1; // Go to next line
+                        ++lineCount;
                         break;
                     case ' ':
                         ++i;
@@ -170,11 +195,16 @@ namespace Asm
                                 ? pseudoPC.ToString()
                                 : codeString.Substring(wordEnd, macroEnd - wordEnd));
 
-                            if (isBranchLabel && labelList != null) {
-                                labelList.Add(new Tuple<string, int>(macroName, pseudoPC));
+                            if (!int.TryParse(macroDef, out int macroVal)) {
+                                Debug.LogError("Invalid macro definition " + macroDef + " on line " + lineCount);
+                                return false;
+                            }
+                            if (isBranchLabel) {
+                                branchLabels.Add(new Label(macroName, macroVal, Label.Type.BRANCH));
+                            } else {
+                                constLabels.Add(new Label(macroName, macroVal, Label.Type.CONST));
                             }
 
-                            macros.Add(macroName, macroDef);
                             // Delete definition
                             codeString = codeString.Substring(0, i) + codeString.Substring(macroEnd);
                         } else {
@@ -185,36 +215,7 @@ namespace Asm
                     }
                 }
             }
-
-            // Macro replacement
-            for (int i = 0; i < codeString.Length;) {
-                char c = codeString[i];
-
-                switch (c) {
-                    // Handle Windows line endings (\r\n)
-                    case '\r': goto case ';';
-                    case '\n': goto case ';';
-                    case ';':
-                        i = codeString.IndexOfToEnd('\n', i) + 1; // Go to next line
-                        break;
-                    case ' ':
-                        ++i;
-                        break;
-
-                    default: {
-                        int wordEnd = codeString.IndexOfAnyToEnd(wordEndChars, i);
-                        string word = codeString.Substring(i, wordEnd - i);
-
-                        if (macros.TryGetValue(word, out string macroDef)) {
-                            codeString = codeString.Substring(0, i) + macroDef + codeString.Substring(wordEnd);
-                        } else {
-                            i = wordEnd;
-                        }
-                        break;
-                    }
-                }
-            }
-            return codeString;
+            return true;
         }
     }
 }

@@ -8,7 +8,9 @@ using UnityEngine.UI;
 public class CodeBlock : MonoBehaviour
 {
     [SerializeField]
-    private OpCategoryColorMap OpCategoryColorMap = null;
+    private OpCategoryColorMap opCategoryColorMap = null;
+    [SerializeField]
+    private ArgTokenColorMap argTokenColorMap = null;
     [SerializeField]
     private GameObject dropdownFieldPrefab = null;
     [SerializeField]
@@ -21,7 +23,7 @@ public class CodeBlock : MonoBehaviour
     private Instruction instruction;
 
     private Image bg;
-    private TextMeshProUGUI tm;
+    private TextMeshProUGUI opTM;
     private Transform contentParent;
 
     public Instruction Instruction
@@ -31,26 +33,18 @@ public class CodeBlock : MonoBehaviour
             instruction = value;
 
             // Configure text
-            string text = instruction.opCode.ToString();
-            foreach (Argument arg in instruction.args) {
-                text += " ";
-                if (arg.isReg) {
-                    text += "R";
-                }
-                text += arg.val.ToString();
-            }
-            tm.text = text;
+            opTM.text = instruction.opCode.ToString();
 
             // Configure color
             OpCategory category = InstructionMaps.opCategoryMap[instruction.opCode];
-            bg.color = OpCategoryColorMap.map[category];
+            bg.color = opCategoryColorMap.map[category];
 
             // Configure argument fields
             ArgumentSpec[] argSpecs = InstructionMaps.opArgSpecMap[instruction.opCode];
             for (int argNum = 0; argNum < instruction.args.Length; ++argNum) {
                 GameObject field;
                 Argument arg = instruction.args[argNum];
-                if (argSpecs[argNum].regOnly || argSpecs[argNum].macros != null) {
+                if (argSpecs[argNum].regOnly || argSpecs[argNum].presets != null) {
                     // Dropdown field
                     field = Instantiate(dropdownFieldPrefab, Vector3.zero, Quaternion.identity, contentParent);
 
@@ -66,7 +60,7 @@ public class CodeBlock : MonoBehaviour
                             maxPreferredWidth = Mathf.Max(tm.GetPreferredValues(regName).x, maxPreferredWidth);
                         }
                     } else {
-                        foreach (string macroName in argSpecs[argNum].macros) {
+                        foreach (string macroName in argSpecs[argNum].presets) {
                             dropdown.options.Add(new TMP_Dropdown.OptionData(macroName));
                             maxPreferredWidth = Mathf.Max(tm.GetPreferredValues(macroName).x, maxPreferredWidth);
                         }
@@ -76,20 +70,35 @@ public class CodeBlock : MonoBehaviour
                     // Resize to fit the max preferred width
                     RectTransform dropdownRT = dropdown.GetComponent<RectTransform>();
                     RectTransform labelRT = tm.GetComponent<RectTransform>();
-                    // dropdownRT.sizeDelta = new Vector2(maxPreferredWidth - labelRT.sizeDelta.x, dropdownRT.sizeDelta.y);
+                    dropdownRT.sizeDelta = new Vector2(maxPreferredWidth - labelRT.sizeDelta.x, dropdownRT.sizeDelta.y);
                 } else {
                     // Slot field
                     field = Instantiate(slotFieldPrefab, Vector3.zero, Quaternion.identity, contentParent);
 
-                    if (arg.isReg) {
-                        // Insert register token into slot
+                    if (arg.type == Argument.Type.REGISTER || arg.type == Argument.Type.LABEL) {
+                        // Insert token into slot
                         GameObject token = Instantiate(tokenPrefab, field.transform, false);
+
+                        // Configure color
+                        // TODO: This big ternary statement is confusing
+                        ArgTokenColorMap.Type tokenType = arg.type == Argument.Type.REGISTER
+                            ? ArgTokenColorMap.Type.REGISTER
+                            : arg.label.type == Label.Type.BRANCH
+                            ? ArgTokenColorMap.Type.BRANCH_LABEL
+                            : ArgTokenColorMap.Type.CONST_LABEL;
+                        token.GetComponent<Image>().color = argTokenColorMap.map[tokenType];
+
+                        // Configure text
                         TextMeshProUGUI tm = token.GetComponentInChildren<TextMeshProUGUI>();
-                        tm.text = "R" + arg.val.ToString();
+                        if (arg.type == Argument.Type.REGISTER) {
+                            tm.text = "R" + arg.val.ToString();
+                        } else {
+                            tm.text = arg.label.name;
+                        }
 
                         // Resize to fit the preferred width
                         RectTransform rt = field.GetComponent<RectTransform>();
-                        // rt.sizeDelta = new Vector2(tm.GetPreferredValues(tm.text).x, rt.sizeDelta.y);
+                        rt.sizeDelta = new Vector2(tm.GetPreferredValues(tm.text).x, rt.sizeDelta.y);
                     } else {
                         field.GetComponent<TMP_InputField>().text = arg.val.ToString();
                     }
@@ -105,7 +114,7 @@ public class CodeBlock : MonoBehaviour
     void Awake()
     {
         bg = GetComponent<Image>();
-        tm = GetComponentInChildren<TextMeshProUGUI>();
+        opTM = GetComponentInChildren<TextMeshProUGUI>();
         contentParent = GetComponentInChildren<HorizontalLayoutGroup>().transform;
     }
 }

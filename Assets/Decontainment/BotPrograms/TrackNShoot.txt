@@ -5,30 +5,30 @@ Inf: 1000000000
 TRN_Left: 0
 TRN_Right: 1
 
-; Put the ID of the farthest enemy in R0
-TAR R0 Farthest
+; Put the ID of the farthest enemy in %0
+TAR %0 Farthest
 
 TrackNShoot:
 ; Turn to face enemy
-HED R1 R0
-TRN TRN_Left R1 Async
+HED %1 %0
+TRN TRN_Left %1 Async
 
 ; If within 10 degrees
-HED R1 R0
-ABS R1 R1
-BGT TrackNShoot R1 10
+HED %1 %0
+ABS %1 %1
+BGT TrackNShoot %1 $10
 
 ; If not within range
-SCN R1 Enemies 0 10 3
-BGT Shoot R1 0
+SCN %1 Enemies $0 $10 $3
+BGT Shoot %1 $0
 
 ; Drive
 DRV Forward Inf Async
-BEQ TrackNShoot R0 R0
+BEQ TrackNShoot %0 %0
 
 ; Else stop and shoot
 Shoot:
 DRV     ; Halt
 SHT Async
 ;SLP 20
-BEQ TrackNShoot R0 R0
+BEQ TrackNShoot %0 %0

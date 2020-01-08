@@ -306,7 +306,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8153898420effe0419540558a840da44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OpCategoryColorMap: {fileID: 11400000, guid: cd76459292c94464782d46f4b2e3597d, type: 2}
+  opCategoryColorMap: {fileID: 11400000, guid: cd76459292c94464782d46f4b2e3597d, type: 2}
+  argTokenColorMap: {fileID: 11400000, guid: 702fde817b0fc144ebd8b5c6b15e706e, type: 2}
   dropdownFieldPrefab: {fileID: 9008722315217321488, guid: 6363867cc1a301b43b7b248d32b17c07,
     type: 3}
   slotFieldPrefab: {fileID: 6760883868350057258, guid: a77b4e9e1d87f7a49a5a49074c48605f,

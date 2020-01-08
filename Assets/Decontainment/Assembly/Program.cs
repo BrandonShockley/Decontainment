@@ -26,35 +26,52 @@ namespace Asm
         BGE, // Branch if greater than or equal to
 
         // Data manipulation
-        SET,
-        ADD,
-        SUB,
-        MUL,
-        DIV,
-        MOD,
-        ABS,
+        SET, // Set
+        ADD, // Add
+        SUB, // Subtract
+        MUL, // Multiply
+        DIV, // Divide
+        MOD, // Modulo
+        ABS, // Absolute value
 
         // Sensing
-        TAR,
-        HED,
-        SCN,
+        TAR, // Target
+        HED, // Heading
+        SCN, // Scan
 
         // Actions
-        DRV,
-        TRN,
-        SHT,
-        SLP,
+        DRV, // Drive
+        TRN, // Turn
+        SHT, // Shoot
+        SLP, // Sleep
+
         _SIZE,
     }
 
     public struct Argument
     {
-        public int val;
-        public bool isReg;
-        public Argument(int val, bool isReg = false)
+        public enum Type
         {
+            IMMEDIATE,
+            REGISTER,
+            LABEL,
+        }
+
+        public Type type;
+        public int val;
+        public Label label;
+
+        public Argument(Type type, int val)
+        {
+            this.type = type;
             this.val = val;
-            this.isReg = isReg;
+            this.label = default;
+        }
+        public Argument(Type type, Label label)
+        {
+            this.type = type;
+            this.val = label.val;
+            this.label = label;
         }
     }
 
@@ -65,7 +82,7 @@ namespace Asm
         public static readonly ArgumentSpec VAL = ArgumentSpec.MakeOpen("Value");
         public static readonly ArgumentSpec VAL1 = ArgumentSpec.MakeOpen("Value 1");
         public static readonly ArgumentSpec VAL2 = ArgumentSpec.MakeOpen("Value 2");
-        public static readonly ArgumentSpec SYNC_MACROS = new ArgumentSpec("Concurrent", false, new string[]{ "Sync", "Async" });
+        public static readonly ArgumentSpec SYNC_PRESETS = new ArgumentSpec("Concurrent", false, new string[]{ "Sync", "Async" });
 
         public static readonly ArgumentSpec[] TWO_INPUT_CONTROL_FLOW_SPECS = new ArgumentSpec[]
         {
@@ -97,14 +114,28 @@ namespace Asm
 
         public string name;
         public bool regOnly;
-        /// Array of built-in macros
+        /// Array of built-in presets
         /// Only valid if regOnly == false
-        public string[] macros;
-        public ArgumentSpec(string name, bool regOnly, string[] macros)
+        public string[] presets;
+        public ArgumentSpec(string name, bool regOnly, string[] presets)
         {
             this.name = name;
             this.regOnly = regOnly;
-            this.macros = macros;
+            this.presets = presets;
+        }
+    }
+
+    public struct Label
+    {
+        public enum Type { BRANCH, CONST }
+        public string name;
+        public int val;
+        public Type type;
+        public Label(string name, int val, Type type)
+        {
+            this.name = name;
+            this.val = val;
+            this.type = type;
         }
     }
 
@@ -118,6 +149,14 @@ namespace Asm
             this.args = new Argument[InstructionMaps.opArgNumMap[opCode]];
             Array.Copy(args, this.args, Math.Min(this.args.Length, args.Length));
         }
+    }
+
+    public class Program
+    {
+        public Instruction[] instructions;
+        public Dictionary<string, Label> labelMap;
+        public List<Label> branchLabelList;
+        public List<Label> constLabelList;
     }
 
     public static class InstructionMaps
@@ -200,17 +239,17 @@ namespace Asm
                 {
                     new ArgumentSpec("Direction", false, new string[]{ "Forward", "Backward", "Left", "Right"}),
                     ArgumentSpec.MakeOpen("Distance"),
-                    ArgumentSpec.SYNC_MACROS
+                    ArgumentSpec.SYNC_PRESETS
                 }
             },
             {OpCode.TRN, new ArgumentSpec[]
                 {
                     new ArgumentSpec("Direction", false, new string[]{ "Left", "Right" }),
                     ArgumentSpec.MakeOpen("Degrees"),
-                    ArgumentSpec.SYNC_MACROS
+                    ArgumentSpec.SYNC_PRESETS
                 }
             },
-            {OpCode.SHT, new ArgumentSpec[]{ ArgumentSpec.SYNC_MACROS }},
+            {OpCode.SHT, new ArgumentSpec[]{ ArgumentSpec.SYNC_PRESETS }},
             {OpCode.SLP, new ArgumentSpec[]{ ArgumentSpec.MakeOpen("Duration") }},
 
         };

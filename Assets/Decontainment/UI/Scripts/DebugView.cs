@@ -29,19 +29,19 @@ public class DebugView : MonoBehaviour
 
     void Start()
     {
+        Program program = controller.vm.program;
+
         // Create code block for each instruction in program
-        codeBlockTransforms = new Transform[controller.vm.instructions.Length];
+        codeBlockTransforms = new Transform[program.instructions.Length];
         int lineNumber = 0;
         int nextLabelIndex = 0;
-        foreach (Instruction i in controller.vm.instructions) {
-            // Possibly create a label first
-            Tuple<string, int> nextLabel = nextLabelIndex < controller.vm.labelList.Count
-                ? controller.vm.labelList[nextLabelIndex]
-                : null;
-            if (nextLabel != null && nextLabel.Item2 == lineNumber) {
+        foreach (Instruction i in program.instructions) {
+            // Create any labels for the current line
+            while (nextLabelIndex < program.branchLabelList.Count && program.branchLabelList[nextLabelIndex].val == lineNumber) {
                 GameObject labelBlock = Instantiate(labelBlockPrefab, Vector3.zero, Quaternion.identity);
                 labelBlock.transform.SetParent(codeBlockList, false);
-                labelBlock.GetComponentInChildren<TextMeshProUGUI>().text = nextLabel.Item1;
+                string labelText = program.branchLabelList[nextLabelIndex].name + ": " + lineNumber;
+                labelBlock.GetComponentInChildren<TextMeshProUGUI>().text = labelText;
                 ++nextLabelIndex;
             }
 

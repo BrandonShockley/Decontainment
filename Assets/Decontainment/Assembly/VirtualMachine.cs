@@ -9,8 +9,7 @@ public class VirtualMachine
     public static readonly int NUM_REGS = 5;
 
     public int pc;
-    public Instruction[] instructions;
-    public List<Tuple<string, int>> labelList;
+    public Program program;
 
     private int tickCounter;
     private int sleepTickThreshold;
@@ -23,10 +22,9 @@ public class VirtualMachine
         this.controller = controller;
     }
 
-    public void LoadProgram(Instruction[] instructions, List<Tuple<string, int>> labelList = null)
+    public void LoadProgram(Program program)
     {
-        this.instructions = instructions;
-        this.labelList = labelList;
+        this.program = program;
     }
 
     public event Action OnTick;
@@ -35,8 +33,8 @@ public class VirtualMachine
     public void Tick()
     {
         if (tickCounter > sleepTickThreshold) {
-            Instruction i = instructions[pc];
-            int newPC = (pc + 1) % instructions.Length;
+            Instruction i = program.instructions[pc];
+            int newPC = (pc + 1) % program.instructions.Length;
             switch(i.opCode)
             {
                 // Control flow
@@ -141,8 +139,16 @@ public class VirtualMachine
 
     private int GetArgValue(Argument arg)
     {
-        return arg.isReg
-            ? regs[arg.val]
-            : arg.val;
+        switch (arg.type)
+        {
+            case Argument.Type.IMMEDIATE:
+                return arg.val;
+            case Argument.Type.REGISTER:
+                return regs[arg.val];
+            case Argument.Type.LABEL:
+                return arg.val;
+            default:
+                return 0;
+        }
     }
 }

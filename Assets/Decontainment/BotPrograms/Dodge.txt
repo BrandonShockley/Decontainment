@@ -19,23 +19,23 @@ SCN_Obstacles: 1
 SCN_Allies: 2
 SCN_Enemies: 3
 
-TAR R0 TAR_Near
-SET R4 10
+TAR %0 TAR_Near
+SET %4 $10
 
 TrackNDodge:
 ; Face opponent
-HED R1 R0
-TRN TRN_Left R1 Async
+HED %1 %0
+TRN TRN_Left %1 Async
 
 ; If bullet within range
-SCN R1 SCN_Projectiles 0 90 5
-BEQ NotInRange R1 0
+SCN %1 SCN_Projectiles $0 $90 $5
+BEQ NotInRange %1 $0
 
 ; Go left
 DRV DRV_Left Inf Async
-BEQ TrackNDodge R0 R0
+BEQ TrackNDodge %0 %0
 
 ; Else halt
 NotInRange:
-DRV DRV_Left 0 Async
-BEQ TrackNDodge R0 R0
+DRV DRV_Left $0 Async
+BEQ TrackNDodge %0 %0
