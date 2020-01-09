@@ -490,11 +490,11 @@ GameObject:
   m_Component:
   - component: {fileID: 8647798933790731454}
   - component: {fileID: 8647798933790731395}
-  - component: {fileID: 8647798933790731394}
   - component: {fileID: 8647798933790731392}
   - component: {fileID: 2846421678400809063}
+  - component: {fileID: 5119547876451810991}
   m_Layer: 5
-  m_Name: DebugView
+  m_Name: CodeView
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -528,25 +528,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8647798933790731455}
   m_CullTransparentMesh: 0
---- !u!114 &8647798933790731394
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8647798933790731455}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8645571f18820a547900ff4f4fee6b46, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  controller: {fileID: 0}
-  codeBlockPrefab: {fileID: 3789034097312089564, guid: 53c82f9e4126a41429b71f2ef510a6c3,
-    type: 3}
-  labelBlockPrefab: {fileID: 8057640436278862642, guid: 185623e904d102d41808bec8befd39dc,
-    type: 3}
-  codeBlockList: {fileID: 7775971502459746165}
-  instructionPointerTransform: {fileID: 8866921111344339734}
 --- !u!114 &8647798933790731392
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -588,3 +569,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ShowMaskGraphic: 1
+--- !u!114 &5119547876451810991
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8647798933790731455}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8645571f18820a547900ff4f4fee6b46, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  controller: {fileID: 0}
+  codeBlockPrefab: {fileID: 3789034097312089564, guid: 53c82f9e4126a41429b71f2ef510a6c3,
+    type: 3}
+  labelBlockPrefab: {fileID: 8057640436278862642, guid: 185623e904d102d41808bec8befd39dc,
+    type: 3}
+  codeBlockParent: {fileID: 7775971502459746165}
+  instructionPointer: {fileID: 8866921111344339734}

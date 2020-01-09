@@ -61,8 +61,9 @@ GameObject:
   - component: {fileID: 2507148026372521354}
   - component: {fileID: 3892481773246294657}
   - component: {fileID: 57394884683567635}
+  - component: {fileID: 5479632898850276553}
   m_Layer: 5
-  m_Name: ArgSlot
+  m_Name: SlotField
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -220,6 +221,21 @@ MonoBehaviour:
   m_isRichTextEditingAllowed: 0
   m_LineLimit: 0
   m_InputValidator: {fileID: 0}
+--- !u!114 &5479632898850276553
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6760883868350057258}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ffa65421758ed04a928741eff273ffc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  argTokenColorMap: {fileID: 11400000, guid: 702fde817b0fc144ebd8b5c6b15e706e, type: 2}
+  tokenPrefab: {fileID: 8435557820183652977, guid: 7dc2095edc42b104485610b661431ef0,
+    type: 3}
 --- !u!1 &8781700198214451846
 GameObject:
   m_ObjectHideFlags: 0

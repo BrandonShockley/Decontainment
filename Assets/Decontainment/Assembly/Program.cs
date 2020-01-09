@@ -48,7 +48,7 @@ namespace Asm
         _SIZE,
     }
 
-    public struct Argument
+    public class Argument
     {
         public enum Type
         {
@@ -148,6 +148,11 @@ namespace Asm
             this.opCode = opCode;
             this.args = new Argument[InstructionMaps.opArgNumMap[opCode]];
             Array.Copy(args, this.args, Math.Min(this.args.Length, args.Length));
+
+            // Fill in any unspecified args
+            for (int i = args.Length; i < this.args.Length; ++i) {
+                this.args[i] = new Argument(Argument.Type.IMMEDIATE, 0);
+            }
         }
     }
 

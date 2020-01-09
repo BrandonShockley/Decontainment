@@ -919,6 +919,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5119547876451810991, guid: 58280c18903701343bec8500cbc4bc90,
+        type: 3}
+      propertyPath: controller
+      value: 
+      objectReference: {fileID: 1141747327}
     - target: {fileID: 6430141909026233381, guid: 58280c18903701343bec8500cbc4bc90,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -1057,7 +1062,7 @@ PrefabInstance:
     - target: {fileID: 8647798933790731455, guid: 58280c18903701343bec8500cbc4bc90,
         type: 3}
       propertyPath: m_Name
-      value: DebugView
+      value: CodeView
       objectReference: {fileID: 0}
     - target: {fileID: 9009179219746138145, guid: 58280c18903701343bec8500cbc4bc90,
         type: 3}
