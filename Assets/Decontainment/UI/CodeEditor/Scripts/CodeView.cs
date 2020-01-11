@@ -21,6 +21,7 @@ namespace Editor
         private Transform instructionPointer = null;
 
         private Transform[] codeBlockTransforms;
+        private List<RectTransform> slotRTs = new List<RectTransform>();
 
         private Canvas canvas;
 
@@ -40,17 +41,15 @@ namespace Editor
             foreach (Instruction instruction in program.instructions) {
                 // Create any labels for the current line
                 while (nextLabelIndex < program.branchLabelList.Count && program.branchLabelList[nextLabelIndex].val == lineNumber) {
-                    GameObject labelBlock = Instantiate(labelBlockPrefab, Vector3.zero, Quaternion.identity);
-                    labelBlock.transform.SetParent(codeBlockParent, false);
+                    GameObject labelBlock = Instantiate(labelBlockPrefab, codeBlockParent, false);
                     string labelText = program.branchLabelList[nextLabelIndex].name + ": " + lineNumber;
                     labelBlock.GetComponentInChildren<TextMeshProUGUI>().text = labelText;
                     ++nextLabelIndex;
                 }
 
                 // Create code block
-                GameObject codeBlock = Instantiate(codeBlockPrefab, Vector3.zero, Quaternion.identity);
-                codeBlock.transform.SetParent(codeBlockParent, false);
-                codeBlock.GetComponent<CodeBlock>().Init(instruction);
+                GameObject codeBlock = Instantiate(codeBlockPrefab, codeBlockParent, false);
+                codeBlock.GetComponent<CodeBlock>().Init(instruction, slotRTs);
                 codeBlockTransforms[lineNumber] = codeBlock.transform;
                 ++lineNumber;
             }

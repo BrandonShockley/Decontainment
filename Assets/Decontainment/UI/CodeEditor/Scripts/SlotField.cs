@@ -1,4 +1,5 @@
 using Asm;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,6 +15,7 @@ namespace Editor
 
         private Argument arg;
         private GameObject token;
+        private List<RectTransform> slotRTs;
 
         private TMP_InputField inputField;
 
@@ -22,9 +24,11 @@ namespace Editor
             inputField = GetComponent<TMP_InputField>();
         }
 
-        public void Init(Argument arg)
+        public void Init(Argument arg, List<RectTransform> slotRTs)
         {
             this.arg = arg;
+            this.slotRTs = slotRTs;
+            slotRTs.Add(GetComponent<RectTransform>());
 
             if (arg.type == Argument.Type.IMMEDIATE) {
                 inputField.text = arg.val.ToString();
@@ -40,8 +44,10 @@ namespace Editor
             Debug.Assert(arg.type != Argument.Type.IMMEDIATE);
             Debug.Assert(token == null);
 
+            inputField.interactable = false;
             if (transferToken == null) {
                 token = Instantiate(tokenPrefab, transform, false);
+                token.GetComponent<Draggable>().Init(slotRTs);
 
                 // Configure token text
                 TextMeshProUGUI tm = token.GetComponentInChildren<TextMeshProUGUI>();
@@ -62,6 +68,8 @@ namespace Editor
                 // Resize to fit the preferred width
                 RectTransform rt = GetComponent<RectTransform>();
                 rt.sizeDelta = new Vector2(tm.GetPreferredValues(tm.text).x, rt.sizeDelta.y);
+                RectTransform tokenRT = token.GetComponent<RectTransform>();
+                tokenRT.sizeDelta = rt.sizeDelta;
             } else {
                 token = transferToken;
                 token.transform.SetParent(transform, false);
@@ -75,6 +83,7 @@ namespace Editor
             token = null;
             arg.type = Argument.Type.IMMEDIATE;
             arg.val = 0;
+            inputField.interactable = true;
             inputField.text = arg.val.ToString();
         }
     }

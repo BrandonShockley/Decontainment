@@ -13,7 +13,7 @@ using UnityEngine.UI;
 // the instruction/argument classes and make handlers for them here
 namespace Editor
 {
-    public class CodeBlock : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+    public class CodeBlock : MonoBehaviour
     {
         [SerializeField]
         private OpCategoryColorMap opCategoryColorMap = null;
@@ -35,7 +35,7 @@ namespace Editor
             contentParent = GetComponentInChildren<HorizontalLayoutGroup>().transform;
         }
 
-        public void Init(Instruction instruction)
+        public void Init(Instruction instruction, List<RectTransform> slotRTs)
         {
             // Configure text
             opCodeTM.text = instruction.opCode.ToString();
@@ -55,7 +55,7 @@ namespace Editor
                     field.GetComponent<DropdownField>().Init(argSpecs[argNum], arg);
                 } else {
                     field = Instantiate(slotFieldPrefab, Vector3.zero, Quaternion.identity, contentParent);
-                    field.GetComponent<SlotField>().Init(arg);
+                    field.GetComponent<SlotField>().Init(arg, slotRTs);
                 }
 
                 // Add header
@@ -64,19 +64,6 @@ namespace Editor
             }
         }
 
-        public void OnBeginDrag(PointerEventData eventData)
-        {
-            Debug.Log("Begin drag"  + eventData.position);
-        }
 
-        public void OnDrag(PointerEventData eventData)
-        {
-            Debug.Log("Drag " + eventData.position);
-        }
-
-        public void OnEndDrag(PointerEventData eventData)
-        {
-            Debug.Log("End drag"  + eventData.position);
-        }
     }
 }
