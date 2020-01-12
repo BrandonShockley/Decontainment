@@ -7,7 +7,7 @@ namespace Bot
 {
     public class Controller : MonoBehaviour
     {
-        private readonly Program FALLBACK_PROGRAM = new Program(){ instructions = new Instruction[] { new Instruction(OpCode.NOP) }};
+        private readonly Program FALLBACK_PROGRAM = new Program(){ instructions = new List<Instruction> { new Instruction(OpCode.NOP) }};
 
         public VirtualMachine vm;
 

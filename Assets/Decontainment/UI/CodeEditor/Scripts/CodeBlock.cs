@@ -1,5 +1,5 @@
 ﻿using Asm;
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -35,8 +35,19 @@ namespace Editor
             contentParent = GetComponentInChildren<HorizontalLayoutGroup>().transform;
         }
 
-        public void Init(Instruction instruction, List<RectTransform> slotRTs)
+        public void Init(int lineNumber, Instruction instruction, List<RectTransform> slotRTs, List<RectTransform> dividerRTs, Action<RectTransform> onDragSuccess)
         {
+            RectTransform myDivider = dividerRTs[lineNumber];
+
+            Draggable draggable = GetComponent<Draggable>();
+            draggable.Init(dividerRTs);
+            draggable.filterFunc = (RectTransform rt) => rt == myDivider;
+            draggable.onDragStart = () => myDivider.gameObject.SetActive(false);
+            draggable.onDragCancel = () => myDivider.gameObject.SetActive(true);
+            draggable.onDragEnter = (RectTransform rt) => rt.GetComponent<Image>().color = Color.white; // TODO: Make these parameters
+            draggable.onDragExit = (RectTransform rt) => rt.GetComponent<Image>().color = Color.black;
+            draggable.onDragSuccess = onDragSuccess;
+
             // Configure text
             opCodeTM.text = instruction.opCode.ToString();
 
@@ -63,7 +74,5 @@ namespace Editor
                 header.GetComponent<TextMeshProUGUI>().text = argSpecs[argNum].name;
             }
         }
-
-
     }
 }

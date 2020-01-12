@@ -34,7 +34,7 @@ public class VirtualMachine
     {
         if (tickCounter > sleepTickThreshold) {
             Instruction i = program.instructions[pc];
-            int newPC = (pc + 1) % program.instructions.Length;
+            int newPC = (pc + 1) % program.instructions.Count;
             switch(i.opCode)
             {
                 // Control flow

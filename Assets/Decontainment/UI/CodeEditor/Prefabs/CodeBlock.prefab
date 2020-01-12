@@ -230,6 +230,7 @@ GameObject:
   - component: {fileID: 2946558927213816030}
   - component: {fileID: 7863386629209381567}
   - component: {fileID: 8724200043152340285}
+  - component: {fileID: 4324987571710731080}
   - component: {fileID: 5378581104950398171}
   m_Layer: 5
   m_Name: CodeBlock
@@ -257,7 +258,7 @@ RectTransform:
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 30}
-  m_Pivot: {x: 0, y: 1}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2946558927213816030
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -284,7 +285,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 397dacec77482954a978edb3d0725cca, type: 3}
+  m_Sprite: {fileID: 0}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -307,16 +308,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   opCategoryColorMap: {fileID: 11400000, guid: cd76459292c94464782d46f4b2e3597d, type: 2}
-  argTokenColorMap: {fileID: 11400000, guid: 702fde817b0fc144ebd8b5c6b15e706e, type: 2}
   dropdownFieldPrefab: {fileID: 9008722315217321488, guid: 6363867cc1a301b43b7b248d32b17c07,
     type: 3}
   slotFieldPrefab: {fileID: 6760883868350057258, guid: a77b4e9e1d87f7a49a5a49074c48605f,
     type: 3}
-  tokenPrefab: {fileID: 8435557820183652977, guid: 7dc2095edc42b104485610b661431ef0,
-    type: 3}
   headerPrefab: {fileID: 5942781556024676504, guid: 08b5d146b8aa0694c8ebbb08c1b006bf,
     type: 3}
---- !u!114 &5378581104950398171
+--- !u!114 &4324987571710731080
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -324,6 +322,18 @@ MonoBehaviour:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3789034097312089564}
   m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f50ff563e9ff4a419007f564e451143, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5378581104950398171
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3789034097312089564}
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
   m_Name: 

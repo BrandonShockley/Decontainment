@@ -1,101 +1,152 @@
 ﻿using Extensions;
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+namespace Editor
 {
-    private bool isDragging;
-    private List<RectTransform> validParents;
-    private Transform origParent;
-    private Vector2 origAnchor;
-    private Vector2 origAnchorPos;
-
-    private Canvas canvas;
-    private RectTransform rt;
-
-    void Awake()
+    public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
-        canvas = GetComponentInParent<Canvas>();
-        rt = GetComponent<RectTransform>();
+        public Action onDragStart;
+        public Action onDragCancel;
+        // Called upon draggable overlapping a valid slot
+        public Action<RectTransform> onDragEnter;
+        // Called upon draggable unoverlapping a valid slot
+        public Action<RectTransform> onDragExit;
+        // Called upon drag release with a slot highlighted
+        public Action<RectTransform> onDragSuccess;
+        // Returns whether arg1 is included in valid slot search
+        public Func<RectTransform, bool> filterFunc;
 
-        SavePosition();
-    }
+        private bool isDragging;
+        private List<RectTransform> validSlots;
+        private RectTransform bestSlot;
+        private Transform origParent;
+        private int origIndex;
+        private Vector2 origAnchor;
+        private Vector2 origAnchorPos;
 
-    void Update()
-    {
-        if (isDragging) {
-            if (Input.GetKeyDown(KeyCode.Escape)) {
-                EndDrag();
-            }
+        private Canvas canvas;
+        private RectTransform rt;
 
-            // Check overlap with slots
-            foreach (RectTransform validParent in validParents) {
-                if (rt.RectOverlaps(validParent)) {
-                    // TODO: Change this
-                    validParent.gameObject.GetComponent<Outline>().enabled = true;
+        void Awake()
+        {
+            canvas = GetComponentInParent<Canvas>();
+            rt = GetComponent<RectTransform>();
+            SaveState();
+        }
+
+        void Update()
+        {
+            RectTransform oldBestSlot = bestSlot;
+            bestSlot = null;
+            if (isDragging) {
+                if (Input.GetKeyDown(KeyCode.Escape)) {
+                    CancelDrag();
                 } else {
-                    validParent.gameObject.GetComponent<Outline>().enabled = false;
+                    float minSqDistance = float.PositiveInfinity;
+                    foreach (RectTransform validSlot in validSlots) {
+                        // Filtering results
+                        if (filterFunc != null && filterFunc(validSlot)) {
+                            continue;
+                        }
+
+                        // Choose the closest overlapping slot
+                        if (rt.RectOverlaps(validSlot)) {
+                            float sqDistance = (validSlot.position - rt.position).sqrMagnitude;
+                            if (sqDistance < minSqDistance) {
+                                minSqDistance = sqDistance;
+                                bestSlot = validSlot;
+                            }
+                        }
+                    }
                 }
             }
+
+            if (oldBestSlot != null && oldBestSlot != bestSlot) {
+                onDragExit?.Invoke(oldBestSlot);
+            }
+            if (bestSlot != null) {
+                onDragEnter?.Invoke(bestSlot);
+            }
         }
-    }
 
-    public void Init(List<RectTransform> validParents)
-    {
-        this.validParents = validParents;
-    }
+        public void Init(List<RectTransform> validSlots)
+        {
+            this.validSlots = validSlots;
+        }
 
-    public void OnBeginDrag(PointerEventData eventData)
-    {
-        SavePosition();
-        isDragging = true;
+        public void OnBeginDrag(PointerEventData eventData)
+        {
+            SaveState();
+            isDragging = true;
 
-        Debug.Log("Begin drag"  + eventData.position);
-        transform.SetParent(canvas.transform, true);
-        transform.SetAsLastSibling();
-        rt.anchoredPosition = Vector2.zero;
-    }
+            transform.SetParent(canvas.transform, true);
+            transform.SetAsLastSibling();
+            rt.anchoredPosition = Vector2.zero;
+            onDragStart?.Invoke();
+        }
 
-    public void OnDrag(PointerEventData eventData)
-    {
-        // Follow mouse
-        Rect camRect = Camera.main.rect;
-        Vector2 normalizedViewPoint = Camera.main.ScreenToViewportPoint(eventData.position);
-        Vector2 viewPoint = new Vector2(normalizedViewPoint.x * camRect.width, normalizedViewPoint.y * camRect.height)
-            + new Vector2(camRect.xMin, camRect.yMin);
-        Debug.Log("Drag " + viewPoint);
-        Debug.Log(rt.rect);
-        rt.anchorMin = viewPoint;
-        rt.anchorMax = viewPoint;
-    }
+        public void OnDrag(PointerEventData eventData)
+        {
+            if (isDragging) {
+                // Follow mouse
+                Rect camRect = Camera.main.rect;
+                Vector2 normalizedViewPoint = Camera.main.ScreenToViewportPoint(eventData.position);
+                Vector2 viewPoint = new Vector2(normalizedViewPoint.x * camRect.width, normalizedViewPoint.y * camRect.height)
+                    + new Vector2(camRect.xMin, camRect.yMin);
+                rt.anchorMin = viewPoint;
+                rt.anchorMax = viewPoint;
+            }
+        }
 
-    public void OnEndDrag(PointerEventData eventData)
-    {
-        Debug.Log("End drag"  + eventData.position);
-        EndDrag();
-    }
+        public void OnEndDrag(PointerEventData eventData)
+        {
+            if (isDragging) {
+                EndDrag();
+            }
+        }
 
-    private void EndDrag()
-    {
-        RestorePosition();
-        isDragging = false;
-    }
+        private void EndDrag()
+        {
+            if (bestSlot != null) {
+                RestorePosition();
+                onDragSuccess?.Invoke(bestSlot);
+                isDragging = false;
+            } else {
+                CancelDrag();
+            }
+        }
 
-    private void SavePosition()
-    {
-        origParent = transform.parent;
-        origAnchor = rt.anchorMin;
-        origAnchorPos = rt.anchoredPosition;
-    }
+        private void CancelDrag()
+        {
+            RestorePosition();
+            RestoreParent();
+            isDragging = false;
+            onDragCancel?.Invoke();
+        }
 
-    private void RestorePosition()
-    {
-        transform.SetParent(origParent, true);
-        rt.anchorMin = origAnchor;
-        rt.anchorMax = origAnchor;
-        rt.anchoredPosition = origAnchorPos;
+        private void SaveState()
+        {
+            origParent = transform.parent;
+            origIndex = transform.GetSiblingIndex();
+            origAnchor = rt.anchorMin;
+            origAnchorPos = rt.anchoredPosition;
+        }
+
+        private void RestorePosition()
+        {
+            rt.anchorMin = origAnchor;
+            rt.anchorMax = origAnchor;
+            rt.anchoredPosition = origAnchorPos;
+        }
+
+        private void RestoreParent()
+        {
+            transform.SetParent(origParent, false);
+            transform.SetSiblingIndex(origIndex);
+        }
     }
 }

@@ -73,6 +73,18 @@ namespace Asm
             this.val = label.val;
             this.label = label;
         }
+
+        public Argument ShallowCopy()
+        {
+            return (Argument)this.MemberwiseClone();
+        }
+
+        public void CopyValues(Argument arg)
+        {
+            type = arg.type;
+            val = arg.val;
+            label = arg.label;
+        }
     }
 
     public struct ArgumentSpec
@@ -125,7 +137,7 @@ namespace Asm
         }
     }
 
-    public struct Label
+    public class Label
     {
         public enum Type { BRANCH, CONST }
         public string name;
@@ -158,7 +170,7 @@ namespace Asm
 
     public class Program
     {
-        public Instruction[] instructions;
+        public List<Instruction> instructions;
         public Dictionary<string, Label> labelMap;
         public List<Label> branchLabelList;
         public List<Label> constLabelList;

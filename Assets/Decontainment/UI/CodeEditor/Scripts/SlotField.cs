@@ -16,12 +16,17 @@ namespace Editor
         private Argument arg;
         private GameObject token;
         private List<RectTransform> slotRTs;
+        Vector2 origSize;
 
+        private RectTransform rt;
         private TMP_InputField inputField;
 
         void Awake()
         {
+            rt = GetComponent<RectTransform>();
             inputField = GetComponent<TMP_InputField>();
+
+            origSize = rt.sizeDelta;
         }
 
         public void Init(Argument arg, List<RectTransform> slotRTs)
@@ -33,21 +38,28 @@ namespace Editor
             if (arg.type == Argument.Type.IMMEDIATE) {
                 inputField.text = arg.val.ToString();
             } else {
-                InsertToken(arg);
+                InsertArg(arg);
                 inputField.text = "0";
             }
             inputField.onEndEdit.AddListener((string val) => arg.val = int.Parse(val));
         }
 
-        public void InsertToken(Argument arg, GameObject transferToken = null)
+        public void InsertArg(Argument newArg, GameObject transferedToken = null)
         {
-            Debug.Assert(arg.type != Argument.Type.IMMEDIATE);
-            Debug.Assert(token == null);
+            Debug.Assert(newArg.type != Argument.Type.IMMEDIATE);
 
-            inputField.interactable = false;
-            if (transferToken == null) {
+            arg.CopyValues(newArg);
+
+            if (token != null) {
+                Destroy(token);
+            }
+
+            Draggable tokenDraggable;
+            if (transferedToken == null) {
+                // Create a new one
                 token = Instantiate(tokenPrefab, transform, false);
-                token.GetComponent<Draggable>().Init(slotRTs);
+                tokenDraggable = token.GetComponent<Draggable>();
+                tokenDraggable.Init(slotRTs);
 
                 // Configure token text
                 TextMeshProUGUI tm = token.GetComponentInChildren<TextMeshProUGUI>();
@@ -66,25 +78,51 @@ namespace Editor
                 token.GetComponent<Image>().color = argTokenColorMap.map[tokenType];
 
                 // Resize to fit the preferred width
-                RectTransform rt = GetComponent<RectTransform>();
-                rt.sizeDelta = new Vector2(tm.GetPreferredValues(tm.text).x, rt.sizeDelta.y);
                 RectTransform tokenRT = token.GetComponent<RectTransform>();
-                tokenRT.sizeDelta = rt.sizeDelta;
+                tokenRT.sizeDelta = new Vector2(tm.GetPreferredValues(tm.text).x, rt.sizeDelta.y);
             } else {
-                token = transferToken;
+                // Transfer the one we're given
+                token = transferedToken;
                 token.transform.SetParent(transform, false);
+                tokenDraggable = token.GetComponent<Draggable>();
             }
+
+            Resize();
+            inputField.interactable = false;
+
+            tokenDraggable.onDragEnter = (RectTransform slotRT) => slotRT.GetComponent<Outline>().enabled = true;
+            tokenDraggable.onDragExit = (RectTransform slotRT) => slotRT.GetComponent<Outline>().enabled = false;
+            tokenDraggable.onDragSuccess = (RectTransform slotRT) =>
+            {
+                GameObject oldToken = token; // ReleaseArg will set token to null
+                slotRT.GetComponent<SlotField>().InsertArg(ReleaseArg(), oldToken);
+            };
         }
 
-        public void ReleaseToken()
+        public Argument ReleaseArg()
         {
             Debug.Assert(token != null);
 
+            Argument releasedArg = arg.ShallowCopy();
+
+            // Reconfigure for text field mode
             token = null;
             arg.type = Argument.Type.IMMEDIATE;
-            arg.val = 0;
+            arg.val = int.Parse(inputField.text);
             inputField.interactable = true;
-            inputField.text = arg.val.ToString();
+            Resize();
+
+            return releasedArg;
+        }
+
+        private void Resize()
+        {
+            if (token == null) {
+                rt.sizeDelta = origSize;
+            } else {
+                RectTransform tokenRT = token.GetComponent<RectTransform>();
+                rt.sizeDelta = tokenRT.sizeDelta;
+            }
         }
     }
 }

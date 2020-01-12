@@ -144,7 +144,7 @@ namespace Asm
             if (instruction != null) {
                 instructions.Add(instruction);
             }
-            output.instructions = instructions.ToArray();
+            output.instructions = instructions;
             return output;
         }
 

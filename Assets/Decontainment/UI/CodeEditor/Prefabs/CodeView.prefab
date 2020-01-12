@@ -546,7 +546,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 397dacec77482954a978edb3d0725cca, type: 3}
+  m_Sprite: {fileID: 0}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -585,6 +585,8 @@ MonoBehaviour:
   codeBlockPrefab: {fileID: 3789034097312089564, guid: 53c82f9e4126a41429b71f2ef510a6c3,
     type: 3}
   labelBlockPrefab: {fileID: 8057640436278862642, guid: 185623e904d102d41808bec8befd39dc,
+    type: 3}
+  dividerPrefab: {fileID: 3808545089032984274, guid: ecb1cab1380960a448a8dba5392c5e9e,
     type: 3}
   codeBlockParent: {fileID: 7775971502459746165}
   instructionPointer: {fileID: 8866921111344339734}
