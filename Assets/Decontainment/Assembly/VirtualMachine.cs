@@ -45,32 +45,32 @@ public class VirtualMachine
                     break;
                 case OpCode.BEQ:
                     if (GetArgValue(i.args[1]) == GetArgValue(i.args[2])) {
-                        newPC = GetArgValue(i.args[0]);
+                        newPC = GetArgValue(i.args[0]) % program.instructions.Count;
                     }
                     break;
                 case OpCode.BNE:
                     if (GetArgValue(i.args[1]) != GetArgValue(i.args[2])) {
-                        newPC = GetArgValue(i.args[0]);
+                        newPC = GetArgValue(i.args[0]) % program.instructions.Count;
                     }
                     break;
                 case OpCode.BLT:
                     if (GetArgValue(i.args[1]) < GetArgValue(i.args[2])) {
-                        newPC = GetArgValue(i.args[0]);
+                        newPC = GetArgValue(i.args[0]) % program.instructions.Count;
                     }
                     break;
                 case OpCode.BLE:
                     if (GetArgValue(i.args[1]) <= GetArgValue(i.args[2])) {
-                        newPC = GetArgValue(i.args[0]);
+                        newPC = GetArgValue(i.args[0]) % program.instructions.Count;
                     }
                     break;
                 case OpCode.BGT:
                     if (GetArgValue(i.args[1]) > GetArgValue(i.args[2])) {
-                        newPC = GetArgValue(i.args[0]);
+                        newPC = GetArgValue(i.args[0]) % program.instructions.Count;
                     }
                     break;
                 case OpCode.BGE:
                     if (GetArgValue(i.args[1]) >= GetArgValue(i.args[2])) {
-                        newPC = GetArgValue(i.args[0]);
+                        newPC = GetArgValue(i.args[0]) % program.instructions.Count;
                     }
                     break;
 
@@ -146,7 +146,7 @@ public class VirtualMachine
             case Argument.Type.REGISTER:
                 return regs[arg.val];
             case Argument.Type.LABEL:
-                return arg.val;
+                return arg.label.val;
             default:
                 return 0;
         }

@@ -65,11 +65,13 @@ namespace Editor
                 }
             }
 
-            if (oldBestSlot != null && oldBestSlot != bestSlot) {
-                onDragExit?.Invoke(oldBestSlot);
-            }
-            if (bestSlot != null) {
-                onDragEnter?.Invoke(bestSlot);
+            if (oldBestSlot != bestSlot) {
+                if (oldBestSlot != null) {
+                    onDragExit?.Invoke(oldBestSlot);
+                }
+                if (bestSlot != null) {
+                    onDragEnter?.Invoke(bestSlot);
+                }
             }
         }
 

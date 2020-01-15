@@ -13,10 +13,8 @@ using UnityEngine.UI;
 // the instruction/argument classes and make handlers for them here
 namespace Editor
 {
-    public class CodeBlock : MonoBehaviour
+    public class CodeBlock : Block
     {
-        [SerializeField]
-        private float collapsedWidth = 30.0f;
         [SerializeField]
         private OpCategoryColorMap opCategoryColorMap = null;
         [SerializeField]
@@ -26,42 +24,17 @@ namespace Editor
         [SerializeField]
         private GameObject headerPrefab = null;
 
-        private CanvasGroup cg;
-        private Image bg;
-        private RectTransform rt;
         private TextMeshProUGUI opCodeTM;
-        private Transform contentParent;
 
-        void Awake()
+        new void Awake()
         {
-            cg = GetComponentInParent<CanvasGroup>();
-            bg = GetComponent<Image>();
-            rt = GetComponent<RectTransform>();
+            base.Awake();
             opCodeTM = GetComponentInChildren<TextMeshProUGUI>();
-            contentParent = GetComponentInChildren<HorizontalLayoutGroup>().transform;
         }
 
-        public void Init(int lineNumber, Instruction instruction, List<RectTransform> slotRTs, List<RectTransform> dividerRTs, RectTransform myDivider, Action<RectTransform> onDragSuccess)
+        public void Init(Instruction instruction, List<RectTransform> slotRTs, List<RectTransform> dividerRTs, RectTransform myDivider, Action<RectTransform> onDragSuccess)
         {
-            Draggable draggable = GetComponent<Draggable>();
-            draggable.Init(dividerRTs);
-            draggable.filterFunc = (RectTransform rt) => rt == myDivider;
-            draggable.onDragStart = () =>
-            {
-                myDivider.gameObject.SetActive(false);
-                bg.raycastTarget = false;
-                cg.blocksRaycasts = false;
-                rt.sizeDelta = new Vector2(collapsedWidth, rt.sizeDelta.y);
-            };
-            draggable.onDragCancel = () =>
-            {
-                myDivider.gameObject.SetActive(true);
-                bg.raycastTarget = true;
-                cg.blocksRaycasts = true;
-            };
-            draggable.onDragEnter = (RectTransform rt) => rt.GetComponent<Image>().color = Color.white; // TODO: Make these parameters
-            draggable.onDragExit = (RectTransform rt) => rt.GetComponent<Image>().color = Color.black;
-            draggable.onDragSuccess = onDragSuccess;
+            base.Init(dividerRTs, myDivider, onDragSuccess);
 
             // Configure text
             opCodeTM.text = instruction.opCode.ToString();
@@ -77,15 +50,15 @@ namespace Editor
                 Argument arg = instruction.args[argNum];
 
                 if (argSpecs[argNum].regOnly || argSpecs[argNum].presets != null) {
-                    field = Instantiate(dropdownFieldPrefab, Vector3.zero, Quaternion.identity, contentParent);
+                    field = Instantiate(dropdownFieldPrefab, transform);
                     field.GetComponent<DropdownField>().Init(argSpecs[argNum], arg);
                 } else {
-                    field = Instantiate(slotFieldPrefab, Vector3.zero, Quaternion.identity, contentParent);
+                    field = Instantiate(slotFieldPrefab, transform);
                     field.GetComponent<SlotField>().Init(arg, slotRTs);
                 }
 
                 // Add header
-                GameObject header = Instantiate(headerPrefab, field.transform, false);
+                GameObject header = Instantiate(headerPrefab, field.transform);
                 header.GetComponent<TextMeshProUGUI>().text = argSpecs[argNum].name;
             }
         }

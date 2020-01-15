@@ -22,14 +22,13 @@ namespace Editor
         private Transform codeBlockParent = null;
         [SerializeField]
         private RectTransform instructionPointerRT = null;
-        [SerializeField]
-        private CanvasGroup instructionGroup = null;
 
         private List<RectTransform> dividerRTs;
         private List<RectTransform> slotRTs;
         private Transform[] codeBlockTransforms;
 
         private Canvas canvas;
+        private CanvasGroup cg;
 
         void OnEnable()
         {
@@ -44,10 +43,13 @@ namespace Editor
         void Awake()
         {
             canvas = GetComponentInParent<Canvas>();
+            cg = GetComponentInChildren<CanvasGroup>();
         }
 
         void Start()
         {
+            cg.blocksRaycasts = true;
+
             dividerRTs = new List<RectTransform>();
             slotRTs = new List<RectTransform>();
             Program program = controller.vm.program;
@@ -61,7 +63,7 @@ namespace Editor
 
                 // Create any labels for the current line
                 while (nextLabelIndex < program.branchLabelList.Count && program.branchLabelList[nextLabelIndex].val == lineNumber) {
-                    CreateLabel(ref lineNumber, ref nextLabelIndex);
+                    CreateLabel(ref nextLabelIndex);
                 }
 
                 // Create divider
@@ -72,7 +74,7 @@ namespace Editor
 
                 // Create code block
                 GameObject codeBlock = Instantiate(codeBlockPrefab, codeBlockParent, false);
-                codeBlock.GetComponent<CodeBlock>().Init(lineNumber, instruction, slotRTs, dividerRTs, dividerRT,
+                codeBlock.GetComponent<CodeBlock>().Init(instruction, slotRTs, dividerRTs, dividerRT,
                     (RectTransform rt) =>
                     {
                         Divider targetDivider = rt.GetComponent<Divider>();
@@ -117,7 +119,7 @@ namespace Editor
 
             // Create any remaining labels
             while (nextLabelIndex < program.branchLabelList.Count) {
-                CreateLabel(ref lineNumber, ref nextLabelIndex);
+                CreateLabel(ref nextLabelIndex);
             }
 
             // Create end divider
@@ -134,22 +136,58 @@ namespace Editor
             controller.vm.OnTick -= HandleTick;
         }
 
-        private void CreateLabel(ref int lineNumber, ref int nextLabelIndex)
+        private void CreateLabel(ref int nextLabelIndex)
         {
             Program program = controller.vm.program;
             Label label = program.branchLabelList[nextLabelIndex];
 
             GameObject labelDivider = Instantiate(dividerPrefab, codeBlockParent, false);
-            labelDivider.GetComponent<Divider>().Init(lineNumber, label);
-            dividerRTs.Add(labelDivider.GetComponent<RectTransform>());
+            labelDivider.GetComponent<Divider>().Init(label.val, label);
+            RectTransform labelDividerRT = labelDivider.GetComponent<RectTransform>();
+            dividerRTs.Add(labelDividerRT);
 
             // TODO: The line number for a label will change if a new instruction is inserted above it
             // Thus it should probably be its own script that subscribes to changes in the program order
 
             // Response: Only if we end up dynamically modifying the UI instead of doing a full reset
+            // TODO: Need to test on bad devices to see if there's a performance hit
             GameObject labelBlock = Instantiate(labelBlockPrefab, codeBlockParent, false);
-            string labelText = label.name + " (" + lineNumber + ")";
-            labelBlock.GetComponentInChildren<TextMeshProUGUI>().text = labelText;
+            labelBlock.GetComponent<LabelBlock>().Init(label, dividerRTs, labelDividerRT, (RectTransform rt) =>
+            {
+                Divider targetDivider = rt.GetComponent<Divider>();
+
+                int oldLineNumber = label.val;
+                int newLineNumber = targetDivider.lineNumber;
+
+                label.val = newLineNumber;
+
+                // Remove old entry
+                program.branchLabelList.Remove(label);
+
+                // Find new entry
+                int insertionIndex = 0;
+                for (int i = 0; i < program.branchLabelList.Count; ++i) {
+                    Label l = program.branchLabelList[i];
+                    if (l.val > label.val) {
+                        break;
+                    } else if (l.val < label.val) {
+                        insertionIndex = i + 1;
+                    } else if (l.val == label.val) {
+                        if (l == targetDivider.label) {
+                            insertionIndex = i;
+                            break;
+                        } else {
+                            insertionIndex = i + 1;
+                        }
+                    }
+                }
+
+                program.branchLabelList.Insert(insertionIndex, label);
+
+                // Reset frontend
+                Destroy(labelBlock);
+                Reset();
+            });
             ++nextLabelIndex;
         }
 
