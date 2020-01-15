@@ -8,6 +8,9 @@ TRN_Right: 1
 ; Put the ID of the farthest enemy in %0
 TAR %0 Farthest
 
+A:
+B:
+C:
 TrackNShoot:
 ; Turn to face enemy
 HED %1 %0

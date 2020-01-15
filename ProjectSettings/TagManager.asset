@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Bot
+  - MainCanvas
   layers:
   - Default
   - TransparentFX

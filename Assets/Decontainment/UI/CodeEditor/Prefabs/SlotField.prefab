@@ -234,7 +234,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ffa65421758ed04a928741eff273ffc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  argTokenColorMap: {fileID: 11400000, guid: 702fde817b0fc144ebd8b5c6b15e706e, type: 2}
   tokenPrefab: {fileID: 8435557820183652977, guid: 7dc2095edc42b104485610b661431ef0,
     type: 3}
 --- !u!114 &-5834681427256547880

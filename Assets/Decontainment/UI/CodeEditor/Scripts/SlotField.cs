@@ -9,12 +9,10 @@ namespace Editor
     public class SlotField : MonoBehaviour
     {
         [SerializeField]
-        private ArgTokenColorMap argTokenColorMap = null;
-        [SerializeField]
         private GameObject tokenPrefab = null;
 
         private Argument arg;
-        private GameObject token;
+        private GameObject tokenGO;
         private List<RectTransform> slotRTs;
         Vector2 origSize;
 
@@ -50,63 +48,36 @@ namespace Editor
 
             arg.CopyValues(newArg);
 
-            if (token != null) {
-                Destroy(token);
+            if (tokenGO != null) {
+                Destroy(tokenGO);
             }
 
-            Draggable tokenDraggable;
+            Token token;
             if (transferedToken == null) {
                 // Create a new one
-                token = Instantiate(tokenPrefab, transform, false);
-                tokenDraggable = token.GetComponent<Draggable>();
-                tokenDraggable.Init(slotRTs);
-
-                // Configure token text
-                TextMeshProUGUI tm = token.GetComponentInChildren<TextMeshProUGUI>();
-                if (arg.type == Argument.Type.REGISTER) {
-                    tm.text = "R" + arg.val.ToString();
-                } else {
-                    tm.text = arg.label.name;
-                }
-
-                // Configure token color
-                ArgTokenColorMap.Type tokenType = arg.type == Argument.Type.REGISTER
-                    ? ArgTokenColorMap.Type.REGISTER
-                    : arg.label.type == Label.Type.BRANCH
-                    ? ArgTokenColorMap.Type.BRANCH_LABEL
-                    : ArgTokenColorMap.Type.CONST_LABEL;
-                token.GetComponent<Image>().color = argTokenColorMap.map[tokenType];
-
-                // Resize to fit the preferred width
-                RectTransform tokenRT = token.GetComponent<RectTransform>();
-                tokenRT.sizeDelta = new Vector2(tm.GetPreferredValues(tm.text).x, rt.sizeDelta.y);
+                tokenGO = Instantiate(tokenPrefab, transform, false);
+                token = tokenGO.GetComponent<Token>();
+                token.Init(arg, slotRTs);
             } else {
                 // Transfer the one we're given
-                token = transferedToken;
-                token.transform.SetParent(transform, false);
-                tokenDraggable = token.GetComponent<Draggable>();
+                tokenGO = transferedToken;
+                tokenGO.transform.SetParent(transform, false);
+                token = tokenGO.GetComponent<Token>();
             }
 
             Resize();
             inputField.interactable = false;
-
-            tokenDraggable.onDragEnter = (RectTransform slotRT) => slotRT.GetComponent<Outline>().enabled = true;
-            tokenDraggable.onDragExit = (RectTransform slotRT) => slotRT.GetComponent<Outline>().enabled = false;
-            tokenDraggable.onDragSuccess = (RectTransform slotRT) =>
-            {
-                GameObject oldToken = token; // ReleaseArg will set token to null
-                slotRT.GetComponent<SlotField>().InsertArg(ReleaseArg(), oldToken);
-            };
+            token.slot = this;
         }
 
         public Argument ReleaseArg()
         {
-            Debug.Assert(token != null);
+            Debug.Assert(tokenGO != null);
 
             Argument releasedArg = arg.ShallowCopy();
 
             // Reconfigure for text field mode
-            token = null;
+            tokenGO = null;
             arg.type = Argument.Type.IMMEDIATE;
             arg.val = int.Parse(inputField.text);
             inputField.interactable = true;
@@ -117,10 +88,10 @@ namespace Editor
 
         private void Resize()
         {
-            if (token == null) {
+            if (tokenGO == null) {
                 rt.sizeDelta = origSize;
             } else {
-                RectTransform tokenRT = token.GetComponent<RectTransform>();
+                RectTransform tokenRT = tokenGO.GetComponent<RectTransform>();
                 rt.sizeDelta = tokenRT.sizeDelta;
             }
         }

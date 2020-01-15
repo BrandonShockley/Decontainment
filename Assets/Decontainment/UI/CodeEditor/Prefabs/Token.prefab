@@ -59,7 +59,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -168,6 +168,7 @@ GameObject:
   - component: {fileID: 2864860342051270560}
   - component: {fileID: 7719977853727039653}
   - component: {fileID: -2923271725067951924}
+  - component: {fileID: -5143058973267972008}
   m_Layer: 5
   m_Name: Token
   m_TagString: Untagged
@@ -243,3 +244,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f50ff563e9ff4a419007f564e451143, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-5143058973267972008
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8435557820183652977}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6140fd69d1a39d14bb425ce3fa1dd0b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slot: {fileID: 0}
+  argTokenColorMap: {fileID: 11400000, guid: 702fde817b0fc144ebd8b5c6b15e706e, type: 2}

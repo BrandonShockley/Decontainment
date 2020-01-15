@@ -16,6 +16,8 @@ namespace Editor
     public class CodeBlock : MonoBehaviour
     {
         [SerializeField]
+        private float collapsedWidth = 30.0f;
+        [SerializeField]
         private OpCategoryColorMap opCategoryColorMap = null;
         [SerializeField]
         private GameObject dropdownFieldPrefab = null;
@@ -24,26 +26,39 @@ namespace Editor
         [SerializeField]
         private GameObject headerPrefab = null;
 
+        private CanvasGroup cg;
         private Image bg;
+        private RectTransform rt;
         private TextMeshProUGUI opCodeTM;
         private Transform contentParent;
 
         void Awake()
         {
+            cg = GetComponentInParent<CanvasGroup>();
             bg = GetComponent<Image>();
+            rt = GetComponent<RectTransform>();
             opCodeTM = GetComponentInChildren<TextMeshProUGUI>();
             contentParent = GetComponentInChildren<HorizontalLayoutGroup>().transform;
         }
 
-        public void Init(int lineNumber, Instruction instruction, List<RectTransform> slotRTs, List<RectTransform> dividerRTs, Action<RectTransform> onDragSuccess)
+        public void Init(int lineNumber, Instruction instruction, List<RectTransform> slotRTs, List<RectTransform> dividerRTs, RectTransform myDivider, Action<RectTransform> onDragSuccess)
         {
-            RectTransform myDivider = dividerRTs[lineNumber];
-
             Draggable draggable = GetComponent<Draggable>();
             draggable.Init(dividerRTs);
             draggable.filterFunc = (RectTransform rt) => rt == myDivider;
-            draggable.onDragStart = () => myDivider.gameObject.SetActive(false);
-            draggable.onDragCancel = () => myDivider.gameObject.SetActive(true);
+            draggable.onDragStart = () =>
+            {
+                myDivider.gameObject.SetActive(false);
+                bg.raycastTarget = false;
+                cg.blocksRaycasts = false;
+                rt.sizeDelta = new Vector2(collapsedWidth, rt.sizeDelta.y);
+            };
+            draggable.onDragCancel = () =>
+            {
+                myDivider.gameObject.SetActive(true);
+                bg.raycastTarget = true;
+                cg.blocksRaycasts = true;
+            };
             draggable.onDragEnter = (RectTransform rt) => rt.GetComponent<Image>().color = Color.white; // TODO: Make these parameters
             draggable.onDragExit = (RectTransform rt) => rt.GetComponent<Image>().color = Color.black;
             draggable.onDragSuccess = onDragSuccess;

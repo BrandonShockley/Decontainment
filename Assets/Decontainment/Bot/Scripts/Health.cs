@@ -56,7 +56,7 @@ namespace Bot
             sr = GetComponent<SpriteRenderer>();
 
             healthBarGO = Instantiate(healthBarPrefab, Vector3.zero, Quaternion.identity,
-                FindObjectOfType<Canvas>().transform);
+                GameObject.FindGameObjectWithTag("MainCanvas").transform);
             healthBarGO.GetComponent<HealthBar>().Init(this);
         }
 
