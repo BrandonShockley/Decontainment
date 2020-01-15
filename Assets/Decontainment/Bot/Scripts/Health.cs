@@ -55,8 +55,8 @@ namespace Bot
             sm = GetComponent<SoundModulator>();
             sr = GetComponent<SpriteRenderer>();
 
-            healthBarGO = Instantiate(healthBarPrefab, Vector3.zero, Quaternion.identity,
-                GameObject.FindGameObjectWithTag("MainCanvas").transform);
+            healthBarGO = Instantiate(healthBarPrefab, GameObject.FindGameObjectWithTag("MainCanvas").transform, true);
+            healthBarGO.transform.SetAsFirstSibling();
             healthBarGO.GetComponent<HealthBar>().Init(this);
         }
 

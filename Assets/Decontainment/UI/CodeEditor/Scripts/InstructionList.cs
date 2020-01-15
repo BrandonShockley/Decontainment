@@ -1,5 +1,6 @@
 ﻿using Asm;
 using Bot;
+using Extensions;
 using System;
 using System.Collections.Generic;
 using TMPro;
@@ -8,7 +9,7 @@ using UnityEngine.UI;
 
 namespace Editor
 {
-    public class CodeView : MonoBehaviour
+    public class InstructionList : MonoBehaviour
     {
         public Controller controller;
 
@@ -19,9 +20,11 @@ namespace Editor
         [SerializeField]
         private GameObject dividerPrefab = null;
         [SerializeField]
-        private Transform codeBlockParent = null;
-        [SerializeField]
         private RectTransform instructionPointerRT = null;
+        [SerializeField]
+        private RectTransform viewportRT = null;
+        [SerializeField]
+        private ScrollRect scrollRect = null;
 
         private List<RectTransform> dividerRTs;
         private List<RectTransform> slotRTs;
@@ -29,21 +32,25 @@ namespace Editor
 
         private Canvas canvas;
         private CanvasGroup cg;
+        private ContentSizeFitter csf;
+        private RectTransform rt;
 
         void OnEnable()
         {
-            GetComponentInChildren<ScrollRect>().onValueChanged.AddListener(HandleScroll);
+            scrollRect.onValueChanged.AddListener(HandleScroll);
         }
 
         void OnDisable()
         {
-            GetComponentInChildren<ScrollRect>().onValueChanged.RemoveListener(HandleScroll);
+            scrollRect.onValueChanged.RemoveListener(HandleScroll);
         }
 
         void Awake()
         {
             canvas = GetComponentInParent<Canvas>();
-            cg = GetComponentInChildren<CanvasGroup>();
+            cg = GetComponent<CanvasGroup>();
+            csf = GetComponent<ContentSizeFitter>();
+            rt = GetComponent<RectTransform>();
         }
 
         void Start()
@@ -67,13 +74,13 @@ namespace Editor
                 }
 
                 // Create divider
-                GameObject divider = Instantiate(dividerPrefab, codeBlockParent, false);
+                GameObject divider = Instantiate(dividerPrefab, transform, false);
                 divider.GetComponent<Divider>().Init(lineNumber);
                 RectTransform dividerRT = divider.GetComponent<RectTransform>();
                 dividerRTs.Add(dividerRT);
 
                 // Create code block
-                GameObject codeBlock = Instantiate(codeBlockPrefab, codeBlockParent, false);
+                GameObject codeBlock = Instantiate(codeBlockPrefab, transform, false);
                 codeBlock.GetComponent<CodeBlock>().Init(instruction, slotRTs, dividerRTs, dividerRT,
                     (RectTransform rt) =>
                     {
@@ -123,10 +130,11 @@ namespace Editor
             }
 
             // Create end divider
-            GameObject endDivider = Instantiate(dividerPrefab, codeBlockParent, false);
+            GameObject endDivider = Instantiate(dividerPrefab, transform, false);
             endDivider.GetComponent<Divider>().Init(lineNumber);
             dividerRTs.Add(endDivider.GetComponent<RectTransform>());
 
+            OnRectTransformDimensionsChange();
             HandleTick();
             controller.vm.OnTick += HandleTick;
         }
@@ -136,12 +144,33 @@ namespace Editor
             controller.vm.OnTick -= HandleTick;
         }
 
+        // Ensure that code blocks are always at least as wide as the viewport
+        void OnRectTransformDimensionsChange()
+        {
+            if (codeBlockTransforms == null) {
+                return;
+            }
+
+            float maxCodeBlockWidth = 0;
+            foreach (Transform codeBlock in codeBlockTransforms) {
+                RectTransform codeBlockRT = codeBlock.GetComponent<RectTransform>();
+                maxCodeBlockWidth = Mathf.Max(codeBlockRT.GetWorldSize().x, maxCodeBlockWidth);
+            }
+
+            if (viewportRT.GetWorldSize().x < maxCodeBlockWidth) {
+                csf.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
+            } else {
+                csf.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
+                rt.sizeDelta = new Vector2(0, rt.sizeDelta.y);
+            }
+        }
+
         private void CreateLabel(ref int nextLabelIndex)
         {
             Program program = controller.vm.program;
             Label label = program.branchLabelList[nextLabelIndex];
 
-            GameObject labelDivider = Instantiate(dividerPrefab, codeBlockParent, false);
+            GameObject labelDivider = Instantiate(dividerPrefab, transform, false);
             labelDivider.GetComponent<Divider>().Init(label.val, label);
             RectTransform labelDividerRT = labelDivider.GetComponent<RectTransform>();
             dividerRTs.Add(labelDividerRT);
@@ -151,7 +180,7 @@ namespace Editor
 
             // Response: Only if we end up dynamically modifying the UI instead of doing a full reset
             // TODO: Need to test on bad devices to see if there's a performance hit
-            GameObject labelBlock = Instantiate(labelBlockPrefab, codeBlockParent, false);
+            GameObject labelBlock = Instantiate(labelBlockPrefab, transform, false);
             labelBlock.GetComponent<LabelBlock>().Init(label, dividerRTs, labelDividerRT, (RectTransform rt) =>
             {
                 Divider targetDivider = rt.GetComponent<Divider>();
@@ -193,8 +222,8 @@ namespace Editor
 
         private void Reset()
         {
-            for (int i = codeBlockParent.childCount - 1; i >= 0; --i) {
-                Destroy(codeBlockParent.GetChild(i).gameObject);
+            for (int i = transform.childCount - 1; i >= 0; --i) {
+                Destroy(transform.GetChild(i).gameObject);
             }
             Start();
         }

@@ -334,6 +334,7 @@ GameObject:
   - component: {fileID: 630350128279498151}
   - component: {fileID: 5432692432273727049}
   - component: {fileID: 8802951697248366493}
+  - component: {fileID: 4778006854806990053}
   m_Layer: 5
   m_Name: InstructionList
   m_TagString: Untagged
@@ -355,7 +356,7 @@ RectTransform:
   m_Father: {fileID: 7338031590821116209}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
@@ -387,9 +388,9 @@ MonoBehaviour:
     m_Bottom: 0
   m_ChildAlignment: 0
   m_Spacing: 0
-  m_ChildForceExpandWidth: 0
+  m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 0
-  m_ChildControlWidth: 0
+  m_ChildControlWidth: 1
   m_ChildControlHeight: 0
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
@@ -405,7 +406,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_HorizontalFit: 1
+  m_HorizontalFit: 2
   m_VerticalFit: 2
 --- !u!225 &8802951697248366493
 CanvasGroup:
@@ -419,6 +420,28 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &4778006854806990053
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7070255997389662423}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5393208ca0c8c824496406dc23473585, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  controller: {fileID: 0}
+  codeBlockPrefab: {fileID: 3789034097312089564, guid: 53c82f9e4126a41429b71f2ef510a6c3,
+    type: 3}
+  labelBlockPrefab: {fileID: 8057640436278862642, guid: 185623e904d102d41808bec8befd39dc,
+    type: 3}
+  dividerPrefab: {fileID: 3808545089032984274, guid: ecb1cab1380960a448a8dba5392c5e9e,
+    type: 3}
+  instructionPointerRT: {fileID: 8866921111344339734}
+  viewportRT: {fileID: 7338031590821116209}
+  scrollRect: {fileID: 4124638294918339530}
 --- !u!1 &7992176428659204513
 GameObject:
   m_ObjectHideFlags: 0
@@ -505,7 +528,6 @@ GameObject:
   - component: {fileID: 8647798933790731395}
   - component: {fileID: 8647798933790731392}
   - component: {fileID: 2846421678400809063}
-  - component: {fileID: 5119547876451810991}
   m_Layer: 5
   m_Name: CodeView
   m_TagString: Untagged
@@ -582,25 +604,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ShowMaskGraphic: 1
---- !u!114 &5119547876451810991
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8647798933790731455}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8645571f18820a547900ff4f4fee6b46, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  controller: {fileID: 0}
-  codeBlockPrefab: {fileID: 3789034097312089564, guid: 53c82f9e4126a41429b71f2ef510a6c3,
-    type: 3}
-  labelBlockPrefab: {fileID: 8057640436278862642, guid: 185623e904d102d41808bec8befd39dc,
-    type: 3}
-  dividerPrefab: {fileID: 3808545089032984274, guid: ecb1cab1380960a448a8dba5392c5e9e,
-    type: 3}
-  codeBlockParent: {fileID: 7775971502459746165}
-  instructionPointerRT: {fileID: 8866921111344339734}
-  instructionGroup: {fileID: 0}

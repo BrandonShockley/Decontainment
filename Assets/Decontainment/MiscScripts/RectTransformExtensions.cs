@@ -15,5 +15,12 @@ namespace Extensions
 
             return rect1.Overlaps(rect2);
         }
+
+        public static Vector2 GetWorldSize(this RectTransform rt)
+        {
+            Vector3[] corners = new Vector3[4];
+            rt.GetWorldCorners(corners);
+            return corners[3] - corners[0];
+        }
     }
 }
