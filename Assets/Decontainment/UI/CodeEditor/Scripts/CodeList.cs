@@ -144,49 +144,10 @@ namespace Editor
             labelDivider.Init(label.val, label);
             Globals.dividers.Add(labelDivider);
 
-            // TODO: The line number for a label will change if a new instruction is inserted above it
-            // Thus it should probably be its own script that subscribes to changes in the program order
-
-            // Response: Only if we end up dynamically modifying the UI instead of doing a full reset
-            // TODO: Need to test on bad devices to see if there's a performance hit
+            // TODO: Need to test on bad devices to see if there's a performance hit when the code list is reset
+            // NOTE: Maybe if there is, we can use pooling and continue to do a full reset
             GameObject labelBlock = Instantiate(labelBlockPrefab, transform, false);
-            labelBlock.GetComponent<LabelBlock>().Init(label, labelDivider);
-            labelBlock.GetComponent<Draggable>().onDragSuccess = (Draggable.Slot slot) =>
-            {
-                Divider targetDivider = (Divider)slot;
-
-                int oldLineNumber = label.val;
-                int newLineNumber = targetDivider.lineNumber;
-
-                label.val = newLineNumber;
-
-                // Remove old entry
-                program.branchLabelList.Remove(label);
-
-                // Find new entry
-                int insertionIndex = 0;
-                for (int i = 0; i < program.branchLabelList.Count; ++i) {
-                    Label l = program.branchLabelList[i];
-                    if (l.val > label.val) {
-                        break;
-                    } else if (l.val < label.val) {
-                        insertionIndex = i + 1;
-                    } else if (l.val == label.val) {
-                        if (l == targetDivider.label) {
-                            insertionIndex = i;
-                            break;
-                        } else {
-                            insertionIndex = i + 1;
-                        }
-                    }
-                }
-
-                program.branchLabelList.Insert(insertionIndex, label);
-
-                // Reset frontend
-                Destroy(labelBlock);
-                Reset();
-            };
+            labelBlock.GetComponent<LabelBlock>().Init(label, labelDivider, Reset);
             ++nextLabelIndex;
         }
 

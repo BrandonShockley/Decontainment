@@ -24,6 +24,8 @@ namespace Editor
         [SerializeField]
         private GameObject headerPrefab = null;
 
+        private GameObject[] labelTokens;
+
         void Start()
         {
             Globals.trashSlots.Add(trashSlot);
@@ -61,15 +63,20 @@ namespace Editor
 
             // Create a clone to take its place upon being dragged
             Draggable draggable = instructionBlock.GetComponent<Draggable>();
+            Action oldOnDragStart = draggable.onDragStart;
             draggable.onDragStart = () =>
             {
                 InstructionBlock clone = CreateInstructionBlock(instruction, instructionBlock);
+                oldOnDragStart?.Invoke();
 
-                // Call the base onDragStart
-                instructionBlock.HandleDragStart();
-
-                // Ensure that the clone is destroyed upon drag cancel
                 draggable.onDragCancel = () => Destroy(clone.gameObject);
+            };
+            Action<Draggable.Slot> oldOnDragSuccess = draggable.onDragSuccess;
+            draggable.onDragSuccess = (Draggable.Slot slot) =>
+            {
+                draggable.onDragStart = oldOnDragStart;
+                draggable.onDragSuccess = oldOnDragSuccess;
+                oldOnDragSuccess?.Invoke(slot);
             };
 
             return instructionBlock;
@@ -102,6 +109,11 @@ namespace Editor
             };
 
             return token;
+        }
+
+        private void HandleLabelChange()
+        {
+
         }
     }
 }

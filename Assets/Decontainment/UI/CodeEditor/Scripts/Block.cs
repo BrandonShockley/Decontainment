@@ -34,21 +34,19 @@ namespace Editor
 
             draggable.Init(Globals.dividers, Globals.trashSlots);
             draggable.filterFunc = (Draggable.Slot slot) => slot == myDivider;
-            draggable.onDragStart = HandleDragStart;
+            draggable.onDragStart = () =>
+            {
+                myDivider?.gameObject.SetActive(false);
+                bg.raycastTarget = false;
+                cg.blocksRaycasts = false;
+                rt.sizeDelta = new Vector2(collapsedWidth, rt.sizeDelta.y);
+            };
             draggable.onDragEnd = () =>
             {
                 myDivider?.gameObject.SetActive(true);
                 bg.raycastTarget = true;
                 cg.blocksRaycasts = true;
             };
-        }
-
-        public void HandleDragStart()
-        {
-            myDivider?.gameObject.SetActive(false);
-            bg.raycastTarget = false;
-            cg.blocksRaycasts = false;
-            rt.sizeDelta = new Vector2(collapsedWidth, rt.sizeDelta.y);
         }
     }
 }
