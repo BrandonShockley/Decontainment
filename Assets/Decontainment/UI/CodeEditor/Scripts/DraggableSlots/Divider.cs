@@ -1,9 +1,10 @@
 ﻿using Asm;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Editor
 {
-    public class Divider : MonoBehaviour
+    public class Divider : ColorChangeSlot
     {
         public int lineNumber;
         public Label label;

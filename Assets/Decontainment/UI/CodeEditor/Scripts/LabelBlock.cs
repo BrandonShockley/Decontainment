@@ -8,9 +8,9 @@ namespace Editor
 {
     public class LabelBlock : Block
     {
-        public void Init(Label label, List<RectTransform> dividerRTs, RectTransform myDivider, Action<RectTransform> onDragSuccess)
+        public void Init(Label label, Divider myDivider)
         {
-            base.Init(dividerRTs, myDivider, onDragSuccess);
+            base.Init(myDivider);
 
             string labelText = label.name + " (" + label.val + ")";
             GetComponentInChildren<TextMeshProUGUI>().text = labelText;

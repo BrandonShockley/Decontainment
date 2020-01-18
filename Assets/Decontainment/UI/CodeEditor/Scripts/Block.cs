@@ -18,6 +18,7 @@ namespace Editor
         protected Draggable draggable;
         protected Image bg;
         protected RectTransform rt;
+        protected Divider myDivider;
 
         protected void Awake()
         {
@@ -27,31 +28,27 @@ namespace Editor
             rt = GetComponent<RectTransform>();
         }
 
-        public void Init(List<RectTransform> dividerRTs, RectTransform myDivider, Action<RectTransform> onDragSuccess)
+        public void Init(Divider myDivider)
         {
-            draggable.Init(dividerRTs);
-            draggable.filterFunc = (RectTransform rt) => rt == myDivider;
-            draggable.onDragStart = () =>
+            this.myDivider = myDivider;
+
+            draggable.Init(Globals.dividers, Globals.trashSlots);
+            draggable.filterFunc = (Draggable.Slot slot) => slot == myDivider;
+            draggable.onDragStart = HandleDragStart;
+            draggable.onDragEnd = () =>
             {
-                myDivider.gameObject.SetActive(false);
-                bg.raycastTarget = false;
-                cg.blocksRaycasts = false;
-                rt.sizeDelta = new Vector2(collapsedWidth, rt.sizeDelta.y);
-            };
-            draggable.onDragCancel = () =>
-            {
-                myDivider.gameObject.SetActive(true);
+                myDivider?.gameObject.SetActive(true);
                 bg.raycastTarget = true;
                 cg.blocksRaycasts = true;
             };
-            draggable.onDragEnter = (RectTransform rt) =>
-            {
-                Image image = rt.GetComponent<Image>();
-                origColor = image.color;
-                image.color = dragOverColor;
-            };
-            draggable.onDragExit = (RectTransform rt) => rt.GetComponent<Image>().color = origColor;
-            draggable.onDragSuccess = onDragSuccess;
+        }
+
+        public void HandleDragStart()
+        {
+            myDivider?.gameObject.SetActive(false);
+            bg.raycastTarget = false;
+            cg.blocksRaycasts = false;
+            rt.sizeDelta = new Vector2(collapsedWidth, rt.sizeDelta.y);
         }
     }
 }

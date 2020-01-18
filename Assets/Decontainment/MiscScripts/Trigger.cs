@@ -3,14 +3,12 @@ public struct Trigger
     private bool val;
     public bool Value
     {
-        get
-        {
+        get {
             bool old = val;
             val = false;
             return old;
         }
-        set
-        {
+        set {
             val = value;
         }
     }

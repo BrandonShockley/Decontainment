@@ -9,12 +9,12 @@ using UnityEngine.UI;
 
 namespace Editor
 {
-    public class InstructionList : MonoBehaviour
+    public class CodeList : MonoBehaviour
     {
         public Controller controller;
 
         [SerializeField]
-        private GameObject codeBlockPrefab = null;
+        private GameObject instructionBlockPrefab = null;
         [SerializeField]
         private GameObject labelBlockPrefab = null;
         [SerializeField]
@@ -26,9 +26,8 @@ namespace Editor
         [SerializeField]
         private ScrollRect scrollRect = null;
 
-        private List<RectTransform> dividerRTs;
-        private List<RectTransform> slotRTs;
-        private Transform[] codeBlockTransforms;
+        private bool initialCGBlocksRaycasts;
+        private Transform[] instructionBlockTransforms;
 
         private Canvas canvas;
         private CanvasGroup cg;
@@ -51,76 +50,38 @@ namespace Editor
             cg = GetComponent<CanvasGroup>();
             csf = GetComponent<ContentSizeFitter>();
             rt = GetComponent<RectTransform>();
+
+            Globals.Init(controller.vm.program);
+            initialCGBlocksRaycasts = cg.blocksRaycasts;
         }
 
         void Start()
         {
-            cg.blocksRaycasts = true;
+            cg.blocksRaycasts = initialCGBlocksRaycasts;
 
-            dividerRTs = new List<RectTransform>();
-            slotRTs = new List<RectTransform>();
-            Program program = controller.vm.program;
+            Globals.Reset();
+            Program program = Globals.program;
 
             // Create code block for each instruction in program
-            codeBlockTransforms = new Transform[program.instructions.Count];
+            instructionBlockTransforms = new Transform[program.instructions.Count];
             int lineNumber = 0;
             int nextLabelIndex = 0;
             foreach (Instruction instruction in program.instructions) {
-                int lineNumberCopy = lineNumber;
-
                 // Create any labels for the current line
                 while (nextLabelIndex < program.branchLabelList.Count && program.branchLabelList[nextLabelIndex].val == lineNumber) {
                     CreateLabel(ref nextLabelIndex);
                 }
 
                 // Create divider
-                GameObject divider = Instantiate(dividerPrefab, transform, false);
-                divider.GetComponent<Divider>().Init(lineNumber);
-                RectTransform dividerRT = divider.GetComponent<RectTransform>();
-                dividerRTs.Add(dividerRT);
+                Divider divider = Instantiate(dividerPrefab, transform, false).GetComponent<Divider>();
+                divider.Init(lineNumber);
+                Globals.dividers.Add(divider);
 
                 // Create code block
-                GameObject codeBlock = Instantiate(codeBlockPrefab, transform, false);
-                codeBlock.GetComponent<CodeBlock>().Init(instruction, slotRTs, dividerRTs, dividerRT,
-                    (RectTransform rt) =>
-                    {
-                        Divider targetDivider = rt.GetComponent<Divider>();
+                GameObject instructionBlock = Instantiate(instructionBlockPrefab, transform, false);
+                instructionBlock.GetComponent<InstructionBlock>().Init(lineNumber, instruction, divider, Reset);
 
-                        // Modify backend
-
-                        // Remove old instruction
-                        int oldLineNumber = lineNumberCopy;
-                        int newLineNumber = targetDivider.lineNumber;
-                        program.instructions.RemoveAt(oldLineNumber);
-
-                        // Adjust labels
-                        foreach (Label label in program.branchLabelList) {
-                            if (label.val > oldLineNumber) {
-                                --label.val; // TODO: This will need to be variable when we add dragging selected blocks
-                            }
-                        }
-
-                        // Insert new instruction
-                        int adjustedNewLineNumber = newLineNumber > oldLineNumber ? newLineNumber - 1 : newLineNumber;
-                        program.instructions.Insert(adjustedNewLineNumber, instruction);
-
-                        // Adjust labels
-                        bool crossed = false;
-                        foreach (Label label in program.branchLabelList) {
-                            if (targetDivider.label == label) {
-                                crossed = true;
-                            }
-                            if (crossed || adjustedNewLineNumber < label.val) {
-                                ++label.val; // TODO: This will need to be variable when we add dragging selected blocks
-                            }
-                        }
-
-                        // Reset frontend
-                        Destroy(codeBlock);
-                        Reset();
-                    }
-                );
-                codeBlockTransforms[lineNumber] = codeBlock.transform;
+                instructionBlockTransforms[lineNumber] = instructionBlock.transform;
                 ++lineNumber;
             }
 
@@ -130,9 +91,9 @@ namespace Editor
             }
 
             // Create end divider
-            GameObject endDivider = Instantiate(dividerPrefab, transform, false);
-            endDivider.GetComponent<Divider>().Init(lineNumber);
-            dividerRTs.Add(endDivider.GetComponent<RectTransform>());
+            Divider endDivider = Instantiate(dividerPrefab, transform, false).GetComponent<Divider>();
+            endDivider.Init(lineNumber);
+            Globals.dividers.Add(endDivider);
 
             OnRectTransformDimensionsChange();
             HandleTick();
@@ -147,17 +108,17 @@ namespace Editor
         // Ensure that code blocks are always at least as wide as the viewport
         void OnRectTransformDimensionsChange()
         {
-            if (codeBlockTransforms == null) {
+            if (instructionBlockTransforms == null) {
                 return;
             }
 
-            float maxCodeBlockWidth = 0;
-            foreach (Transform codeBlock in codeBlockTransforms) {
-                RectTransform codeBlockRT = codeBlock.GetComponent<RectTransform>();
-                maxCodeBlockWidth = Mathf.Max(codeBlockRT.GetWorldSize().x, maxCodeBlockWidth);
+            float maxInstructionBlockWidth = 0;
+            foreach (Transform instructionBlock in instructionBlockTransforms) {
+                RectTransform instructionBlockRT = instructionBlock.GetComponent<RectTransform>();
+                maxInstructionBlockWidth = Mathf.Max(instructionBlockRT.GetWorldSize().x, maxInstructionBlockWidth);
             }
 
-            if (viewportRT.GetWorldSize().x < maxCodeBlockWidth) {
+            if (viewportRT.GetWorldSize().x < maxInstructionBlockWidth) {
                 csf.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
             } else {
                 csf.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
@@ -165,15 +126,23 @@ namespace Editor
             }
         }
 
+        public void Reset()
+        {
+            for (int i = transform.childCount - 1; i >= 0; --i) {
+                Destroy(transform.GetChild(i).gameObject);
+            }
+            Start();
+            // Debug.Log()
+        }
+
         private void CreateLabel(ref int nextLabelIndex)
         {
             Program program = controller.vm.program;
             Label label = program.branchLabelList[nextLabelIndex];
 
-            GameObject labelDivider = Instantiate(dividerPrefab, transform, false);
-            labelDivider.GetComponent<Divider>().Init(label.val, label);
-            RectTransform labelDividerRT = labelDivider.GetComponent<RectTransform>();
-            dividerRTs.Add(labelDividerRT);
+            Divider labelDivider = Instantiate(dividerPrefab, transform, false).GetComponent<Divider>();
+            labelDivider.Init(label.val, label);
+            Globals.dividers.Add(labelDivider);
 
             // TODO: The line number for a label will change if a new instruction is inserted above it
             // Thus it should probably be its own script that subscribes to changes in the program order
@@ -181,9 +150,10 @@ namespace Editor
             // Response: Only if we end up dynamically modifying the UI instead of doing a full reset
             // TODO: Need to test on bad devices to see if there's a performance hit
             GameObject labelBlock = Instantiate(labelBlockPrefab, transform, false);
-            labelBlock.GetComponent<LabelBlock>().Init(label, dividerRTs, labelDividerRT, (RectTransform rt) =>
+            labelBlock.GetComponent<LabelBlock>().Init(label, labelDivider);
+            labelBlock.GetComponent<Draggable>().onDragSuccess = (Draggable.Slot slot) =>
             {
-                Divider targetDivider = rt.GetComponent<Divider>();
+                Divider targetDivider = (Divider)slot;
 
                 int oldLineNumber = label.val;
                 int newLineNumber = targetDivider.lineNumber;
@@ -216,24 +186,16 @@ namespace Editor
                 // Reset frontend
                 Destroy(labelBlock);
                 Reset();
-            });
+            };
             ++nextLabelIndex;
-        }
-
-        private void Reset()
-        {
-            for (int i = transform.childCount - 1; i >= 0; --i) {
-                Destroy(transform.GetChild(i).gameObject);
-            }
-            Start();
         }
 
         private void HandleTick()
         {
             // Position instruction pointer
-            RectTransform codeBlockRT = codeBlockTransforms[controller.vm.pc].GetComponent<RectTransform>();
+            RectTransform instructionBlockRT = instructionBlockTransforms[controller.vm.pc].GetComponent<RectTransform>();
             Vector2 oldPos = instructionPointerRT.position;
-            Vector2 newPos = new Vector2(oldPos.x, codeBlockRT.position.y);
+            Vector2 newPos = new Vector2(oldPos.x, instructionBlockRT.position.y);
             instructionPointerRT.position = newPos;
         }
 

@@ -21,9 +21,9 @@ namespace Editor
                     maxPreferredWidth = Mathf.Max(tm.GetPreferredValues(regName).x, maxPreferredWidth);
                 }
             } else {
-                foreach (string macroName in argSpec.presets) {
-                    dropdown.options.Add(new TMP_Dropdown.OptionData(macroName));
-                    maxPreferredWidth = Mathf.Max(tm.GetPreferredValues(macroName).x, maxPreferredWidth);
+                foreach (string presetName in argSpec.presets) {
+                    dropdown.options.Add(new TMP_Dropdown.OptionData(presetName));
+                    maxPreferredWidth = Mathf.Max(tm.GetPreferredValues(presetName).x, maxPreferredWidth);
                 }
             }
             dropdown.value = arg.val;

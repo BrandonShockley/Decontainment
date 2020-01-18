@@ -162,7 +162,7 @@ namespace Asm
             int pseudoPC = 0;
             bool parsingInstruction = false;
 
-            // Macro discovery
+            // Label discovery
             for (int i = 0; i < codeString.Length;) {
                 char c = codeString[i];
 
@@ -187,26 +187,26 @@ namespace Asm
                         string word = codeString.Substring(i, wordEnd - i);
 
                         if (word.Length > 1 && word.IndexOf(':') == word.Length - 1) {
-                            // We've found a macro defenition
-                            int macroEnd = codeString.IndexOfAnyToEnd(lineEndChars, i);
-                            bool isBranchLabel = macroEnd == wordEnd;
-                            string macroName = word.Substring(0, word.Length - 1);
-                            string macroDef = (isBranchLabel
+                            // We've found a label defenition
+                            int labelEnd = codeString.IndexOfAnyToEnd(lineEndChars, i);
+                            bool isBranchLabel = labelEnd == wordEnd;
+                            string labelName = word.Substring(0, word.Length - 1);
+                            string labelDef = (isBranchLabel
                                 ? pseudoPC.ToString()
-                                : codeString.Substring(wordEnd, macroEnd - wordEnd));
+                                : codeString.Substring(wordEnd, labelEnd - wordEnd));
 
-                            if (!int.TryParse(macroDef, out int macroVal)) {
-                                Debug.LogError("Invalid macro definition " + macroDef + " on line " + lineCount);
+                            if (!int.TryParse(labelDef, out int labelVal)) {
+                                Debug.LogError("Invalid label definition " + labelDef + " on line " + lineCount);
                                 return false;
                             }
                             if (isBranchLabel) {
-                                branchLabels.Add(new Label(macroName, macroVal, Label.Type.BRANCH));
+                                branchLabels.Add(new Label(labelName, labelVal, Label.Type.BRANCH));
                             } else {
-                                constLabels.Add(new Label(macroName, macroVal, Label.Type.CONST));
+                                constLabels.Add(new Label(labelName, labelVal, Label.Type.CONST));
                             }
 
                             // Delete definition
-                            codeString = codeString.Substring(0, i) + codeString.Substring(macroEnd);
+                            codeString = codeString.Substring(0, i) + codeString.Substring(labelEnd);
                         } else {
                             parsingInstruction = true;
                             i = wordEnd;

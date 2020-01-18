@@ -9,20 +9,48 @@ namespace Editor
 {
     public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
+        /// Extend to make a slot ui element
+        public abstract class Slot : MonoBehaviour
+        {
+            private RectTransform _rt;
+
+            public RectTransform RT
+            {
+                get {
+                    if (_rt == null) {
+                        _rt = GetComponent<RectTransform>();
+                        Debug.Assert(_rt != null);
+                    }
+                    return _rt;
+                }
+            }
+
+            public abstract void HandleDragEnter();
+            public abstract void HandleDragExit();
+        }
+
+        /// Called upon drag start
         public Action onDragStart;
+        /// Called when drag ended, whether successful or not
+        public Action onDragEnd;
+        /// Called if drag manually cancelled or not successful
         public Action onDragCancel;
-        // Called upon draggable overlapping a valid slot
-        public Action<RectTransform> onDragEnter;
-        // Called upon draggable unoverlapping a valid slot
-        public Action<RectTransform> onDragExit;
-        // Called upon drag release with a slot highlighted
-        public Action<RectTransform> onDragSuccess;
-        // Returns whether arg1 is included in valid slot search
-        public Func<RectTransform, bool> filterFunc;
+        /// Called upon draggable overlapping a valid slot
+        public Action<Slot> onDragEnter;
+        /// Called upon draggable unoverlapping a valid slot
+        public Action<Slot> onDragExit;
+        /// Called upon drag release with a valid slot highlighted
+        public Action<Slot> onDragSuccess;
+        /// Called upon drag release with a trash slot highlighted
+        public Action<Slot> onDragTrash;
+        /// Returns whether arg1 is included in valid slot search
+        public Func<Slot, bool> filterFunc;
 
         private bool isDragging;
-        private List<RectTransform> validSlots;
-        private RectTransform bestSlot;
+        private List<Slot> validSlots;
+        private List<Slot> trashSlots;
+        private Slot bestSlot;
+        private bool isTrashSlot;
         private Transform origParent;
         private int origIndex;
         private Vector2 origAnchor;
@@ -40,25 +68,43 @@ namespace Editor
 
         void Update()
         {
-            RectTransform oldBestSlot = bestSlot;
+            Slot oldBestSlot = bestSlot;
             bestSlot = null;
+            isTrashSlot = false;
             if (isDragging) {
                 if (Input.GetKeyDown(KeyCode.Escape)) {
                     CancelDrag();
                 } else {
-                    float minSqDistance = float.PositiveInfinity;
-                    foreach (RectTransform validSlot in validSlots) {
+                    float minSqrDistance = float.PositiveInfinity;
+                    foreach (Slot validSlot in validSlots) {
                         // Filtering results
                         if (filterFunc != null && filterFunc(validSlot)) {
                             continue;
                         }
 
                         // Choose the closest overlapping slot
-                        if (rt.RectOverlaps(validSlot)) {
-                            float sqDistance = (validSlot.position - rt.position).sqrMagnitude;
-                            if (sqDistance < minSqDistance) {
-                                minSqDistance = sqDistance;
+                        if (rt.RectOverlaps(validSlot.RT)) {
+                            float sqDistance = (validSlot.RT.position - rt.position).sqrMagnitude;
+                            if (sqDistance < minSqrDistance) {
+                                minSqrDistance = sqDistance;
                                 bestSlot = validSlot;
+                                isTrashSlot = false;
+                            }
+                        }
+                    }
+                    foreach (Slot trashSlot in trashSlots) {
+                        // Filtering results
+                        if (filterFunc != null && filterFunc(trashSlot)) {
+                            continue;
+                        }
+
+                        // Choose the closest overlapping slot
+                        if (rt.RectOverlaps(trashSlot.RT)) {
+                            float sqDistance = (trashSlot.RT.position - rt.position).sqrMagnitude;
+                            if (sqDistance < minSqrDistance) {
+                                minSqrDistance = sqDistance;
+                                bestSlot = trashSlot;
+                                isTrashSlot = true;
                             }
                         }
                     }
@@ -67,28 +113,40 @@ namespace Editor
 
             if (oldBestSlot != bestSlot) {
                 if (oldBestSlot != null) {
+                    oldBestSlot.HandleDragExit();
                     onDragExit?.Invoke(oldBestSlot);
                 }
                 if (bestSlot != null) {
+                    bestSlot.HandleDragEnter();
                     onDragEnter?.Invoke(bestSlot);
                 }
             }
         }
 
-        public void Init(List<RectTransform> validSlots)
+        void OnDestroy()
+        {
+            if (bestSlot != null) {
+                bestSlot.HandleDragExit();
+                onDragExit?.Invoke(bestSlot);
+            }
+        }
+
+        public void Init(List<Slot> validSlots, List<Slot> trashSlots)
         {
             this.validSlots = validSlots;
+            this.trashSlots = trashSlots;
         }
 
         public void OnBeginDrag(PointerEventData eventData)
         {
+            onDragStart?.Invoke();
+
             SaveState();
             isDragging = true;
 
             transform.SetParent(canvas.transform, true);
             transform.SetAsLastSibling();
             rt.anchoredPosition = Vector2.zero;
-            onDragStart?.Invoke();
         }
 
         public void OnDrag(PointerEventData eventData)
@@ -114,8 +172,13 @@ namespace Editor
         private void EndDrag()
         {
             if (bestSlot != null) {
+                onDragEnd?.Invoke();
                 RestorePosition();
-                onDragSuccess?.Invoke(bestSlot);
+                if (isTrashSlot) {
+                    onDragTrash?.Invoke(bestSlot);
+                } else {
+                    onDragSuccess?.Invoke(bestSlot);
+                }
                 isDragging = false;
             } else {
                 CancelDrag();
@@ -124,6 +187,7 @@ namespace Editor
 
         private void CancelDrag()
         {
+            onDragEnd?.Invoke();
             RestorePosition();
             RestoreParent();
             isDragging = false;

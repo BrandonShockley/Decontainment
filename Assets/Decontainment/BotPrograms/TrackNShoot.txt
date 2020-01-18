@@ -5,6 +5,7 @@ Inf: 1000000000
 TRN_Left: 0
 TRN_Right: 1
 
+Start:
 ; Put the ID of the farthest enemy in %0
 TAR %0 Farthest
 

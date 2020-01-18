@@ -9,10 +9,12 @@ namespace Editor
 {
     public class Token : MonoBehaviour
     {
-        public SlotField slot;
+        public SlotField slotField;
 
         [SerializeField]
         private ArgTokenColorMap argTokenColorMap = null;
+
+        private Argument arg;
 
         private CanvasGroup cg;
         private Draggable draggable;
@@ -25,24 +27,10 @@ namespace Editor
             image = GetComponent<Image>();
         }
 
-        void Start()
+        public void Init(Argument initArg)
         {
-            draggable.onDragStart = () =>
-            {
-                image.raycastTarget = false;
-                cg.blocksRaycasts = false;
-            };
-            draggable.onDragCancel = () =>
-            {
-                image.raycastTarget = true;
-                cg.blocksRaycasts = true;
-            };
-            draggable.onDragEnter = (RectTransform slotRT) => slotRT.GetComponent<Outline>().enabled = true;
-            draggable.onDragExit = (RectTransform slotRT) => slotRT.GetComponent<Outline>().enabled = false;
-        }
+            arg = initArg;
 
-        public void Init(Argument arg, List<RectTransform> slotRTs)
-        {
             // Configure text
             TextMeshProUGUI tm = GetComponentInChildren<TextMeshProUGUI>();
             if (arg.type == Argument.Type.REGISTER) {
@@ -63,11 +51,28 @@ namespace Editor
             RectTransform rt = GetComponent<RectTransform>();
             rt.sizeDelta = new Vector2(tm.GetPreferredValues(tm.text).x, rt.sizeDelta.y);
 
-            draggable.Init(slotRTs);
-            draggable.onDragSuccess = (RectTransform slotRT) =>
+            draggable.Init(Globals.slotFields, Globals.trashSlots);
+            draggable.onDragStart = () =>
             {
-                GameObject oldToken = gameObject; // ReleaseArg will set token to null
-                slotRT.GetComponent<SlotField>().InsertArg(slot.ReleaseArg(), oldToken);
+                image.raycastTarget = false;
+                cg.blocksRaycasts = false;
+            };
+            draggable.onDragEnd = () =>
+            {
+                image.raycastTarget = true;
+                cg.blocksRaycasts = true;
+            };
+            draggable.onDragSuccess = (Draggable.Slot slot) =>
+            {
+                if (slotField != null) {
+                    arg = slotField.ReleaseArg();
+                }
+                ((SlotField)slot).InsertArg(arg, gameObject);
+            };
+            draggable.onDragTrash = (Draggable.Slot slot) =>
+            {
+                slotField?.ReleaseArg();
+                Destroy(gameObject);
             };
         }
     }

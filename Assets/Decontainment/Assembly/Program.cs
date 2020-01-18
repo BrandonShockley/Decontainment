@@ -7,7 +7,7 @@ namespace Asm
     public enum OpCategory
     {
         CONTROL_FLOW,
-        DATA_MANIP,
+        DATA_MANIPULATION,
         SENSING,
         ACTION,
         _SIZE,
@@ -102,12 +102,12 @@ namespace Asm
             ArgumentSpec.VAL1,
             ArgumentSpec.VAL2
         };
-        public static readonly ArgumentSpec[] ONE_INPUT_DATA_MANIP_SPECS = new ArgumentSpec[]
+        public static readonly ArgumentSpec[] ONE_INPUT_DATA_MANIPULATION_SPECS = new ArgumentSpec[]
         {
             DEST_REG,
             ArgumentSpec.VAL
         };
-        public static readonly ArgumentSpec[] TWO_INPUT_DATA_MANIP_SPECS = new ArgumentSpec[]
+        public static readonly ArgumentSpec[] TWO_INPUT_DATA_MANIPULATION_SPECS = new ArgumentSpec[]
         {
             DEST_REG,
             ArgumentSpec.VAL1,
@@ -222,13 +222,13 @@ namespace Asm
             {OpCode.BGT, ArgumentSpec.TWO_INPUT_CONTROL_FLOW_SPECS},
             {OpCode.BGE, ArgumentSpec.TWO_INPUT_CONTROL_FLOW_SPECS},
 
-            {OpCode.SET, ArgumentSpec.ONE_INPUT_DATA_MANIP_SPECS},
-            {OpCode.ADD, ArgumentSpec.TWO_INPUT_DATA_MANIP_SPECS},
-            {OpCode.SUB, ArgumentSpec.TWO_INPUT_DATA_MANIP_SPECS},
-            {OpCode.MUL, ArgumentSpec.TWO_INPUT_DATA_MANIP_SPECS},
-            {OpCode.DIV, ArgumentSpec.TWO_INPUT_DATA_MANIP_SPECS},
-            {OpCode.MOD, ArgumentSpec.TWO_INPUT_DATA_MANIP_SPECS},
-            {OpCode.ABS, ArgumentSpec.ONE_INPUT_DATA_MANIP_SPECS},
+            {OpCode.SET, ArgumentSpec.ONE_INPUT_DATA_MANIPULATION_SPECS},
+            {OpCode.ADD, ArgumentSpec.TWO_INPUT_DATA_MANIPULATION_SPECS},
+            {OpCode.SUB, ArgumentSpec.TWO_INPUT_DATA_MANIPULATION_SPECS},
+            {OpCode.MUL, ArgumentSpec.TWO_INPUT_DATA_MANIPULATION_SPECS},
+            {OpCode.DIV, ArgumentSpec.TWO_INPUT_DATA_MANIPULATION_SPECS},
+            {OpCode.MOD, ArgumentSpec.TWO_INPUT_DATA_MANIPULATION_SPECS},
+            {OpCode.ABS, ArgumentSpec.ONE_INPUT_DATA_MANIPULATION_SPECS},
 
             {OpCode.TAR, new ArgumentSpec[]
                 {
@@ -272,7 +272,7 @@ namespace Asm
         };
 
         /// OpCode to OpCategory map
-        public static Dictionary<OpCode, OpCategory> opCategoryMap = new Dictionary<OpCode, OpCategory>()
+        public static Dictionary<OpCode, OpCategory> opCodeOpCategoryMap = new Dictionary<OpCode, OpCategory>()
         {
             {OpCode.NOP, OpCategory.CONTROL_FLOW},
             {OpCode.BUN, OpCategory.CONTROL_FLOW},
@@ -283,13 +283,13 @@ namespace Asm
             {OpCode.BGT, OpCategory.CONTROL_FLOW},
             {OpCode.BGE, OpCategory.CONTROL_FLOW},
 
-            {OpCode.SET, OpCategory.DATA_MANIP},
-            {OpCode.ADD, OpCategory.DATA_MANIP},
-            {OpCode.SUB, OpCategory.DATA_MANIP},
-            {OpCode.MUL, OpCategory.DATA_MANIP},
-            {OpCode.DIV, OpCategory.DATA_MANIP},
-            {OpCode.MOD, OpCategory.DATA_MANIP},
-            {OpCode.ABS, OpCategory.DATA_MANIP},
+            {OpCode.SET, OpCategory.DATA_MANIPULATION},
+            {OpCode.ADD, OpCategory.DATA_MANIPULATION},
+            {OpCode.SUB, OpCategory.DATA_MANIPULATION},
+            {OpCode.MUL, OpCategory.DATA_MANIPULATION},
+            {OpCode.DIV, OpCategory.DATA_MANIPULATION},
+            {OpCode.MOD, OpCategory.DATA_MANIPULATION},
+            {OpCode.ABS, OpCategory.DATA_MANIPULATION},
 
             {OpCode.TAR, OpCategory.SENSING},
             {OpCode.HED, OpCategory.SENSING},
@@ -301,15 +301,25 @@ namespace Asm
             {OpCode.SLP, OpCategory.ACTION},
         };
 
+        /// OpCategory to OpCode array
+        public static Dictionary<OpCategory, List<OpCode>> opCategoryOpCodesMap = new Dictionary<OpCategory, List<OpCode>>();
+
         /// OpCode string name to OpCode value map
         public static Dictionary<string, OpCode> nameOpMap = new Dictionary<string, OpCode>();
 
         static InstructionMaps()
         {
-            for (int i = 0; i < (int)OpCode._SIZE; ++i) {
-                OpCode opCode = (OpCode)i;
+            for (OpCategory opCategory = 0; opCategory < OpCategory._SIZE; ++opCategory) {
+                // Init opCategoryOpCodesMap
+                opCategoryOpCodesMap[opCategory] = new List<OpCode>();
+            }
+
+            for (OpCode opCode = 0; opCode < OpCode._SIZE; ++opCode) {
                 // Init nameOpMap
                 nameOpMap.Add(opCode.ToString(), opCode);
+
+                // Init opCategoryOpCodesMap
+                opCategoryOpCodesMap[opCodeOpCategoryMap[opCode]].Add(opCode);
 
                 // Validate opArgSpecMap is filled out
                 int numArgs = opArgNumMap[opCode];
@@ -319,7 +329,8 @@ namespace Asm
             // Validate sizes of maps
             Debug.Assert(opArgNumMap.Count == (int)OpCode._SIZE);
             Debug.Assert(opArgSpecMap.Count == (int)OpCode._SIZE);
-            Debug.Assert(opCategoryMap.Count == (int)OpCode._SIZE);
+            Debug.Assert(opCodeOpCategoryMap.Count == (int)OpCode._SIZE);
+            Debug.Assert(opCategoryOpCodesMap.Count == (int)OpCategory._SIZE);
         }
     }
 }

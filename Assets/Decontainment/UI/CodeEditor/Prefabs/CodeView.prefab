@@ -336,7 +336,7 @@ GameObject:
   - component: {fileID: 8802951697248366493}
   - component: {fileID: 4778006854806990053}
   m_Layer: 5
-  m_Name: InstructionList
+  m_Name: CodeList
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -433,7 +433,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controller: {fileID: 0}
-  codeBlockPrefab: {fileID: 3789034097312089564, guid: 53c82f9e4126a41429b71f2ef510a6c3,
+  dividerRTs: []
+  instructionBlockPrefab: {fileID: 3789034097312089564, guid: 53c82f9e4126a41429b71f2ef510a6c3,
     type: 3}
   labelBlockPrefab: {fileID: 8057640436278862642, guid: 185623e904d102d41808bec8befd39dc,
     type: 3}
