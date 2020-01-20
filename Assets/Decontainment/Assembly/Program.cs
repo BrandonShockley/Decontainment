@@ -174,6 +174,23 @@ namespace Asm
         public Dictionary<string, Label> labelMap;
         public List<Label> branchLabelList;
         public List<Label> constLabelList;
+
+        public event Action OnInstructionChange;
+        public event Action OnBranchLabelChange;
+        public event Action OnConstLabelChange;
+
+        public void BroadcastInstructionChange()
+        {
+            OnInstructionChange?.Invoke();
+        }
+        public void BroadcastBranchLabelChange()
+        {
+            OnBranchLabelChange?.Invoke();
+        }
+        public void BroadcastConstLabelChange()
+        {
+            OnConstLabelChange?.Invoke();
+        }
     }
 
     public static class InstructionMaps

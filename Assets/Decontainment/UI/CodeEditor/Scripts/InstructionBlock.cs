@@ -26,7 +26,6 @@ namespace Editor
 
         private int lineNumber;
         private Instruction instruction;
-        private Action resetAction;
 
         private TextMeshProUGUI opCodeTM;
 
@@ -37,26 +36,26 @@ namespace Editor
         }
 
         // lineNumber == -1 signifies no line number
-        public void Init(int lineNumber, Instruction instruction, Divider myDivider, Action resetAction)
+        public void Init(int lineNumber, Instruction instruction, Divider myDivider)
         {
             base.Init(myDivider);
             this.lineNumber = lineNumber;
             this.instruction = instruction;
-            this.resetAction = resetAction;
 
             draggable.onDragSuccess = (Draggable.Slot slot) =>
             {
                 Insert(slot);
                 // Reset frontend
                 Destroy(gameObject);
-                resetAction();
+                Globals.program.BroadcastInstructionChange();
             };
             draggable.onDragTrash = (Draggable.Slot slot) =>
             {
-                Remove();
-                // Reset frontend
+                if (lineNumber != -1) {
+                    Remove();
+                    Globals.program.BroadcastInstructionChange();
+                }
                 Destroy(gameObject);
-                resetAction();
             };
 
             // Configure text
@@ -120,12 +119,12 @@ namespace Editor
         {
             if (lineNumber != -1) {
                 Globals.program.instructions.RemoveAt(lineNumber);
-            }
 
-            // Adjust labels
-            foreach (Label label in Globals.program.branchLabelList) {
-                if (label.val > lineNumber) {
-                    --label.val; // TODO: This will need to be variable when we add dragging selected blocks
+                // Adjust labels
+                foreach (Label label in Globals.program.branchLabelList) {
+                    if (label.val > lineNumber) {
+                        --label.val; // TODO: This will need to be variable when we add dragging selected blocks
+                    }
                 }
             }
         }

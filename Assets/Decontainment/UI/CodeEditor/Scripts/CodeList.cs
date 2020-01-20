@@ -52,7 +52,12 @@ namespace Editor
             rt = GetComponent<RectTransform>();
 
             Globals.Init(controller.vm.program);
+            controller.vm.OnTick += HandleTick;
             initialCGBlocksRaycasts = cg.blocksRaycasts;
+
+            Globals.program.OnInstructionChange += Reset;
+            Globals.program.OnBranchLabelChange += Reset;
+            Globals.program.OnConstLabelChange += Reset;
         }
 
         void Start()
@@ -79,7 +84,7 @@ namespace Editor
 
                 // Create code block
                 GameObject instructionBlock = Instantiate(instructionBlockPrefab, transform, false);
-                instructionBlock.GetComponent<InstructionBlock>().Init(lineNumber, instruction, divider, Reset);
+                instructionBlock.GetComponent<InstructionBlock>().Init(lineNumber, instruction, divider);
 
                 instructionBlockTransforms[lineNumber] = instructionBlock.transform;
                 ++lineNumber;
@@ -97,7 +102,6 @@ namespace Editor
 
             OnRectTransformDimensionsChange();
             HandleTick();
-            controller.vm.OnTick += HandleTick;
         }
 
         void OnDestroy()
@@ -132,7 +136,6 @@ namespace Editor
                 Destroy(transform.GetChild(i).gameObject);
             }
             Start();
-            // Debug.Log()
         }
 
         private void CreateLabel(ref int nextLabelIndex)
@@ -147,7 +150,7 @@ namespace Editor
             // TODO: Need to test on bad devices to see if there's a performance hit when the code list is reset
             // NOTE: Maybe if there is, we can use pooling and continue to do a full reset
             GameObject labelBlock = Instantiate(labelBlockPrefab, transform, false);
-            labelBlock.GetComponent<LabelBlock>().Init(label, labelDivider, Reset);
+            labelBlock.GetComponent<LabelBlock>().Init(label, labelDivider);
             ++nextLabelIndex;
         }
 

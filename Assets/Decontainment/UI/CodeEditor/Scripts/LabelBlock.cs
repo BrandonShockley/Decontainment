@@ -8,13 +8,11 @@ namespace Editor
 {
     public class LabelBlock : Block
     {
-        private Action resetAction;
         private Label label;
 
-        public void Init(Label label, Divider myDivider, Action resetAction)
+        public void Init(Label label, Divider myDivider)
         {
             base.Init(myDivider);
-            this.resetAction = resetAction;
             this.label = label;
 
             string labelText = label.name + " (" + label.val + ")";
@@ -54,10 +52,10 @@ namespace Editor
             }
 
             Globals.program.branchLabelList.Insert(insertionIndex, label);
+            Globals.program.BroadcastBranchLabelChange();
 
             // Reset frontend
             Destroy(gameObject);
-            resetAction();
         }
     }
 }

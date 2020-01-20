@@ -3,13 +3,15 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Editor
 {
-    public class Token : MonoBehaviour
+    public class Token : MonoBehaviour, IPointerClickHandler
     {
         public SlotField slotField;
+        public bool renamable;
 
         [SerializeField]
         private ArgTokenColorMap argTokenColorMap = null;
@@ -19,24 +21,32 @@ namespace Editor
         private CanvasGroup cg;
         private Draggable draggable;
         private Image image;
+        private RectTransform rt;
+        private TextMeshProUGUI tm;
+        private TMP_InputField inputField;
+
+        public Argument Arg { get { return arg; }}
 
         void Awake()
         {
             cg = GetComponentInParent<CanvasGroup>();
             draggable = GetComponent<Draggable>();
             image = GetComponent<Image>();
+            rt = GetComponent<RectTransform>();
+            tm = GetComponentInChildren<TextMeshProUGUI>();
+            inputField = GetComponent<TMP_InputField>();
         }
 
-        public void Init(Argument initArg)
+        public void Init(Argument initArg, bool renamable = false)
         {
             arg = initArg;
+            this.renamable = renamable;
 
             // Configure text
-            TextMeshProUGUI tm = GetComponentInChildren<TextMeshProUGUI>();
             if (arg.type == Argument.Type.REGISTER) {
-                tm.text = "R" + arg.val.ToString();
+                inputField.text = "R" + arg.val.ToString();
             } else {
-                tm.text = arg.label.name;
+                inputField.text = arg.label.name;
             }
 
             // Configure token color
@@ -48,9 +58,9 @@ namespace Editor
             image.color = argTokenColorMap.map[tokenType];
 
             // Resize to fit the preferred width
-            RectTransform rt = GetComponent<RectTransform>();
-            rt.sizeDelta = new Vector2(tm.GetPreferredValues(tm.text).x, rt.sizeDelta.y);
+            Resize();
 
+            // Configure callbacks n' stuff
             draggable.Init(Globals.slotFields, Globals.trashSlots);
             draggable.onDragStart = () =>
             {
@@ -74,6 +84,63 @@ namespace Editor
                 slotField?.ReleaseArg();
                 Destroy(gameObject);
             };
+
+            inputField.onDeselect.AddListener(RenameLabel);
+            inputField.onSubmit.AddListener((string val) => EventSystem.current.SetSelectedGameObject(null));
+            inputField.onValueChanged.AddListener((string newVal) => Resize());
+            inputField.onValidateInput = ValidateInput;
         }
+
+        public void OnPointerClick(PointerEventData pointerEventData)
+        {
+            bool isRightClick = pointerEventData.button == PointerEventData.InputButton.Right;
+            if (renamable && (pointerEventData.clickCount == 2 || isRightClick)) {
+                Debug.Assert(arg.type == Argument.Type.LABEL);
+
+                inputField.interactable = true;
+                inputField.ActivateInputField();
+                inputField.interactable = false;
+            }
+        }
+
+        private char ValidateInput(string text, int pos, char ch)
+        {
+            bool isNumber = ch >= '0' && ch <= '9';
+            bool isUpperAlpha = ch >= 'A' && ch <= 'Z';
+            bool isLowerAlpha = ch >= 'a' && ch <= 'z';
+            bool isExtra = ch == '_' || ch == '-';
+
+            if (isNumber || isUpperAlpha || isLowerAlpha || isExtra) {
+                return ch;
+            } else {
+                return (char)0;
+            }
+        }
+
+        private void Resize()
+        {
+            rt.sizeDelta = new Vector2(tm.GetPreferredValues(inputField.text).x, rt.sizeDelta.y);
+        }
+
+        private void RenameLabel(string newName)
+        {
+            if (newName == arg.label.name) {
+                return;
+            }
+
+            Globals.program.labelMap.Remove(arg.label.name);
+            arg.label.name = newName;
+            Globals.program.labelMap.Add(newName, arg.label);
+
+            Action labelChangeAction;
+            if (arg.label.type == Label.Type.BRANCH) {
+                labelChangeAction = Globals.program.BroadcastBranchLabelChange;
+            } else {
+                labelChangeAction = Globals.program.BroadcastConstLabelChange;
+            }
+
+            labelChangeAction();
+        }
+
     }
 }

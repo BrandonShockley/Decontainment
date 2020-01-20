@@ -1,7 +1,9 @@
 using Asm;
+using Extensions;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Editor
@@ -18,12 +20,14 @@ namespace Editor
         private Outline outline;
         private RectTransform rt;
         private TMP_InputField inputField;
+        private TextMeshProUGUI tm;
 
         void Awake()
         {
             outline = GetComponent<Outline>();
             rt = GetComponent<RectTransform>();
             inputField = GetComponent<TMP_InputField>();
+            tm = GetComponentInChildren<TextMeshProUGUI>();
 
             origSize = rt.sizeDelta;
         }
@@ -33,13 +37,19 @@ namespace Editor
             this.arg = arg;
             Globals.slotFields.Add(this);
 
+            inputField.onEndEdit.AddListener((string val) =>
+            {
+                arg.val = int.Parse(val);
+            });
+
             if (arg.type == Argument.Type.IMMEDIATE) {
                 inputField.text = arg.val.ToString();
+                Resize();
             } else {
                 InsertArg(arg);
                 inputField.text = "0";
             }
-            inputField.onEndEdit.AddListener((string val) => arg.val = int.Parse(val));
+            inputField.onValueChanged.AddListener(Resize);
         }
 
         public void InsertArg(Argument newArg, GameObject transferedToken = null)
@@ -102,10 +112,15 @@ namespace Editor
             outline.enabled = false;
         }
 
-        private void Resize()
+        private void Resize(string newText = null)
         {
             if (tokenGO == null) {
-                rt.sizeDelta = origSize;
+                string text = newText == null ? tm.text : newText;
+                RectTransform tmRT = tm.GetComponent<RectTransform>();
+                float preferredWidth = tm.GetPreferredValues(text + "C").x; // Extra character to account for caret
+                float widthDifference = rt.GetWorldSize().x - tmRT.GetWorldSize().x;
+
+                rt.sizeDelta = new Vector2(preferredWidth + widthDifference, rt.sizeDelta.y);
             } else {
                 RectTransform tokenRT = tokenGO.GetComponent<RectTransform>();
                 rt.sizeDelta = tokenRT.sizeDelta;
