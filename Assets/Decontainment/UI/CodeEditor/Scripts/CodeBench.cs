@@ -12,13 +12,19 @@ namespace Editor
         [SerializeField]
         private Transform instructionList = null;
         [SerializeField]
-        private Transform tokenList = null;
+        private Transform regTokenList = null;
+        [SerializeField]
+        private Transform branchLabelTokenList = null;
+        [SerializeField]
+        private Transform constLabelTokenList = null;
         [SerializeField]
         private ColorChangeSlot trashSlot = null;
         [SerializeField]
         private GameObject instructionBlockPrefab = null;
         [SerializeField]
         private GameObject tokenPrefab = null;
+        [SerializeField]
+        private GameObject labelTokenContainerPrefab = null;
         [SerializeField]
         private GameObject constTokenContainerPrefab = null;
         [SerializeField]
@@ -42,33 +48,92 @@ namespace Editor
                 }
             }
 
-            // Create token for each register
-            GameObject regHeader = Instantiate(headerPrefab, tokenList, false);
-            regHeader.GetComponent<TextMeshProUGUI>().text = "REGISTERS";
-
             for (int regNum = 0; regNum < VirtualMachine.NUM_REGS; ++regNum) {
                 Argument arg = new Argument(Argument.Type.REGISTER, regNum);
-                CreateToken(arg, tokenList);
+                CreateToken(arg, regTokenList);
             }
 
-            // Create token for each branch label
-            GameObject branchLabelHeader = Instantiate(headerPrefab, tokenList, false);
-            branchLabelHeader.GetComponent<TextMeshProUGUI>().text = "BRANCH_LABELS";
+            ResetBranchLabelList();
+            ResetConstLabelList();
+
+            Globals.program.OnBranchLabelChange += ResetBranchLabelList;
+            Globals.program.OnConstLabelChange += ResetConstLabelList;
+        }
+
+        public void AddBranchLabel()
+        {
+            string defaultName = "BranchLabel";
+            string newName;
+            for (int i = 0;; ++i) {
+                newName = defaultName + i.ToString();
+                if (!Globals.program.labelMap.ContainsKey(newName)) {
+                    break;
+                }
+            }
+
+            Label label = new Label(newName, 0, Label.Type.BRANCH);
+            Globals.program.branchLabelList.Insert(0, label);
+            Globals.program.labelMap.Add(newName, label);
+            Globals.program.BroadcastBranchLabelChange();
+        }
+
+        public void AddConstLabel()
+        {
+            string defaultName = "ConstLabel";
+            string newName;
+            for (int i = 0;; ++i) {
+                newName = defaultName + i.ToString();
+                if (!Globals.program.labelMap.ContainsKey(newName)) {
+                    break;
+                }
+            }
+
+            Label label = new Label(newName, 0, Label.Type.CONST);
+
+            // Insert alphabetically
+            List<Label> labelList = Globals.program.constLabelList;
+            for (int i = 0; i < labelList.Count; ++i) {
+                if (string.Compare(label.name, labelList[i].name) <= 0) {
+                    labelList.Insert(i, label);
+                    break;
+                } else if (i + 1 == labelList.Count) {
+                    labelList.Add(label);
+                    break;
+                }
+            }
+            Globals.program.labelMap.Add(newName, label);
+            Globals.program.BroadcastConstLabelChange();
+        }
+
+        private void ResetBranchLabelList()
+        {
+            for (int i = branchLabelTokenList.childCount - 1; i >= 0; --i) {
+                Destroy(branchLabelTokenList.GetChild(i).gameObject);
+            }
 
             foreach (Label label in Globals.program.branchLabelList) {
+                Transform labelTokenContainer = Instantiate(labelTokenContainerPrefab, branchLabelTokenList).transform;
+                labelTokenContainer.GetComponentInChildren<Button>().onClick.AddListener(() =>
+                {
+                    Globals.program.RemoveLabel(label);
+                });
                 Argument arg = new Argument(Argument.Type.LABEL, label);
-                CreateToken(arg, tokenList);
+                Token token = CreateToken(arg, labelTokenContainer);
+                token.transform.SetSiblingIndex(1);
+            }
+        }
+
+        private void ResetConstLabelList()
+        {
+            for (int i = constLabelTokenList.childCount - 1; i >= 0; --i) {
+                Destroy(constLabelTokenList.GetChild(i).gameObject);
             }
 
-            // Create token container for each const label
-            GameObject constLabelHeader = Instantiate(headerPrefab, tokenList, false);
-            constLabelHeader.GetComponent<TextMeshProUGUI>().text = "CONSTANT_LABELS";
-
             foreach (Label label in Globals.program.constLabelList) {
-                Transform constTokenContainer = Instantiate(constTokenContainerPrefab, tokenList).transform;
+                Transform labelTokenContainer = Instantiate(labelTokenContainerPrefab, constLabelTokenList).transform;
                 Argument arg = new Argument(Argument.Type.LABEL, label);
-                Token token = CreateToken(arg, constTokenContainer);
-                token.transform.SetAsFirstSibling();
+                Token token = CreateToken(arg, labelTokenContainer);
+                token.transform.SetSiblingIndex(1);
             }
         }
 

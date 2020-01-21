@@ -191,6 +191,30 @@ namespace Asm
         {
             OnConstLabelChange?.Invoke();
         }
+        public void RemoveLabel(Label label)
+        {
+            labelMap.Remove(label.name);
+            Label.Type labelType = label.type;
+            List<Label> labelList = labelType == Label.Type.BRANCH ? branchLabelList : constLabelList;
+            labelList.Remove(label);
+
+            // Remove references in instructions
+            foreach (Instruction i in instructions) {
+                foreach (Argument arg in i.args) {
+                    if (arg.type == Argument.Type.LABEL && arg.label == label) {
+                        arg.label = null;
+                        arg.type = Argument.Type.IMMEDIATE;
+                        arg.val = 0;
+                    }
+                }
+            }
+
+            if (labelType == Label.Type.BRANCH) {
+                BroadcastBranchLabelChange();
+            } else {
+                BroadcastConstLabelChange();
+            }
+        }
     }
 
     public static class InstructionMaps

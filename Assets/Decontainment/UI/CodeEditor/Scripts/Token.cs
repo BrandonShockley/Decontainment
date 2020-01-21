@@ -128,6 +128,13 @@ namespace Editor
                 return;
             }
 
+            // Make sure we're not renaming to a preexisting label
+            if (Globals.program.labelMap.ContainsKey(newName)) {
+                // TODO: Display a prompt when this happens (Trello #18)
+                inputField.text = arg.label.name;
+                return;
+            }
+
             Globals.program.labelMap.Remove(arg.label.name);
             arg.label.name = newName;
             Globals.program.labelMap.Add(newName, arg.label);

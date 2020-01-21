@@ -28,7 +28,7 @@ namespace Editor
             inputField.onEndEdit.AddListener(ChangeLabelValue);
             inputField.onValueChanged.AddListener(Resize);
 
-            Token token = transform.parent.GetComponentInChildren<Token>();
+            Token token = transform.parent.parent.GetComponentInChildren<Token>();
             Debug.Assert(token.Arg.type == Argument.Type.LABEL);
             Debug.Assert(token.Arg.label.type == Label.Type.CONST);
 
