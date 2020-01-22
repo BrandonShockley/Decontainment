@@ -25,6 +25,8 @@ public class VirtualMachine
     public void LoadProgram(Program program)
     {
         this.program = program;
+
+        program.OnInstructionChange += () => pc = pc % this.program.instructions.Count;
     }
 
     public event Action OnTick;

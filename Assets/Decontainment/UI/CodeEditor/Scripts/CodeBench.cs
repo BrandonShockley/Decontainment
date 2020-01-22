@@ -26,8 +26,6 @@ namespace Editor
         [SerializeField]
         private GameObject labelTokenContainerPrefab = null;
         [SerializeField]
-        private GameObject constTokenContainerPrefab = null;
-        [SerializeField]
         private GameObject headerPrefab = null;
 
         private GameObject[] labelTokens;
@@ -92,15 +90,13 @@ namespace Editor
 
             // Insert alphabetically
             List<Label> labelList = Globals.program.constLabelList;
-            for (int i = 0; i < labelList.Count; ++i) {
-                if (string.Compare(label.name, labelList[i].name) <= 0) {
-                    labelList.Insert(i, label);
-                    break;
-                } else if (i + 1 == labelList.Count) {
-                    labelList.Add(label);
+            int index;
+            for (index = 0; index < labelList.Count; ++index) {
+                if (string.Compare(label.name, labelList[index].name) <= 0) {
                     break;
                 }
             }
+            labelList.Insert(index, label);
             Globals.program.labelMap.Add(newName, label);
             Globals.program.BroadcastConstLabelChange();
         }

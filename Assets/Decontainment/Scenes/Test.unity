@@ -555,8 +555,8 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 1856250847}
-  - {fileID: 2102464750}
   - {fileID: 558188923}
+  - {fileID: 2102464750}
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -876,6 +876,18 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 8647798932408962913}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1932744059 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3528470376585942943, guid: dcb872f8505c05f419fa3282048b6883,
+    type: 3}
+  m_PrefabInstance: {fileID: 1479763993}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbf6cc87087728f4d930cff5c970ff2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1940557443
 GameObject:
   m_ObjectHideFlags: 0
@@ -1173,6 +1185,21 @@ PrefabInstance:
       propertyPath: m_textInfo.pageCount
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3832538195994308849, guid: cbac44966c4dc4f4a8f3885057157673,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3832538195994308849, guid: cbac44966c4dc4f4a8f3885057157673,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3832538195994308849, guid: cbac44966c4dc4f4a8f3885057157673,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4117471000670593077, guid: cbac44966c4dc4f4a8f3885057157673,
         type: 3}
       propertyPath: m_AnchorMin.y
@@ -1356,7 +1383,7 @@ PrefabInstance:
     - target: {fileID: 5911792287318247080, guid: cbac44966c4dc4f4a8f3885057157673,
         type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5911792287318247080, guid: cbac44966c4dc4f4a8f3885057157673,
         type: 3}
@@ -1406,7 +1433,7 @@ PrefabInstance:
     - target: {fileID: 5911792287318247080, guid: cbac44966c4dc4f4a8f3885057157673,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0.5
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 5911792287318247080, guid: cbac44966c4dc4f4a8f3885057157673,
         type: 3}
@@ -1427,6 +1454,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: CodeBench
+      objectReference: {fileID: 0}
+    - target: {fileID: 5911792287318247081, guid: cbac44966c4dc4f4a8f3885057157673,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6957993123132683066, guid: cbac44966c4dc4f4a8f3885057157673,
         type: 3}
@@ -1664,7 +1696,7 @@ RectTransform:
   - {fileID: 1316681069}
   - {fileID: 2025014051}
   m_Father: {fileID: 837323672}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
@@ -1968,7 +2000,7 @@ PrefabInstance:
         type: 3}
       propertyPath: controller
       value: 
-      objectReference: {fileID: 1141747327}
+      objectReference: {fileID: 1932744059}
     - target: {fileID: 5119547876451810991, guid: 58280c18903701343bec8500cbc4bc90,
         type: 3}
       propertyPath: controller
@@ -1987,7 +2019,7 @@ PrefabInstance:
     - target: {fileID: 7775971502459746165, guid: 58280c18903701343bec8500cbc4bc90,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0.000030517578
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8129006242167088867, guid: 58280c18903701343bec8500cbc4bc90,
         type: 3}
@@ -2048,6 +2080,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: CodeView
+      objectReference: {fileID: 0}
+    - target: {fileID: 8647798933790731455, guid: 58280c18903701343bec8500cbc4bc90,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8866921111344339734, guid: 58280c18903701343bec8500cbc4bc90,
         type: 3}

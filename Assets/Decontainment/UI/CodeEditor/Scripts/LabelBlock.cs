@@ -18,7 +18,13 @@ namespace Editor
             string labelText = label.name + " (" + label.val + ")";
             GetComponentInChildren<TextMeshProUGUI>().text = labelText;
 
-            GetComponent<Draggable>().onDragSuccess = Move;
+            Draggable draggable = GetComponent<Draggable>();
+            draggable.onDragSuccess = Move;
+            draggable.onDragTrash = (Draggable.Slot slot) =>
+            {
+                Globals.program.RemoveLabel(label);
+                Destroy(gameObject);
+            };
         }
 
         private void Move(Draggable.Slot slot)

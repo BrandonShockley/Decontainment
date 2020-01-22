@@ -122,7 +122,8 @@ namespace Editor
                 maxInstructionBlockWidth = Mathf.Max(instructionBlockRT.GetWorldSize().x, maxInstructionBlockWidth);
             }
 
-            if (viewportRT.GetWorldSize().x < maxInstructionBlockWidth) {
+            float viewportWidth = viewportRT.GetWorldSize().x;
+            if (viewportWidth < maxInstructionBlockWidth && !Mathf.Approximately(viewportWidth, maxInstructionBlockWidth)) {
                 csf.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
             } else {
                 csf.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;

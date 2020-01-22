@@ -19,8 +19,9 @@ public class PersistentSingleton<T> : MonoBehaviour where T : MonoBehaviour
     {
         get {
             lock (m_Lock) {
-                if (destroyed)
+                if (destroyed) {
                     return null;
+                }
                 if (m_Instance == null) {
                     // Need to create a new GameObject to attach the singleton to.
                     var singletonObject = new GameObject();
