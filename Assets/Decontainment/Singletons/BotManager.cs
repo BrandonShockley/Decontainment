@@ -45,6 +45,11 @@ class BotManager : PersistentSingleton<BotManager>
 
     public int GetTargetHeading(Controller targeter, int targetIndex)
     {
+        if (targetIndex < 0 || targetIndex >= bots.Count) {
+            Debug.LogWarning("Bot " + targeter + " attempted to get target heading for invalid target index");
+            return 0;
+        }
+
         Controller target = bots[targetIndex];
         Vector2 look = target.transform.position - targeter.transform.position;
         return (int)Vector2.SignedAngle(targeter.transform.right, look);

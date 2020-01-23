@@ -120,6 +120,25 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &149472566 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5911792287318247081, guid: cbac44966c4dc4f4a8f3885057157673,
+    type: 3}
+  m_PrefabInstance: {fileID: 1954698154}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &149472571
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 149472566}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a138ff2ce883b8409ee818224ed2cd4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  toggleKey: 97
 --- !u!1 &437661327
 GameObject:
   m_ObjectHideFlags: 0
@@ -1698,11 +1717,11 @@ RectTransform:
   m_Father: {fileID: 837323672}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 160, y: 20}
-  m_Pivot: {x: 0, y: 1}
+  m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &2102464751
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1728,7 +1747,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
