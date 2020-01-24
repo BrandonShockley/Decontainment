@@ -11,11 +11,12 @@ namespace Bot
             RIGHT,
         }
 
-        public Action onComplete;
-
+        public bool async;
         public float speed = 45;
         public float remainingDegrees;
         public Direction direction;
+
+        public bool Running { get { return !async && remainingDegrees != 0; } }
 
         void Awake()
         {
@@ -34,14 +35,6 @@ namespace Bot
                 float directionVector = direction == Direction.LEFT ? 1 : -1;
                 transform.Rotate(0, 0, deltaDegrees * directionVector);
                 remainingDegrees -= deltaDegrees;
-
-                if (willArrive) {
-                    onComplete?.Invoke();
-                    onComplete = null;
-                }
-            } else {
-                onComplete?.Invoke();
-                onComplete = null;
             }
         }
 

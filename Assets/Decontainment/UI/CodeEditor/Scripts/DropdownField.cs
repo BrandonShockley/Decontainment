@@ -30,7 +30,10 @@ namespace Editor
 
             // Register value change handler
             Argument.Type argType = argSpec.regOnly ? Argument.Type.REGISTER : Argument.Type.IMMEDIATE;
-            dropdown.onValueChanged.AddListener((int val) => arg.val = val);
+            dropdown.onValueChanged.AddListener((int val) =>
+            {
+                arg.val = val;
+            });
 
             // Resize to fit the max preferred width
             RectTransform dropdownRT = dropdown.GetComponent<RectTransform>();

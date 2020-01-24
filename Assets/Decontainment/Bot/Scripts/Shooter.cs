@@ -5,9 +5,8 @@ namespace Bot
 {
     public class Shooter : MonoBehaviour
     {
-        public Action onComplete;
-
         public Trigger shotRequested;
+        public bool async;
 
         [SerializeField]
         private float cooldown = 1;
@@ -19,6 +18,8 @@ namespace Bot
         private float cooldownTimer;
 
         private SoundModulator sm;
+
+        public bool Running { get { return !async && cooldownTimer > 0; } }
 
         void Awake()
         {
@@ -33,7 +34,6 @@ namespace Bot
 
                 Projectile.CreateProjectile(this, projectilePrefab, transform.position, transform.right);
                 sm.PlayModClip(projectileSound);
-                onComplete?.Invoke();
             }
         }
     }

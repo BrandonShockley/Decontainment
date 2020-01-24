@@ -14,6 +14,7 @@ public class PairAttribute : PropertyAttribute
         this.valueFieldName = valueFieldName;
     }
 
+    #if UNITY_EDITOR
     [CustomPropertyDrawer(typeof(PairAttribute))]
     private class EnumColorMapDrawer : PropertyDrawer
     {
@@ -46,4 +47,5 @@ public class PairAttribute : PropertyAttribute
             EditorGUI.EndProperty();
         }
     }
+    #endif
 }

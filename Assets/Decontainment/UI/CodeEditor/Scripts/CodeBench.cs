@@ -41,8 +41,7 @@ namespace Editor
 
                 List<OpCode> opCodes = InstructionMaps.opCategoryOpCodesMap[opCategory];
                 foreach (OpCode opCode in opCodes) {
-                    Instruction instruction = new Instruction(opCode);
-                    CreateInstructionBlock(instruction);
+                    CreateInstructionBlock(opCode);
                 }
             }
 
@@ -133,8 +132,9 @@ namespace Editor
             }
         }
 
-        private InstructionBlock CreateInstructionBlock(Instruction instruction, InstructionBlock originalBlock = null)
+        private InstructionBlock CreateInstructionBlock(OpCode opCode, InstructionBlock originalBlock = null)
         {
+            Instruction instruction = new Instruction(opCode);
             InstructionBlock instructionBlock = Instantiate(instructionBlockPrefab, instructionList, false).GetComponent<InstructionBlock>();
             instructionBlock.Init(-1, instruction, null);
 
@@ -147,7 +147,7 @@ namespace Editor
             Action oldOnDragStart = draggable.onDragStart;
             draggable.onDragStart = () =>
             {
-                InstructionBlock clone = CreateInstructionBlock(instruction, instructionBlock);
+                InstructionBlock clone = CreateInstructionBlock(opCode, instructionBlock);
                 oldOnDragStart?.Invoke();
 
                 draggable.onDragCancel = () => Destroy(clone.gameObject);
@@ -166,7 +166,7 @@ namespace Editor
         private Token CreateToken(Argument arg, Transform parent, Token originalToken = null)
         {
             Token token = Instantiate(tokenPrefab, parent, false).GetComponent<Token>();
-            token.Init(arg, true);
+            token.Init(arg.ShallowCopy(), true);
 
             if (originalToken != null) {
                 token.transform.SetSiblingIndex(originalToken.transform.GetSiblingIndex());
@@ -187,6 +187,7 @@ namespace Editor
                 token.renamable = false;
                 draggable.onDragStart = oldOnDragStart;
                 draggable.onDragSuccess = oldOnDragSuccess;
+                draggable.onDragCancel = null;
                 oldOnDragSuccess?.Invoke(slot);
             };
 

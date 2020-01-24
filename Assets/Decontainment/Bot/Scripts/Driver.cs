@@ -13,11 +13,12 @@ namespace Bot
             RIGHT,
         }
 
-        public Action onComplete;
-
+        public bool async;
         public float speed = 1;
         public float remainingDistance;
         public Direction direction;
+
+        public bool Running { get { return !async && remainingDistance != 0; } }
 
         void Awake()
         {
@@ -40,13 +41,6 @@ namespace Bot
                 transform.position += directionVector * deltaDistance;
                 remainingDistance -= deltaDistance;
 
-                if (willArrive) {
-                    onComplete?.Invoke();
-                    onComplete = null;
-                }
-            } else {
-                onComplete?.Invoke();
-                onComplete = null;
             }
         }
 

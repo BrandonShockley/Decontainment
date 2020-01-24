@@ -17,7 +17,6 @@ namespace Bot
         private float clockInterval = 1;
 
         private float clockTimer;
-        private bool opRunning;
 
         private Driver driver;
         private Scanner scanner;
@@ -55,6 +54,7 @@ namespace Bot
 
         void FixedUpdate()
         {
+            bool opRunning = driver.Running || turner.Running || shooter.Running;
             if (!opRunning) {
                 clockTimer -= Time.fixedDeltaTime;
                 if (clockTimer <= 0) {
@@ -68,29 +68,20 @@ namespace Bot
         {
             driver.remainingDistance = distance;
             driver.direction = direction;
-            if (!async) {
-                opRunning = true;
-                driver.onComplete = () => opRunning = false;
-            }
+            driver.async = async;
         }
 
         public void Turn(Turner.Direction direction, int degrees, bool async)
         {
             turner.remainingDegrees = degrees;
             turner.direction = direction;
-            if (!async) {
-                opRunning = true;
-                turner.onComplete = () => opRunning = false;
-            }
+            turner.async = async;
         }
 
         public void Shoot(bool async)
         {
             shooter.shotRequested.Value = true;
-            if (!async) {
-                opRunning = true;
-                shooter.onComplete = () => opRunning = false;
-            }
+            shooter.async = async;
         }
 
         public int Scan(Scanner.Target target, float direction, float range, float width)
