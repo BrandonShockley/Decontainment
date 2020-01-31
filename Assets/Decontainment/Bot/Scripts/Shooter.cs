@@ -8,33 +8,30 @@ namespace Bot
         public Trigger shotRequested;
         public bool async;
 
-        [SerializeField]
-        private float cooldown = 1;
-        [SerializeField]
-        private GameObject projectilePrefab = null;
-        [SerializeField]
-        private AudioClip projectileSound = null;
+        public Hardpoint hardpoint;
+        public Weapon weapon;
 
         private float cooldownTimer;
 
-        private SoundModulator sm;
-
         public bool Running { get { return !async && cooldownTimer > 0; } }
-
-        void Awake()
-        {
-            sm = GetComponent<SoundModulator>();
-        }
 
         void FixedUpdate()
         {
             cooldownTimer -= Time.fixedDeltaTime;
-            if (cooldownTimer <= 0 && shotRequested.Value) {
-                cooldownTimer = cooldown;
+            if (shotRequested.Value && cooldownTimer <= 0) {
+                cooldownTimer = weapon.cooldown;
+                async = true;
 
-                Projectile.CreateProjectile(this, projectilePrefab, transform.position, transform.right);
-                sm.PlayModClip(projectileSound);
+                Projectile.CreateProjectile(this, weapon.projectilePrefab, hardpoint.transform.position, hardpoint.transform.right);
             }
+        }
+
+        public void Init(Hardpoint hardpoint, Weapon weapon)
+        {
+            this.hardpoint = hardpoint;
+            this.weapon = weapon;
+
+            this.hardpoint.Init(weapon.hardpointColor);
         }
     }
 }

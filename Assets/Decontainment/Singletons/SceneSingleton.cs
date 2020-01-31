@@ -3,8 +3,8 @@ using UnityEngine;
 /// <summary>
 /// Inherit from this base class to create a scene singleton.
 /// e.g. public class MyClassName : SceneSingleton<MyClassName> {}
-/// Scene singletons must be present in a scene in order to use them
 /// from: https://wiki.unity3d.com/index.php/Singleton
+/// Scene singletons must be present in a scene in order to use them
 ///
 /// </summary>
 public class SceneSingleton<T> : MonoBehaviour where T : MonoBehaviour

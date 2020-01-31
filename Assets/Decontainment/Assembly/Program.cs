@@ -246,7 +246,7 @@ namespace Asm
 
             {OpCode.DRV, 3},
             {OpCode.TRN, 3},
-            {OpCode.SHT, 1},
+            {OpCode.SHT, 2},
             {OpCode.SLP, 1},
         };
 
@@ -307,7 +307,12 @@ namespace Asm
                     ArgumentSpec.SYNC_PRESETS
                 }
             },
-            {OpCode.SHT, new ArgumentSpec[]{ ArgumentSpec.SYNC_PRESETS }},
+            {OpCode.SHT, new ArgumentSpec[]
+                {
+                    new ArgumentSpec("Weapon ID", false, new string[]{ "0", "1", "2" }),
+                    ArgumentSpec.SYNC_PRESETS
+                }
+            },
             {OpCode.SLP, new ArgumentSpec[]{ ArgumentSpec.MakeOpen("Duration") }},
 
         };

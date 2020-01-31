@@ -13,13 +13,13 @@ public class SoundModulator : MonoBehaviour
         }
 	}
 
-    public void PlayModClip(AudioClip clip, float minPitch = .95f, float maxPitch = 1.05f, float volume = 1.0f) {
+    public void PlayClip(AudioClip clip, float minPitch = .95f, float maxPitch = 1.05f, float volume = 1.0f) {
         audio.pitch = Random.Range(minPitch, maxPitch);
         audio.volume = volume;
         audio.PlayOneShot(clip);
     }
 
-    // public void PlayModClipLate(AudioClip clip, float minPitch = .95f, float maxPitch = 1.05f) {
+    // public void PlayClipLate(AudioClip clip, float minPitch = .95f, float maxPitch = 1.05f) {
     //     AudioSource audio = GameObject.Find("AudioPlayer").GetComponent<AudioSource>();
     //     audio.pitch = Random.Range(minPitch, maxPitch);
     //     audio.PlayOneShot(clip);

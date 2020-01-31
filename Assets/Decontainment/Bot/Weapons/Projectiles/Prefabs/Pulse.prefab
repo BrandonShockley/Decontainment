@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4322972671638487903}
   - component: {fileID: 4391388499460265513}
   - component: {fileID: 5340437789409779508}
+  - component: {fileID: 1616975164642298597}
   m_Layer: 8
   m_Name: Pulse
   m_TagString: Untagged
@@ -142,7 +143,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85e332343a006a146ae8fcc70789c7c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shooter: {fileID: 0}
+  shotSound: {fileID: 8300000, guid: ad47c1249e426c844af34b69d3aba624, type: 3}
   speed: 8
 --- !u!61 &4391388499460265513
 BoxCollider2D:
@@ -191,3 +192,15 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &1616975164642298597
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5202299059419044755}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb23cef5618c9ab4bb460e0ca22a69c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -33,7 +33,7 @@ BEQ TrackNShoot %0 %0
 ; Else stop and shoot
 Shoot:
 DRV     ; Halt
-SHT Async
-;SLP 20
+SHT $0 Async
+SHT $1 Async
 BEQ TrackNShoot %0 %0
 THIIING:

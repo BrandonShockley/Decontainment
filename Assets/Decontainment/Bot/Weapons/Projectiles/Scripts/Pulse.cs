@@ -12,14 +12,14 @@ public class Pulse : Projectile
     private LineRenderer lr;
     private Rigidbody2D rb;
 
-    void Awake()
+    protected override void SubAwake()
     {
         col = GetComponent<Collider2D>();
         lr = GetComponent<LineRenderer>();
         rb = GetComponent<Rigidbody2D>();
     }
 
-    void OnEnable()
+    protected override void SubOnEnable()
     {
         col.enabled = false;
     }

@@ -17,7 +17,7 @@ public class Laser : Projectile
 
     private LineRenderer lr;
 
-    void Awake()
+    protected override void SubAwake()
     {
         lr = GetComponent<LineRenderer>();
     }

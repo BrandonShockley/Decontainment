@@ -15,22 +15,34 @@ namespace Bot
         private TextAsset code = null;
         [SerializeField]
         private float clockInterval = 1;
+        [SerializeField]
+        private Hardpoint[] hardpoints = null;
+        [SerializeField]
+        private ShooterConfigurations shooterConfigsTemplate = null;
 
         private float clockTimer;
+        private ShooterConfigurations shooterConfigs;
 
         private Driver driver;
         private Scanner scanner;
-        private Shooter shooter;
+        private Shooter[] shooters;
         private Turner turner;
         private Health health;
 
         void Awake()
         {
             driver = GetComponent<Driver>();
-            shooter = GetComponent<Shooter>();
             scanner = GetComponentInChildren<Scanner>();
             turner = GetComponent<Turner>();
             health = GetComponent<Health>();
+            shooters = GetComponents<Shooter>();
+
+            shooterConfigs = shooterConfigsTemplate.Clone();
+
+            for (int si = 0; si < shooterConfigs.Length; ++si) {
+                ShooterConfigurations.Configuration config = shooterConfigs[si];
+                shooters[si].Init(hardpoints[config.hardpointNum], config.weapon);
+            }
 
             vm = new VirtualMachine(this);
 
@@ -54,7 +66,11 @@ namespace Bot
 
         void FixedUpdate()
         {
-            bool opRunning = driver.Running || turner.Running || shooter.Running;
+            bool opRunning = driver.Running || turner.Running;
+            foreach (Shooter shooter in shooters) {
+                opRunning = opRunning || shooter.Running;
+            }
+
             if (!opRunning) {
                 clockTimer -= Time.fixedDeltaTime;
                 if (clockTimer <= 0) {
@@ -78,10 +94,10 @@ namespace Bot
             turner.async = async;
         }
 
-        public void Shoot(bool async)
+        public void Shoot(int weaponNum, bool async)
         {
-            shooter.shotRequested.Value = true;
-            shooter.async = async;
+            shooters[weaponNum].shotRequested.Value = true;
+            shooters[weaponNum].async = async;
         }
 
         public int Scan(Scanner.Target target, float direction, float range, float width)

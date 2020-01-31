@@ -79,7 +79,7 @@ namespace Bot
         {
             if (vulnerable && !Disabled) {
                 Amount -= damage;
-                sm.PlayModClip(hitClip);
+                sm.PlayClip(hitClip);
                 if (!Disabled) {
                     StartCoroutine(InvulnerableRoutine());
                 }

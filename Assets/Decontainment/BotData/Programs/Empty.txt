@@ -1,4 +1,8 @@
 NOP
+SHT $0 Async
+SHT $1 Async
+SHT $2 Async
+DRV Left $1
 ;DRV Forward $3 Async
 ;SLP $200
 ;DRV Backward $3 Sync

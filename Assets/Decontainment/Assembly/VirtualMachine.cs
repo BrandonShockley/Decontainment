@@ -124,7 +124,7 @@ public class VirtualMachine
                         GetArgValue(i.args[2]) != 0);
                     break;
                 case OpCode.SHT:
-                    controller.Shoot(GetArgValue(i.args[0]) == 1);
+                    controller.Shoot(GetArgValue(i.args[0]), GetArgValue(i.args[1]) == 1);
                     break;
                 case OpCode.SLP:
                     sleepTickThreshold = tickCounter + GetArgValue(i.args[0]);
