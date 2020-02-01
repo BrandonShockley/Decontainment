@@ -24,6 +24,8 @@ namespace Asm
         BLE, // Branch if less than or equal to
         BGT, // Branch if greater than
         BGE, // Branch if greater than or equal to
+        CSR, // Call subroutine
+        RSR, // Return from subroutine
 
         // Data manipulation
         SET, // Set
@@ -96,6 +98,10 @@ namespace Asm
         public static readonly ArgumentSpec VAL2 = ArgumentSpec.MakeOpen("Value 2");
         public static readonly ArgumentSpec SYNC_PRESETS = new ArgumentSpec("Concurrent", false, new string[]{ "Sync", "Async" });
 
+        public static readonly ArgumentSpec[] NO_INPUT_CONTROL_FLOW_SPECS = new ArgumentSpec[]
+        {
+            ArgumentSpec.BRANCH_LABEL
+        };
         public static readonly ArgumentSpec[] TWO_INPUT_CONTROL_FLOW_SPECS = new ArgumentSpec[]
         {
             ArgumentSpec.BRANCH_LABEL,
@@ -170,11 +176,13 @@ namespace Asm
 
     public class Program
     {
+        public string name = "Unnamed";
         public List<Instruction> instructions;
         public Dictionary<string, Label> labelMap;
         public List<Label> branchLabelList;
         public List<Label> constLabelList;
 
+        public event Action OnChange;
         public event Action OnInstructionChange;
         public event Action OnBranchLabelChange;
         public event Action OnConstLabelChange;
@@ -182,14 +190,17 @@ namespace Asm
         public void BroadcastInstructionChange()
         {
             OnInstructionChange?.Invoke();
+            OnChange?.Invoke();
         }
         public void BroadcastBranchLabelChange()
         {
             OnBranchLabelChange?.Invoke();
+            OnChange?.Invoke();
         }
         public void BroadcastConstLabelChange()
         {
             OnConstLabelChange?.Invoke();
+            OnChange?.Invoke();
         }
         public void RemoveLabel(Label label)
         {
@@ -231,6 +242,8 @@ namespace Asm
             {OpCode.BLE, 3},
             {OpCode.BGT, 3},
             {OpCode.BGE, 3},
+            {OpCode.CSR, 1},
+            {OpCode.RSR, 0},
 
             {OpCode.SET, 2},
             {OpCode.ADD, 3},
@@ -255,13 +268,15 @@ namespace Asm
         public static Dictionary<OpCode, ArgumentSpec[]> opArgSpecMap = new Dictionary<OpCode, ArgumentSpec[]>()
         {
             {OpCode.NOP, new ArgumentSpec[0]},
-            {OpCode.BUN, new ArgumentSpec[]{ ArgumentSpec.BRANCH_LABEL }},
+            {OpCode.BUN, ArgumentSpec.NO_INPUT_CONTROL_FLOW_SPECS},
             {OpCode.BEQ, ArgumentSpec.TWO_INPUT_CONTROL_FLOW_SPECS},
             {OpCode.BNE, ArgumentSpec.TWO_INPUT_CONTROL_FLOW_SPECS},
             {OpCode.BLT, ArgumentSpec.TWO_INPUT_CONTROL_FLOW_SPECS},
             {OpCode.BLE, ArgumentSpec.TWO_INPUT_CONTROL_FLOW_SPECS},
             {OpCode.BGT, ArgumentSpec.TWO_INPUT_CONTROL_FLOW_SPECS},
             {OpCode.BGE, ArgumentSpec.TWO_INPUT_CONTROL_FLOW_SPECS},
+            {OpCode.CSR, ArgumentSpec.NO_INPUT_CONTROL_FLOW_SPECS},
+            {OpCode.RSR, new ArgumentSpec[0]},
 
             {OpCode.SET, ArgumentSpec.ONE_INPUT_DATA_MANIPULATION_SPECS},
             {OpCode.ADD, ArgumentSpec.TWO_INPUT_DATA_MANIPULATION_SPECS},
@@ -309,7 +324,7 @@ namespace Asm
             },
             {OpCode.SHT, new ArgumentSpec[]
                 {
-                    new ArgumentSpec("Weapon ID", false, new string[]{ "0", "1", "2" }),
+                    new ArgumentSpec("Weapon ID", false, new string[]{ "Weapon0", "Weapon1", "Weapon2" }),
                     ArgumentSpec.SYNC_PRESETS
                 }
             },
@@ -328,6 +343,8 @@ namespace Asm
             {OpCode.BLE, OpCategory.CONTROL_FLOW},
             {OpCode.BGT, OpCategory.CONTROL_FLOW},
             {OpCode.BGE, OpCategory.CONTROL_FLOW},
+            {OpCode.CSR, OpCategory.CONTROL_FLOW},
+            {OpCode.RSR, OpCategory.CONTROL_FLOW},
 
             {OpCode.SET, OpCategory.DATA_MANIPULATION},
             {OpCode.ADD, OpCategory.DATA_MANIPULATION},

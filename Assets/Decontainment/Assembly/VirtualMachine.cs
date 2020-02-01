@@ -6,14 +6,16 @@ using UnityEngine;
 
 public class VirtualMachine
 {
-    public static readonly int NUM_REGS = 5;
+    public const int NUM_REGS = 5;
+    public const int STACK_SIZE = 20;
 
     public int pc;
-    public Program program;
 
+    private Program program;
     private int tickCounter;
     private int sleepTickThreshold;
     private int[] regs = new int[NUM_REGS];
+    private Stack<int> callStack = new Stack<int>(STACK_SIZE);
 
     private Controller controller;
 
@@ -22,14 +24,19 @@ public class VirtualMachine
         this.controller = controller;
     }
 
-    public void LoadProgram(Program program)
-    {
-        this.program = program;
-
-        program.OnInstructionChange += () => pc = pc % this.program.instructions.Count;
-    }
-
     public event Action OnTick;
+
+    public Program Program
+    {
+        get { return program; }
+        set {
+            if (program != null) {
+                program.OnInstructionChange -= BoundPC;
+            }
+            program = value;
+            program.OnInstructionChange += BoundPC;
+        }
+    }
 
     /// Run the next instruction
     public void Tick()
@@ -74,6 +81,21 @@ public class VirtualMachine
                     if (GetArgValue(i.args[1]) >= GetArgValue(i.args[2])) {
                         newPC = GetArgValue(i.args[0]) % program.instructions.Count;
                     }
+                    break;
+                case OpCode.CSR:
+                    if (callStack.Count > STACK_SIZE) {
+                        Debug.LogWarning("Stack limit reached on CSR call");
+                        break;
+                    }
+                    callStack.Push(newPC);
+                    newPC = GetArgValue(i.args[0]) % program.instructions.Count;
+                    break;
+                case OpCode.RSR:
+                    if (callStack.Count == 0) {
+                        Debug.LogWarning("Empty callstack on RSR call");
+                        break;
+                    }
+                    newPC = callStack.Pop();
                     break;
 
                 // Data manipulation
@@ -152,5 +174,10 @@ public class VirtualMachine
             default:
                 return 0;
         }
+    }
+
+    private void BoundPC()
+    {
+        pc = pc % program.instructions.Count;
     }
 }

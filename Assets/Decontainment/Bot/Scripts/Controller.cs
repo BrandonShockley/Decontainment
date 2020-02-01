@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
+using UnityEditor;
 using Asm;
 
 namespace Bot
 {
     public class Controller : MonoBehaviour
     {
-        private readonly Program FALLBACK_PROGRAM = new Program(){ instructions = new List<Instruction> { new Instruction(OpCode.NOP) }};
+        private readonly Program FALLBACK_PROGRAM = new Program(){ name = "Fallback", instructions = new List<Instruction> { new Instruction(OpCode.NOP) }};
 
         public VirtualMachine vm;
 
@@ -48,16 +50,28 @@ namespace Bot
 
             if (code == null) {
                 Debug.LogWarning("No code provided. Using fallback program.");
-                vm.LoadProgram(FALLBACK_PROGRAM);
+                vm.Program = FALLBACK_PROGRAM;
             } else {
                 Program program = Assembler.Assemble(code.text);
                 if (program == null) {
                     Debug.LogWarning("Assembly failed. Using fallback program.");
-                    vm.LoadProgram(FALLBACK_PROGRAM);
+                    vm.Program = FALLBACK_PROGRAM;
                 } else {
-                    vm.LoadProgram(program);
+                    program.name = AssetDatabase.GetAssetPath(code);
+                    // TODO: This is a temporary autosave solution; should be redone when editor is put into own menu
+                    program.OnChange += () =>
+                    {
+                        string progText = Disassembler.Disassemble(vm.Program);
+                        StreamWriter progFile = File.CreateText(vm.Program.name);
+                        progFile.Write(progText);
+                        progFile.Close();
+                    };
+                    Debug.Log(program.name);
+                    vm.Program = program;
                 }
             }
+
+
 
             health.OnDisable += HandleDisabled;
 

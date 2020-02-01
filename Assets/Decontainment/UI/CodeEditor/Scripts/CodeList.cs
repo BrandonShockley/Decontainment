@@ -1,9 +1,6 @@
 ﻿using Asm;
 using Bot;
 using Extensions;
-using System;
-using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -51,7 +48,7 @@ namespace Editor
             csf = GetComponent<ContentSizeFitter>();
             rt = GetComponent<RectTransform>();
 
-            Globals.Init(controller.vm.program);
+            Globals.Init(controller.vm.Program);
             controller.vm.OnTick += HandleTick;
             initialCGBlocksRaycasts = cg.blocksRaycasts;
 
@@ -141,7 +138,7 @@ namespace Editor
 
         private void CreateLabel(ref int nextLabelIndex)
         {
-            Program program = controller.vm.program;
+            Program program = Globals.program;
             Label label = program.branchLabelList[nextLabelIndex];
 
             Divider labelDivider = Instantiate(dividerPrefab, transform, false).GetComponent<Divider>();
