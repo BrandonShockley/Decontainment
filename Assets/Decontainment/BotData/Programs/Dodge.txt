@@ -19,7 +19,7 @@ SCN_Obstacles: 1
 SCN_Allies: 2
 SCN_Enemies: 3
 
-TAR %0 TAR_Near
+TAR %0 Nearest Enemy
 SET %4 $10
 
 TrackNDodge:

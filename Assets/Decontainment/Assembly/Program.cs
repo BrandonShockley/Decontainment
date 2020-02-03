@@ -168,8 +168,12 @@ namespace Asm
             Array.Copy(args, this.args, Math.Min(this.args.Length, args.Length));
 
             // Fill in any unspecified args
-            for (int i = args.Length; i < this.args.Length; ++i) {
-                this.args[i] = new Argument(Argument.Type.IMMEDIATE, 0);
+            ArgumentSpec[] argSpecs = InstructionMaps.opArgSpecMap[opCode];
+            for (int ai = args.Length; ai < this.args.Length; ++ai) {
+                Argument.Type argType = argSpecs[ai].regOnly
+                    ? Argument.Type.REGISTER
+                    : Argument.Type.IMMEDIATE;
+                this.args[ai] = new Argument(argType, 0);
             }
         }
     }
@@ -177,10 +181,10 @@ namespace Asm
     public class Program
     {
         public string name = "Unnamed";
-        public List<Instruction> instructions;
-        public Dictionary<string, Label> labelMap;
-        public List<Label> branchLabelList;
-        public List<Label> constLabelList;
+        public List<Instruction> instructions = new List<Instruction>();
+        public Dictionary<string, Label> labelMap = new Dictionary<string, Label>();
+        public List<Label> branchLabelList = new List<Label>();
+        public List<Label> constLabelList = new List<Label>();
 
         public event Action OnChange;
         public event Action OnInstructionChange;
@@ -230,7 +234,6 @@ namespace Asm
 
     public static class InstructionMaps
     {
-
         /// OpCode to argument number map
         public static Dictionary<OpCode, int> opArgNumMap = new Dictionary<OpCode, int>()
         {
@@ -253,7 +256,7 @@ namespace Asm
             {OpCode.MOD, 3},
             {OpCode.ABS, 2},
 
-            {OpCode.TAR, 2},
+            {OpCode.TAR, 3},
             {OpCode.HED, 2},
             {OpCode.SCN, 5},
 
@@ -289,13 +292,14 @@ namespace Asm
             {OpCode.TAR, new ArgumentSpec[]
                 {
                     ArgumentSpec.DEST_REG,
-                    new ArgumentSpec("Filter", false, new string[]{ "Nearest", "Farthest" })
+                    new ArgumentSpec("Distance", false, new string[]{ "Nearest", "Farthest" }),
+                    new ArgumentSpec("Type", false, new string[]{ "Ally", "Enemy" })
                 }
             },
             {OpCode.HED, new ArgumentSpec[]
                 {
                     ArgumentSpec.DEST_REG,
-                    ArgumentSpec.MakeOpen("Target Index")
+                    ArgumentSpec.MakeRegOnly("Target Index")
                 }
             },
             {OpCode.SCN, new ArgumentSpec[]

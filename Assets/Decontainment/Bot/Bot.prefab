@@ -114,6 +114,7 @@ MonoBehaviour:
   - {fileID: 2460913259241045337}
   shooterConfigsTemplate: {fileID: 11400000, guid: 0a340f83203a2414cb3371dcf2d3b738,
     type: 2}
+  teamID: 0
 --- !u!114 &5491903226993273825
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -249,11 +250,8 @@ PolygonCollider2D:
   m_Points:
     m_Paths:
     - - {x: -0.5, y: 0.5}
+      - {x: 0.5, y: 0}
       - {x: -0.5, y: -0.5}
-      - {x: -0.48999998, y: -0.5}
-      - {x: 0.5, y: -0.01}
-      - {x: 0.5, y: 0.03}
-      - {x: -0.45, y: 0.5}
 --- !u!50 &1999255554972039512
 Rigidbody2D:
   serializedVersion: 4

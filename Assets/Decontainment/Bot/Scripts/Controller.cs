@@ -21,6 +21,8 @@ namespace Bot
         private Hardpoint[] hardpoints = null;
         [SerializeField]
         private ShooterConfigurations shooterConfigsTemplate = null;
+        [SerializeField]
+        private int teamID = 0;
 
         private float clockTimer;
         private ShooterConfigurations shooterConfigs;
@@ -30,6 +32,8 @@ namespace Bot
         private Shooter[] shooters;
         private Turner turner;
         private Health health;
+
+        public int TeamID { get { return teamID; } }
 
         void Awake()
         {
