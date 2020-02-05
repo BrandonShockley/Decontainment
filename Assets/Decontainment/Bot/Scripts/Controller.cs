@@ -117,10 +117,10 @@ namespace Bot
             turner.async = async;
         }
 
-        public void Shoot(int weaponNum, bool async)
+        public void Shoot(bool async)
         {
-            shooters[weaponNum].shotRequested.Value = true;
-            shooters[weaponNum].async = async;
+            shooters[0].shotRequested.Value = true;
+            shooters[0].async = async;
         }
 
         public int Scan(Scanner.Target target, float direction, float range, float width)

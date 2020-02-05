@@ -15,7 +15,3 @@ MonoBehaviour:
   configs:
   - hardpointNum: 0
     weapon: {fileID: 11400000, guid: 425d82cfe20f1f743ad2f53b9d04e7a1, type: 2}
-  - hardpointNum: 1
-    weapon: {fileID: 11400000, guid: 425d82cfe20f1f743ad2f53b9d04e7a1, type: 2}
-  - hardpointNum: 2
-    weapon: {fileID: 11400000, guid: 425d82cfe20f1f743ad2f53b9d04e7a1, type: 2}

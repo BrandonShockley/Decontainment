@@ -77,13 +77,14 @@ namespace Asm
                         } else {
                             // Argument
                             OpCode opCode = instruction.opCode;
-                            if (argCount == InstructionMaps.opArgNumMap[opCode]) {
+                            ArgumentSpec[] argSpecs = InstructionMaps.opArgSpecMap[opCode];
+                            if (argCount == argSpecs.Length) {
                                 Debug.LogError("Invalid number of arguments for operation " + opCode.ToString()
                                     + " on line " + lineCount);
                                 return null;
                             }
 
-                            ArgumentSpec argSpec = InstructionMaps.opArgSpecMap[opCode][argCount];
+                            ArgumentSpec argSpec = argSpecs[argCount];
                             // Check for preset value
                             int presetValue = -1;
                             if (argSpec.presets != null) {
