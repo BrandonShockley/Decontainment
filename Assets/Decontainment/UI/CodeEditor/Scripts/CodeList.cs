@@ -1,6 +1,8 @@
 ﻿using Asm;
 using Bot;
 using Extensions;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,16 +10,12 @@ namespace Editor
 {
     public class CodeList : MonoBehaviour
     {
-        public Controller controller;
-
         [SerializeField]
         private GameObject instructionBlockPrefab = null;
         [SerializeField]
         private GameObject labelBlockPrefab = null;
         [SerializeField]
         private GameObject dividerPrefab = null;
-        [SerializeField]
-        private RectTransform instructionPointerRT = null;
         [SerializeField]
         private RectTransform viewportRT = null;
         [SerializeField]
@@ -26,10 +24,48 @@ namespace Editor
         private bool initialCGBlocksRaycasts;
         private Transform[] instructionBlockTransforms;
 
+        private Program _program;
+        private List<Draggable.Slot> _dividers = new List<Draggable.Slot>();
+        private List<Draggable.Slot> _slotFields = new List<Draggable.Slot>();
+        private List<Draggable.Slot> _trashSlots = new List<Draggable.Slot>();
+
         private Canvas canvas;
         private CanvasGroup cg;
         private ContentSizeFitter csf;
         private RectTransform rt;
+
+        public event Action OnScroll;
+        public event Action<Program> OnProgramChange;
+
+        public Transform[] InstructionBlockTransforms { get { return instructionBlockTransforms; } }
+
+        public Program Program
+        {
+            get { return _program; }
+            set {
+                Program oldProgram = _program;
+                _program = value;
+
+                if (oldProgram != null) {
+                    oldProgram.OnInstructionChange -= Reset;
+                    oldProgram.OnBranchLabelChange -= Reset;
+                    oldProgram.OnConstLabelChange -= Reset;
+                }
+
+                Clear();
+                if (_program != null) {
+                    _program.OnInstructionChange += Reset;
+                    _program.OnBranchLabelChange += Reset;
+                    _program.OnConstLabelChange += Reset;
+                    Generate();
+                }
+
+                OnProgramChange?.Invoke(oldProgram);
+            }
+        }
+        public List<Draggable.Slot> Dividers { get { return _dividers; } }
+        public List<Draggable.Slot> SlotFields { get { return _slotFields; } }
+        public List<Draggable.Slot> TrashSlots { get { return _trashSlots; } }
 
         void OnEnable()
         {
@@ -48,62 +84,7 @@ namespace Editor
             csf = GetComponent<ContentSizeFitter>();
             rt = GetComponent<RectTransform>();
 
-            Globals.Init(controller.vm.Program);
-            controller.vm.OnTick += HandleTick;
             initialCGBlocksRaycasts = cg.blocksRaycasts;
-
-            Globals.program.OnInstructionChange += Reset;
-            Globals.program.OnBranchLabelChange += Reset;
-            Globals.program.OnConstLabelChange += Reset;
-        }
-
-        void Start()
-        {
-            cg.blocksRaycasts = initialCGBlocksRaycasts;
-
-            Globals.Reset();
-            Program program = Globals.program;
-
-            // Create code block for each instruction in program
-            instructionBlockTransforms = new Transform[program.instructions.Count];
-            int lineNumber = 0;
-            int nextLabelIndex = 0;
-            foreach (Instruction instruction in program.instructions) {
-                // Create any labels for the current line
-                while (nextLabelIndex < program.branchLabelList.Count && program.branchLabelList[nextLabelIndex].val == lineNumber) {
-                    CreateLabel(ref nextLabelIndex);
-                }
-
-                // Create divider
-                Divider divider = Instantiate(dividerPrefab, transform, false).GetComponent<Divider>();
-                divider.Init(lineNumber);
-                Globals.dividers.Add(divider);
-
-                // Create code block
-                GameObject instructionBlock = Instantiate(instructionBlockPrefab, transform, false);
-                instructionBlock.GetComponent<InstructionBlock>().Init(lineNumber, instruction, divider);
-
-                instructionBlockTransforms[lineNumber] = instructionBlock.transform;
-                ++lineNumber;
-            }
-
-            // Create any remaining labels
-            while (nextLabelIndex < program.branchLabelList.Count) {
-                CreateLabel(ref nextLabelIndex);
-            }
-
-            // Create end divider
-            Divider endDivider = Instantiate(dividerPrefab, transform, false).GetComponent<Divider>();
-            endDivider.Init(lineNumber);
-            Globals.dividers.Add(endDivider);
-
-            OnRectTransformDimensionsChange();
-            HandleTick();
-        }
-
-        void OnDestroy()
-        {
-            controller.vm.OnTick -= HandleTick;
         }
 
         // Ensure that code blocks are always at least as wide as the viewport
@@ -130,40 +111,78 @@ namespace Editor
 
         public void Reset()
         {
+            Clear();
+            Generate();
+        }
+
+        private void Clear()
+        {
             for (int i = transform.childCount - 1; i >= 0; --i) {
                 Destroy(transform.GetChild(i).gameObject);
             }
-            Start();
+        }
+
+        private void Generate()
+        {
+            cg.blocksRaycasts = initialCGBlocksRaycasts;
+
+            Dividers.Clear();
+            SlotFields.Clear();
+
+            // Create code block for each instruction in program
+            instructionBlockTransforms = new Transform[Program.instructions.Count];
+            int lineNumber = 0;
+            int nextLabelIndex = 0;
+            foreach (Instruction instruction in Program.instructions) {
+                // Create any labels for the current line
+                while (nextLabelIndex < Program.branchLabelList.Count && Program.branchLabelList[nextLabelIndex].val == lineNumber) {
+                    CreateLabel(ref nextLabelIndex);
+                }
+
+                // Create divider
+                Divider divider = Instantiate(dividerPrefab, transform, false).GetComponent<Divider>();
+                divider.Init(lineNumber);
+                Dividers.Add(divider);
+
+                // Create code block
+                GameObject instructionBlock = Instantiate(instructionBlockPrefab, transform, false);
+                instructionBlock.GetComponent<InstructionBlock>().Init(lineNumber, instruction, divider, this);
+
+                instructionBlockTransforms[lineNumber] = instructionBlock.transform;
+                ++lineNumber;
+            }
+
+            // Create any remaining labels
+            while (nextLabelIndex < Program.branchLabelList.Count) {
+                CreateLabel(ref nextLabelIndex);
+            }
+
+            // Create end divider
+            Divider endDivider = Instantiate(dividerPrefab, transform, false).GetComponent<Divider>();
+            endDivider.Init(lineNumber);
+            Dividers.Add(endDivider);
+
+            OnRectTransformDimensionsChange();
         }
 
         private void CreateLabel(ref int nextLabelIndex)
         {
-            Program program = Globals.program;
-            Label label = program.branchLabelList[nextLabelIndex];
+            Label label = Program.branchLabelList[nextLabelIndex];
 
             Divider labelDivider = Instantiate(dividerPrefab, transform, false).GetComponent<Divider>();
             labelDivider.Init(label.val, label);
-            Globals.dividers.Add(labelDivider);
+            Dividers.Add(labelDivider);
 
             // TODO: Need to test on bad devices to see if there's a performance hit when the code list is reset
             // NOTE: Maybe if there is, we can use pooling and continue to do a full reset
             GameObject labelBlock = Instantiate(labelBlockPrefab, transform, false);
-            labelBlock.GetComponent<LabelBlock>().Init(label, labelDivider);
+            labelBlock.GetComponent<LabelBlock>().Init(label, labelDivider, this);
             ++nextLabelIndex;
-        }
-
-        private void HandleTick()
-        {
-            // Position instruction pointer
-            RectTransform instructionBlockRT = instructionBlockTransforms[controller.vm.pc].GetComponent<RectTransform>();
-            Vector2 oldPos = instructionPointerRT.position;
-            Vector2 newPos = new Vector2(oldPos.x, instructionBlockRT.position.y);
-            instructionPointerRT.position = newPos;
         }
 
         private void HandleScroll(Vector2 pos)
         {
-            HandleTick();
+            OnScroll?.Invoke();
         }
     }
 }

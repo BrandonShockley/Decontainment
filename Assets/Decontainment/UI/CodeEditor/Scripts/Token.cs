@@ -17,6 +17,7 @@ namespace Editor
         private ArgTokenColorMap argTokenColorMap = null;
 
         private Argument arg;
+        private CodeList codeList;
 
         private CanvasGroup cg;
         private Draggable draggable;
@@ -37,10 +38,11 @@ namespace Editor
             inputField = GetComponent<TMP_InputField>();
         }
 
-        public void Init(Argument initArg, bool renamable = false)
+        public void Init(Argument initArg, CodeList codeList, bool renamable = false)
         {
             arg = initArg;
             this.renamable = renamable;
+            this.codeList = codeList;
 
             // Configure text
             if (arg.type == Argument.Type.REGISTER) {
@@ -61,7 +63,7 @@ namespace Editor
             Resize();
 
             // Configure callbacks n' stuff
-            draggable.Init(Globals.slotFields, Globals.trashSlots);
+            draggable.Init(codeList.SlotFields, codeList.TrashSlots);
             draggable.onDragStart = () =>
             {
                 image.raycastTarget = false;
@@ -129,21 +131,21 @@ namespace Editor
             }
 
             // Make sure we're not renaming to a preexisting label
-            if (Globals.program.labelMap.ContainsKey(newName)) {
+            if (codeList.Program.labelMap.ContainsKey(newName)) {
                 // TODO: Display a prompt when this happens (Trello #18)
                 inputField.text = arg.label.name;
                 return;
             }
 
-            Globals.program.labelMap.Remove(arg.label.name);
+            codeList.Program.labelMap.Remove(arg.label.name);
             arg.label.name = newName;
-            Globals.program.labelMap.Add(newName, arg.label);
+            codeList.Program.labelMap.Add(newName, arg.label);
 
             Action labelChangeAction;
             if (arg.label.type == Label.Type.BRANCH) {
-                labelChangeAction = Globals.program.BroadcastBranchLabelChange;
+                labelChangeAction = codeList.Program.BroadcastBranchLabelChange;
             } else {
-                labelChangeAction = Globals.program.BroadcastConstLabelChange;
+                labelChangeAction = codeList.Program.BroadcastConstLabelChange;
             }
 
             labelChangeAction();

@@ -9,7 +9,6 @@ public class VirtualMachine
     public const int NUM_REGS = 5;
     public const int STACK_SIZE = 20;
 
-    public int pc;
 
     private Program program;
     private int tickCounter;
@@ -17,6 +16,7 @@ public class VirtualMachine
     private int[] regs = new int[NUM_REGS];
     private Stack<int> callStack = new Stack<int>(STACK_SIZE);
 
+    private int pc;
     private Controller controller;
 
     public VirtualMachine(Controller controller)
@@ -37,6 +37,8 @@ public class VirtualMachine
             program.OnInstructionChange += BoundPC;
         }
     }
+
+    public int PC { get { return pc; } }
 
     /// Run the next instruction
     public void Tick()

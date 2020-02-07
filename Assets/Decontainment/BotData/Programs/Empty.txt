@@ -1,4 +1,5 @@
+ohshiiiiit:
 NOP
 TAR %0 Nearest Enemy
 HED %0 %0
-TRN Left $0 Sync
+TRN Left ohshiiiiit Sync

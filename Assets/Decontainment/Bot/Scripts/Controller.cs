@@ -11,8 +11,6 @@ namespace Bot
     {
         private readonly Program FALLBACK_PROGRAM = new Program(){ name = "Fallback", instructions = new List<Instruction> { new Instruction(OpCode.NOP) }};
 
-        public VirtualMachine vm;
-
         [SerializeField]
         private TextAsset code = null;
         [SerializeField]
@@ -27,6 +25,7 @@ namespace Bot
         private float clockTimer;
         private ShooterConfigurations shooterConfigs;
 
+        private VirtualMachine vm;
         private Driver driver;
         private Scanner scanner;
         private Shooter[] shooters;
@@ -34,6 +33,7 @@ namespace Bot
         private Health health;
 
         public int TeamID { get { return teamID; } }
+        public VirtualMachine VM { get { return vm; } }
 
         void Awake()
         {
