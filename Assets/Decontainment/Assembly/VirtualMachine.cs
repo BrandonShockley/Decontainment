@@ -124,7 +124,8 @@ public class VirtualMachine
                 // Sensing
                 case OpCode.TAR:
                     regs[i.args[0].val] = BotManager.Instance.FindTarget(controller,
-                        (BotManager.DistanceType)GetArgValue(i.args[1]));
+                        (BotManager.DistanceType)GetArgValue(i.args[1]),
+                        (BotManager.TargetType)GetArgValue(i.args[2]));
                     break;
                 case OpCode.HED:
                     regs[i.args[0].val] = BotManager.Instance.GetTargetHeading(controller, GetArgValue(i.args[1]));
@@ -146,7 +147,7 @@ public class VirtualMachine
                         GetArgValue(i.args[2]) != 0);
                     break;
                 case OpCode.SHT:
-                    controller.Shoot(GetArgValue(i.args[0]), GetArgValue(i.args[1]) == 1);
+                    controller.Shoot(GetArgValue(i.args[0]) == 1);
                     break;
                 case OpCode.SLP:
                     sleepTickThreshold = tickCounter + GetArgValue(i.args[0]);

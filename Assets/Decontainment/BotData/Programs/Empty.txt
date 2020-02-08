@@ -1,8 +1,4 @@
-Start:
-DRV Left $1 Sync
-CSR Shoot
-BUN Start
-Shoot:
-SHT Weapon0 Async
-SHT Weapon1 Async
-SHT Weapon2 Async
+NOP
+TAR %0 Nearest Enemy
+HED %0 %0
+TRN Left $0 Sync

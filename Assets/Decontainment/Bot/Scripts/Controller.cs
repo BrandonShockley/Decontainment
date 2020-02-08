@@ -21,6 +21,8 @@ namespace Bot
         private Hardpoint[] hardpoints = null;
         [SerializeField]
         private ShooterConfigurations shooterConfigsTemplate = null;
+        [SerializeField]
+        private int teamID = 0;
 
         private float clockTimer;
         private ShooterConfigurations shooterConfigs;
@@ -30,6 +32,8 @@ namespace Bot
         private Shooter[] shooters;
         private Turner turner;
         private Health health;
+
+        public int TeamID { get { return teamID; } }
 
         void Awake()
         {
@@ -48,6 +52,7 @@ namespace Bot
 
             vm = new VirtualMachine(this);
 
+            // Load the program
             if (code == null) {
                 Debug.LogWarning("No code provided. Using fallback program.");
                 vm.Program = FALLBACK_PROGRAM;
@@ -57,7 +62,12 @@ namespace Bot
                     Debug.LogWarning("Assembly failed. Using fallback program.");
                     vm.Program = FALLBACK_PROGRAM;
                 } else {
+                    #if UNITY_EDITOR
                     program.name = AssetDatabase.GetAssetPath(code);
+                    #else
+                    program.name = code.name + ".txt";
+                    #endif
+
                     // TODO: This is a temporary autosave solution; should be redone when editor is put into own menu
                     program.OnChange += () =>
                     {
@@ -66,7 +76,6 @@ namespace Bot
                         progFile.Write(progText);
                         progFile.Close();
                     };
-                    Debug.Log(program.name);
                     vm.Program = program;
                 }
             }
@@ -108,10 +117,10 @@ namespace Bot
             turner.async = async;
         }
 
-        public void Shoot(int weaponNum, bool async)
+        public void Shoot(bool async)
         {
-            shooters[weaponNum].shotRequested.Value = true;
-            shooters[weaponNum].async = async;
+            shooters[0].shotRequested.Value = true;
+            shooters[0].async = async;
         }
 
         public int Scan(Scanner.Target target, float direction, float range, float width)

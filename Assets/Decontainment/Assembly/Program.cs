@@ -164,12 +164,16 @@ namespace Asm
         public Instruction(OpCode opCode, params Argument[] args)
         {
             this.opCode = opCode;
-            this.args = new Argument[InstructionMaps.opArgNumMap[opCode]];
+            ArgumentSpec[] argSpecs = InstructionMaps.opArgSpecMap[opCode];
+            this.args = new Argument[argSpecs.Length];
             Array.Copy(args, this.args, Math.Min(this.args.Length, args.Length));
 
             // Fill in any unspecified args
-            for (int i = args.Length; i < this.args.Length; ++i) {
-                this.args[i] = new Argument(Argument.Type.IMMEDIATE, 0);
+            for (int ai = args.Length; ai < this.args.Length; ++ai) {
+                Argument.Type argType = argSpecs[ai].regOnly
+                    ? Argument.Type.REGISTER
+                    : Argument.Type.IMMEDIATE;
+                this.args[ai] = new Argument(argType, 0);
             }
         }
     }
@@ -177,10 +181,10 @@ namespace Asm
     public class Program
     {
         public string name = "Unnamed";
-        public List<Instruction> instructions;
-        public Dictionary<string, Label> labelMap;
-        public List<Label> branchLabelList;
-        public List<Label> constLabelList;
+        public List<Instruction> instructions = new List<Instruction>();
+        public Dictionary<string, Label> labelMap = new Dictionary<string, Label>();
+        public List<Label> branchLabelList = new List<Label>();
+        public List<Label> constLabelList = new List<Label>();
 
         public event Action OnChange;
         public event Action OnInstructionChange;
@@ -230,40 +234,6 @@ namespace Asm
 
     public static class InstructionMaps
     {
-
-        /// OpCode to argument number map
-        public static Dictionary<OpCode, int> opArgNumMap = new Dictionary<OpCode, int>()
-        {
-            {OpCode.NOP, 0},
-            {OpCode.BUN, 1},
-            {OpCode.BEQ, 3},
-            {OpCode.BNE, 3},
-            {OpCode.BLT, 3},
-            {OpCode.BLE, 3},
-            {OpCode.BGT, 3},
-            {OpCode.BGE, 3},
-            {OpCode.CSR, 1},
-            {OpCode.RSR, 0},
-
-            {OpCode.SET, 2},
-            {OpCode.ADD, 3},
-            {OpCode.SUB, 3},
-            {OpCode.MUL, 3},
-            {OpCode.DIV, 3},
-            {OpCode.MOD, 3},
-            {OpCode.ABS, 2},
-
-            {OpCode.TAR, 2},
-            {OpCode.HED, 2},
-            {OpCode.SCN, 5},
-
-            {OpCode.DRV, 3},
-            {OpCode.TRN, 3},
-            {OpCode.SHT, 2},
-            {OpCode.SLP, 1},
-        };
-
-
         /// OpCode to argument specification array map
         public static Dictionary<OpCode, ArgumentSpec[]> opArgSpecMap = new Dictionary<OpCode, ArgumentSpec[]>()
         {
@@ -289,13 +259,14 @@ namespace Asm
             {OpCode.TAR, new ArgumentSpec[]
                 {
                     ArgumentSpec.DEST_REG,
-                    new ArgumentSpec("Filter", false, new string[]{ "Nearest", "Farthest" })
+                    new ArgumentSpec("Distance", false, new string[]{ "Nearest", "Farthest" }),
+                    new ArgumentSpec("Type", false, new string[]{ "Ally", "Enemy" })
                 }
             },
             {OpCode.HED, new ArgumentSpec[]
                 {
                     ArgumentSpec.DEST_REG,
-                    ArgumentSpec.MakeOpen("Target Index")
+                    ArgumentSpec.MakeRegOnly("Target Index")
                 }
             },
             {OpCode.SCN, new ArgumentSpec[]
@@ -324,7 +295,6 @@ namespace Asm
             },
             {OpCode.SHT, new ArgumentSpec[]
                 {
-                    new ArgumentSpec("Weapon ID", false, new string[]{ "Weapon0", "Weapon1", "Weapon2" }),
                     ArgumentSpec.SYNC_PRESETS
                 }
             },
@@ -383,14 +353,9 @@ namespace Asm
 
                 // Init opCategoryOpCodesMap
                 opCategoryOpCodesMap[opCodeOpCategoryMap[opCode]].Add(opCode);
-
-                // Validate opArgSpecMap is filled out
-                int numArgs = opArgNumMap[opCode];
-                Debug.Assert(opArgSpecMap[opCode].Length == numArgs);
             }
 
             // Validate sizes of maps
-            Debug.Assert(opArgNumMap.Count == (int)OpCode._SIZE);
             Debug.Assert(opArgSpecMap.Count == (int)OpCode._SIZE);
             Debug.Assert(opCodeOpCategoryMap.Count == (int)OpCode._SIZE);
             Debug.Assert(opCategoryOpCodesMap.Count == (int)OpCategory._SIZE);
