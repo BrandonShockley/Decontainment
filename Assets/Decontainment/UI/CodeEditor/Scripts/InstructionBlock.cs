@@ -57,17 +57,17 @@ namespace Editor
             };
 
             // Configure text
-            opCodeTM.text = instruction.OpCode.ToString();
+            opCodeTM.text = instruction.opCode.ToString();
 
             // Configure color
-            OpCategory category = InstructionMaps.opCodeOpCategoryMap[instruction.OpCode];
+            OpCategory category = InstructionMaps.opCodeOpCategoryMap[instruction.opCode];
             bg.color = opCategoryColorMap.map[category];
 
             // Create argument fields
-            ArgumentSpec[] argSpecs = InstructionMaps.opArgSpecMap[instruction.OpCode];
-            for (int argNum = 0; argNum < instruction.Args.Length; ++argNum) {
+            ArgumentSpec[] argSpecs = InstructionMaps.opArgSpecMap[instruction.opCode];
+            for (int argNum = 0; argNum < instruction.args.Length; ++argNum) {
                 GameObject field;
-                Argument arg = instruction.Args[argNum];
+                Argument arg = instruction.args[argNum];
 
                 if (argSpecs[argNum].regOnly || argSpecs[argNum].presets != null) {
                     field = Instantiate(dropdownFieldPrefab, transform);

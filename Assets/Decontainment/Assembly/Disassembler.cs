@@ -28,10 +28,10 @@ namespace Asm
 
                 // Write instruction
                 Instruction instruction = program.instructions[lineNumber];
-                ArgumentSpec[] argSpecs = InstructionMaps.opArgSpecMap[instruction.OpCode];
-                programSB.Append(instruction.OpCode.ToString());
-                for (int argNum = 0; argNum < instruction.Args.Length; ++argNum) {
-                    Argument arg = instruction.Args[argNum];
+                ArgumentSpec[] argSpecs = InstructionMaps.opArgSpecMap[instruction.opCode];
+                programSB.Append(instruction.opCode.ToString());
+                for (int argNum = 0; argNum < instruction.args.Length; ++argNum) {
+                    Argument arg = instruction.args[argNum];
                     programSB.Append(" ");
                     switch (arg.type)
                     {

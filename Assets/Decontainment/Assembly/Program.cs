@@ -130,11 +130,11 @@ namespace Asm
             return new ArgumentSpec(name, true, null);
         }
 
-        public string name;
-        public bool regOnly;
+        public readonly string name;
+        public readonly bool regOnly;
         /// Array of built-in presets
         /// Only valid if regOnly == false
-        public string[] presets;
+        public readonly string[] presets;
         public ArgumentSpec(string name, bool regOnly, string[] presets)
         {
             this.name = name;
@@ -155,12 +155,14 @@ namespace Asm
             this.val = val;
             this.type = type;
         }
+
+        public override string ToString() { return name; }
     }
 
     public class Instruction
     {
-        private OpCode opCode;
-        private Argument[] args;
+        public readonly OpCode opCode;
+        public readonly Argument[] args;
 
         public Instruction(OpCode opCode, params Argument[] args)
         {
@@ -177,9 +179,6 @@ namespace Asm
                 this.args[ai] = new Argument(argType, 0);
             }
         }
-
-        public OpCode OpCode { get { return opCode; } }
-        public Argument[] Args { get { return args; } }
     }
 
     public class Program
@@ -195,6 +194,8 @@ namespace Asm
         public event Action OnInstructionChange;
         public event Action OnBranchLabelChange;
         public event Action OnConstLabelChange;
+
+        public override string ToString() { return name; }
 
         public void BroadcastArgumentChange()
         {
@@ -226,7 +227,7 @@ namespace Asm
 
             // Remove references in instructions
             foreach (Instruction i in instructions) {
-                foreach (Argument arg in i.Args) {
+                foreach (Argument arg in i.args) {
                     if (arg.type == Argument.Type.LABEL && arg.label == label) {
                         arg.label = null;
                         arg.type = Argument.Type.IMMEDIATE;

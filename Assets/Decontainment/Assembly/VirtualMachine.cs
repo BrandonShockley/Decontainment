@@ -46,42 +46,42 @@ public class VirtualMachine
         if (tickCounter > sleepTickThreshold) {
             Instruction i = program.instructions[pc];
             int newPC = (pc + 1) % program.instructions.Count;
-            switch(i.OpCode)
+            switch(i.opCode)
             {
                 // Control flow
                 case OpCode.NOP:
                     break;
                 case OpCode.BUN:
-                    newPC = GetArgValue(i.Args[0]);
+                    newPC = GetArgValue(i.args[0]);
                     break;
                 case OpCode.BEQ:
-                    if (GetArgValue(i.Args[1]) == GetArgValue(i.Args[2])) {
-                        newPC = GetArgValue(i.Args[0]) % program.instructions.Count;
+                    if (GetArgValue(i.args[1]) == GetArgValue(i.args[2])) {
+                        newPC = GetArgValue(i.args[0]) % program.instructions.Count;
                     }
                     break;
                 case OpCode.BNE:
-                    if (GetArgValue(i.Args[1]) != GetArgValue(i.Args[2])) {
-                        newPC = GetArgValue(i.Args[0]) % program.instructions.Count;
+                    if (GetArgValue(i.args[1]) != GetArgValue(i.args[2])) {
+                        newPC = GetArgValue(i.args[0]) % program.instructions.Count;
                     }
                     break;
                 case OpCode.BLT:
-                    if (GetArgValue(i.Args[1]) < GetArgValue(i.Args[2])) {
-                        newPC = GetArgValue(i.Args[0]) % program.instructions.Count;
+                    if (GetArgValue(i.args[1]) < GetArgValue(i.args[2])) {
+                        newPC = GetArgValue(i.args[0]) % program.instructions.Count;
                     }
                     break;
                 case OpCode.BLE:
-                    if (GetArgValue(i.Args[1]) <= GetArgValue(i.Args[2])) {
-                        newPC = GetArgValue(i.Args[0]) % program.instructions.Count;
+                    if (GetArgValue(i.args[1]) <= GetArgValue(i.args[2])) {
+                        newPC = GetArgValue(i.args[0]) % program.instructions.Count;
                     }
                     break;
                 case OpCode.BGT:
-                    if (GetArgValue(i.Args[1]) > GetArgValue(i.Args[2])) {
-                        newPC = GetArgValue(i.Args[0]) % program.instructions.Count;
+                    if (GetArgValue(i.args[1]) > GetArgValue(i.args[2])) {
+                        newPC = GetArgValue(i.args[0]) % program.instructions.Count;
                     }
                     break;
                 case OpCode.BGE:
-                    if (GetArgValue(i.Args[1]) >= GetArgValue(i.Args[2])) {
-                        newPC = GetArgValue(i.Args[0]) % program.instructions.Count;
+                    if (GetArgValue(i.args[1]) >= GetArgValue(i.args[2])) {
+                        newPC = GetArgValue(i.args[0]) % program.instructions.Count;
                     }
                     break;
                 case OpCode.CSR:
@@ -90,7 +90,7 @@ public class VirtualMachine
                         break;
                     }
                     callStack.Push(newPC);
-                    newPC = GetArgValue(i.Args[0]) % program.instructions.Count;
+                    newPC = GetArgValue(i.args[0]) % program.instructions.Count;
                     break;
                 case OpCode.RSR:
                     if (callStack.Count == 0) {
@@ -102,60 +102,60 @@ public class VirtualMachine
 
                 // Data manipulation
                 case OpCode.SET:
-                    regs[i.Args[0].val] = GetArgValue(i.Args[1]);
+                    regs[i.args[0].val] = GetArgValue(i.args[1]);
                     break;
                 case OpCode.ADD:
-                    regs[i.Args[0].val] = GetArgValue(i.Args[1]) + GetArgValue(i.Args[2]);
+                    regs[i.args[0].val] = GetArgValue(i.args[1]) + GetArgValue(i.args[2]);
                     break;
                 case OpCode.SUB:
-                    regs[i.Args[0].val] = GetArgValue(i.Args[1]) - GetArgValue(i.Args[2]);
+                    regs[i.args[0].val] = GetArgValue(i.args[1]) - GetArgValue(i.args[2]);
                     break;
                 case OpCode.MUL:
-                    regs[i.Args[0].val] = GetArgValue(i.Args[1]) * GetArgValue(i.Args[2]);
+                    regs[i.args[0].val] = GetArgValue(i.args[1]) * GetArgValue(i.args[2]);
                     break;
                 case OpCode.DIV:
-                    regs[i.Args[0].val] = GetArgValue(i.Args[1]) / GetArgValue(i.Args[2]);
+                    regs[i.args[0].val] = GetArgValue(i.args[1]) / GetArgValue(i.args[2]);
                     break;
                 case OpCode.MOD:
-                    regs[i.Args[0].val] = GetArgValue(i.Args[1]) % GetArgValue(i.Args[2]);
+                    regs[i.args[0].val] = GetArgValue(i.args[1]) % GetArgValue(i.args[2]);
                     break;
                 case OpCode.ABS:
-                    regs[i.Args[0].val] = Math.Abs(GetArgValue(i.Args[1]));
+                    regs[i.args[0].val] = Math.Abs(GetArgValue(i.args[1]));
                     break;
 
                 // Sensing
                 case OpCode.TAR:
-                    regs[i.Args[0].val] = BotManager.Instance.FindTarget(controller,
-                        (BotManager.DistanceType)GetArgValue(i.Args[1]),
-                        (BotManager.TargetType)GetArgValue(i.Args[2]));
+                    regs[i.args[0].val] = BotManager.Instance.FindTarget(controller,
+                        (BotManager.DistanceType)GetArgValue(i.args[1]),
+                        (BotManager.TargetType)GetArgValue(i.args[2]));
                     break;
                 case OpCode.HED:
-                    regs[i.Args[0].val] = BotManager.Instance.GetTargetHeading(controller, GetArgValue(i.Args[1]));
+                    regs[i.args[0].val] = BotManager.Instance.GetTargetHeading(controller, GetArgValue(i.args[1]));
                     break;
                 case OpCode.SCN:
-                    regs[i.Args[0].val] = controller.Scan((Scanner.Target)GetArgValue(i.Args[1]),
-                        GetArgValue(i.Args[2]), GetArgValue(i.Args[3]), GetArgValue(i.Args[4]));
+                    regs[i.args[0].val] = controller.Scan((Scanner.Target)GetArgValue(i.args[1]),
+                        GetArgValue(i.args[2]), GetArgValue(i.args[3]), GetArgValue(i.args[4]));
                     break;
 
                 // Actions
                 case OpCode.DRV:
-                    controller.Drive((Driver.Direction)GetArgValue(i.Args[0]),
-                        GetArgValue(i.Args[1]),
-                        GetArgValue(i.Args[2]) != 0);
+                    controller.Drive((Driver.Direction)GetArgValue(i.args[0]),
+                        GetArgValue(i.args[1]),
+                        GetArgValue(i.args[2]) != 0);
                     break;
                 case OpCode.TRN:
-                    controller.Turn((Turner.Direction)GetArgValue(i.Args[0]),
-                        GetArgValue(i.Args[1]),
-                        GetArgValue(i.Args[2]) != 0);
+                    controller.Turn((Turner.Direction)GetArgValue(i.args[0]),
+                        GetArgValue(i.args[1]),
+                        GetArgValue(i.args[2]) != 0);
                     break;
                 case OpCode.SHT:
-                    controller.Shoot(GetArgValue(i.Args[0]) == 1);
+                    controller.Shoot(GetArgValue(i.args[0]) == 1);
                     break;
                 case OpCode.SLP:
-                    sleepTickThreshold = tickCounter + GetArgValue(i.Args[0]);
+                    sleepTickThreshold = tickCounter + GetArgValue(i.args[0]);
                     break;
                 default:
-                    Debug.LogWarning("Unhandled OpCode " + i.OpCode.ToString());
+                    Debug.LogWarning("Unhandled OpCode " + i.opCode.ToString());
                     break;
             }
             pc = newPC;

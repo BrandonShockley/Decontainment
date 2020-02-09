@@ -1,4 +1,5 @@
 ﻿using Asm;
+using Extensions;
 using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
@@ -77,14 +78,7 @@ namespace Editor
             newProgram.OnChange += () => SaveProgram(newProgram);
             SaveProgram(newProgram);
 
-            // Insert alphabetically TODO: Pull this out into a utility that can be used with any list
-            int index;
-            for (index = 0; index < programs.Count; ++index) {
-                if (string.Compare(newProgram.name, programs[index].name) <= 0) {
-                    break;
-                }
-            }
-            programs.Insert(index, newProgram);
+            int index = programs.InsertAlphabetically(newProgram);
 
             // Update the front end
             CreateListEntry(newProgram, index);
@@ -100,8 +94,7 @@ namespace Editor
         private void SaveProgram(Program program)
         {
             string programText = Disassembler.Disassemble(program);
-            string programPath = programDirectory + "/" + program.name + ".txt";
-            StreamWriter programFile = File.CreateText(programPath);
+            StreamWriter programFile = File.CreateText(ProgramPath(program));
             programFile.Write(programText);
             programFile.Close();
         }
@@ -109,10 +102,29 @@ namespace Editor
         private void CreateListEntry(Program program, int siblingIndex = -1)
         {
             GameObject listEntry = Instantiate(listEntryPrefab, transform);
-            listEntry.GetComponent<ListEntry>().Init(program, codeList);
+            listEntry.GetComponent<ListEntry>().Init(program, codeList, RenameProgram);
             if (siblingIndex >= 0) {
                 listEntry.transform.SetSiblingIndex(siblingIndex);
             }
         }
+
+        private void RenameProgram(Program program, int index, string name)
+        {
+            // Remove old file
+            File.Delete(ProgramPath(program));
+
+            // Update back end
+            programs.RemoveAt(index);
+            program.name = name;
+            int newIndex = programs.InsertAlphabetically(program);
+
+            // Update front end
+            transform.GetChild(index).SetSiblingIndex(newIndex);
+
+            // Create new file
+            SaveProgram(program);
+        }
+
+        private string ProgramPath(Program program) { return programDirectory + "/" + program.name + ".txt"; }
     }
 }

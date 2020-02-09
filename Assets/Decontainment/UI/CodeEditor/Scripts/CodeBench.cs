@@ -1,4 +1,5 @@
 ﻿using Asm;
+using Extensions;
 using System;
 using System.Collections.Generic;
 using TMPro;
@@ -117,15 +118,8 @@ namespace Editor
 
             Label label = new Label(newName, 0, Label.Type.CONST);
 
-            // Insert alphabetically
             List<Label> labelList = codeList.Program.constLabelList;
-            int index;
-            for (index = 0; index < labelList.Count; ++index) {
-                if (string.Compare(label.name, labelList[index].name) <= 0) {
-                    break;
-                }
-            }
-            labelList.Insert(index, label);
+            labelList.InsertAlphabetically(label);
             codeList.Program.labelMap.Add(newName, label);
             codeList.Program.BroadcastConstLabelChange();
         }
@@ -139,10 +133,7 @@ namespace Editor
             if (codeList.Program != null) {
                 foreach (Label label in codeList.Program.branchLabelList) {
                     Transform labelTokenContainer = Instantiate(labelTokenContainerPrefab, branchLabelTokenList).transform;
-                    labelTokenContainer.GetComponentInChildren<Button>().onClick.AddListener(() =>
-                    {
-                        codeList.Program.RemoveLabel(label);
-                    });
+                    labelTokenContainer.GetComponent<LabelTokenContainer>().Init(codeList);
                     Argument arg = new Argument(Argument.Type.LABEL, label);
                     Token token = CreateToken(arg, labelTokenContainer);
                     token.transform.SetSiblingIndex(1);
@@ -200,7 +191,9 @@ namespace Editor
         private Token CreateToken(Argument arg, Transform parent, Token originalToken = null)
         {
             Token token = Instantiate(tokenPrefab, parent, false).GetComponent<Token>();
-            token.Init(arg.ShallowCopy(), codeList, true);
+            Renamable tokenRN = token.GetComponent<Renamable>();
+            token.Init(arg.ShallowCopy(), codeList);
+            tokenRN.enabled = true;
 
             if (originalToken != null) {
                 token.transform.SetSiblingIndex(originalToken.transform.GetSiblingIndex());
@@ -218,7 +211,7 @@ namespace Editor
             Action<Draggable.Slot> oldOnDragSuccess = draggable.onDragSuccess;
             draggable.onDragSuccess = (Draggable.Slot slot) =>
             {
-                token.renamable = false;
+                tokenRN.enabled = false;
                 draggable.onDragStart = oldOnDragStart;
                 draggable.onDragSuccess = oldOnDragSuccess;
                 draggable.onDragCancel = null;

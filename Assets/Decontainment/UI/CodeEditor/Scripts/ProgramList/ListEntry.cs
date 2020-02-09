@@ -1,5 +1,5 @@
 ﻿using Asm;
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -19,26 +19,29 @@ namespace Editor
         private Color unselectedColor;
 
         private Image image;
-        private TextMeshProUGUI tm;
+        private Renamable rn;
+        private TMP_InputField inputField;
 
         void Awake()
         {
             image = GetComponent<Image>();
-            tm = GetComponentInChildren<TextMeshProUGUI>();
+            rn = GetComponent<Renamable>();
+            inputField = GetComponent<TMP_InputField>();
 
             unselectedColor = image.color;
         }
 
-        public void Init(Program program, CodeList codeList)
+        public void Init(Program program, CodeList codeList, Action<Program, int, string> handleRename)
         {
             this.program = program;
             this.codeList = codeList;
-            tm.text = program.name;
+            rn.OnRename += (string name) => handleRename(program, transform.GetSiblingIndex(), name);
+            inputField.text = program.name;
         }
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            if (codeList.Program != program) {
+            if (eventData.button == PointerEventData.InputButton.Left && codeList.Program != program) {
                 image.color = selectedColor;
                 codeList.Program = program;
                 codeList.OnProgramChange += HandleProgramChange;

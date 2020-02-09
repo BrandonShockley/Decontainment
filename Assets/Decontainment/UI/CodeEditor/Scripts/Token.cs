@@ -3,15 +3,13 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Editor
 {
-    public class Token : MonoBehaviour, IPointerClickHandler
+    public class Token : MonoBehaviour
     {
         public SlotField slotField;
-        public bool renamable;
 
         [SerializeField]
         private ArgTokenColorMap argTokenColorMap = null;
@@ -23,10 +21,11 @@ namespace Editor
         private Draggable draggable;
         private Image image;
         private RectTransform rt;
+        private Renamable rn;
         private TextMeshProUGUI tm;
         private TMP_InputField inputField;
 
-        public Argument Arg { get { return arg; }}
+        public Argument Arg { get { return arg; } }
 
         void Awake()
         {
@@ -34,14 +33,16 @@ namespace Editor
             draggable = GetComponent<Draggable>();
             image = GetComponent<Image>();
             rt = GetComponent<RectTransform>();
+            rn = GetComponent<Renamable>();
             tm = GetComponentInChildren<TextMeshProUGUI>();
             inputField = GetComponent<TMP_InputField>();
+
+            rn.OnRename += RenameLabel;
         }
 
-        public void Init(Argument initArg, CodeList codeList, bool renamable = false)
+        public void Init(Argument initArg, CodeList codeList)
         {
             arg = initArg;
-            this.renamable = renamable;
             this.codeList = codeList;
 
             // Configure text
@@ -58,9 +59,6 @@ namespace Editor
                 ? ArgTokenColorMap.Type.BRANCH_LABEL
                 : ArgTokenColorMap.Type.CONST_LABEL;
             image.color = argTokenColorMap.map[tokenType];
-
-            // Resize to fit the preferred width
-            Resize();
 
             // Configure callbacks n' stuff
             draggable.Init(codeList.SlotFields, codeList.TrashSlots);
@@ -86,42 +84,6 @@ namespace Editor
                 slotField?.ReleaseArg();
                 Destroy(gameObject);
             };
-
-            inputField.onDeselect.AddListener(RenameLabel);
-            inputField.onSubmit.AddListener((string val) => EventSystem.current.SetSelectedGameObject(null));
-            inputField.onValueChanged.AddListener((string newVal) => Resize());
-            inputField.onValidateInput = ValidateInput;
-        }
-
-        public void OnPointerClick(PointerEventData pointerEventData)
-        {
-            bool isRightClick = pointerEventData.button == PointerEventData.InputButton.Right;
-            if (renamable && (pointerEventData.clickCount == 2 || isRightClick)) {
-                Debug.Assert(arg.type == Argument.Type.LABEL);
-
-                inputField.interactable = true;
-                inputField.ActivateInputField();
-                inputField.interactable = false;
-            }
-        }
-
-        private char ValidateInput(string text, int pos, char ch)
-        {
-            bool isNumber = ch >= '0' && ch <= '9';
-            bool isUpperAlpha = ch >= 'A' && ch <= 'Z';
-            bool isLowerAlpha = ch >= 'a' && ch <= 'z';
-            bool isExtra = ch == '_' || ch == '-';
-
-            if (isNumber || isUpperAlpha || isLowerAlpha || isExtra) {
-                return ch;
-            } else {
-                return (char)0;
-            }
-        }
-
-        private void Resize()
-        {
-            rt.sizeDelta = new Vector2(tm.GetPreferredValues(inputField.text).x, rt.sizeDelta.y);
         }
 
         private void RenameLabel(string newName)
@@ -130,8 +92,8 @@ namespace Editor
                 return;
             }
 
-            // Make sure we're not renaming to a preexisting label
-            if (codeList.Program.labelMap.ContainsKey(newName)) {
+            // Make sure we're not renaming to a preexisting label or an invalid name
+            if (codeList.Program.labelMap.ContainsKey(newName) || newName == "") {
                 // TODO: Display a prompt when this happens (Trello #18)
                 inputField.text = arg.label.name;
                 return;
