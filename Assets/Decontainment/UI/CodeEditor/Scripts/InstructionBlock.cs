@@ -21,8 +21,6 @@ namespace Editor
         private GameObject dropdownFieldPrefab = null;
         [SerializeField]
         private GameObject slotFieldPrefab = null;
-        [SerializeField]
-        private GameObject headerPrefab = null;
 
         private int lineNumber;
         private Instruction instruction;
@@ -59,29 +57,25 @@ namespace Editor
             };
 
             // Configure text
-            opCodeTM.text = instruction.opCode.ToString();
+            opCodeTM.text = instruction.OpCode.ToString();
 
             // Configure color
-            OpCategory category = InstructionMaps.opCodeOpCategoryMap[instruction.opCode];
+            OpCategory category = InstructionMaps.opCodeOpCategoryMap[instruction.OpCode];
             bg.color = opCategoryColorMap.map[category];
 
             // Create argument fields
-            ArgumentSpec[] argSpecs = InstructionMaps.opArgSpecMap[instruction.opCode];
-            for (int argNum = 0; argNum < instruction.args.Length; ++argNum) {
+            ArgumentSpec[] argSpecs = InstructionMaps.opArgSpecMap[instruction.OpCode];
+            for (int argNum = 0; argNum < instruction.Args.Length; ++argNum) {
                 GameObject field;
-                Argument arg = instruction.args[argNum];
+                Argument arg = instruction.Args[argNum];
 
                 if (argSpecs[argNum].regOnly || argSpecs[argNum].presets != null) {
                     field = Instantiate(dropdownFieldPrefab, transform);
-                    field.GetComponent<DropdownField>().Init(argSpecs[argNum], arg);
+                    field.GetComponent<DropdownField>().Init(argSpecs[argNum], arg, codeList);
                 } else {
                     field = Instantiate(slotFieldPrefab, transform);
                     field.GetComponent<SlotField>().Init(arg, codeList);
                 }
-
-                // Add header
-                // GameObject header = Instantiate(headerPrefab, field.transform);
-                // header.GetComponent<TextMeshProUGUI>().text = argSpecs[argNum].name;
             }
         }
 

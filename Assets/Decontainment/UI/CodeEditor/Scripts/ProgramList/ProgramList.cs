@@ -49,9 +49,45 @@ namespace Editor
 
             // Populate list
             foreach (Program program in programs) {
-                GameObject listEntry = Instantiate(listEntryPrefab, transform);
-                listEntry.GetComponent<ListEntry>().Init(program, codeList);
+                CreateListEntry(program);
             }
+        }
+
+        public void AddProgram()
+        {
+            string defaultName = "Program";
+            string newName;
+            for (int i = 0;; ++i) {
+                newName = defaultName + i.ToString();
+                bool nameGood = true;
+                foreach (Program p in programs) {
+                    if (p.name == newName) {
+                        nameGood = false;
+                        break;
+                    }
+                }
+
+                if (nameGood) {
+                    break;
+                }
+            }
+
+            Program newProgram = new Program();
+            newProgram.name = newName;
+            newProgram.OnChange += () => SaveProgram(newProgram);
+            SaveProgram(newProgram);
+
+            // Insert alphabetically TODO: Pull this out into a utility that can be used with any list
+            int index;
+            for (index = 0; index < programs.Count; ++index) {
+                if (string.Compare(newProgram.name, programs[index].name) <= 0) {
+                    break;
+                }
+            }
+            programs.Insert(index, newProgram);
+
+            // Update the front end
+            CreateListEntry(newProgram, index);
         }
 
         private void Clear()
@@ -68,6 +104,15 @@ namespace Editor
             StreamWriter programFile = File.CreateText(programPath);
             programFile.Write(programText);
             programFile.Close();
+        }
+
+        private void CreateListEntry(Program program, int siblingIndex = -1)
+        {
+            GameObject listEntry = Instantiate(listEntryPrefab, transform);
+            listEntry.GetComponent<ListEntry>().Init(program, codeList);
+            if (siblingIndex >= 0) {
+                listEntry.transform.SetSiblingIndex(siblingIndex);
+            }
         }
     }
 }

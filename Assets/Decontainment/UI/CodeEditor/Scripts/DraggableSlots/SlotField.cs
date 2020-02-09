@@ -42,6 +42,7 @@ namespace Editor
             inputField.onEndEdit.AddListener((string val) =>
             {
                 arg.val = int.Parse(val);
+                codeList.Program.BroadcastArgumentChange();
             });
 
             if (arg.type == Argument.Type.IMMEDIATE) {
@@ -59,6 +60,7 @@ namespace Editor
             Debug.Assert(newArg.type != Argument.Type.IMMEDIATE);
 
             arg.CopyValues(newArg);
+            codeList.Program.BroadcastArgumentChange();
 
             if (tokenGO != null) {
                 Destroy(tokenGO);
@@ -98,6 +100,7 @@ namespace Editor
             tokenGO = null;
             arg.type = Argument.Type.IMMEDIATE;
             arg.val = int.Parse(inputField.text);
+            codeList.Program.BroadcastArgumentChange();
             inputField.interactable = true;
             Resize();
 

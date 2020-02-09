@@ -7,7 +7,7 @@ namespace Editor
 {
     public class DropdownField : MonoBehaviour
     {
-        public void Init(ArgumentSpec argSpec, Argument arg)
+        public void Init(ArgumentSpec argSpec, Argument arg, CodeList codeList)
         {
             // Configure dropdown options
             TMP_Dropdown dropdown = GetComponent<TMP_Dropdown>();
@@ -33,6 +33,7 @@ namespace Editor
             dropdown.onValueChanged.AddListener((int val) =>
             {
                 arg.val = val;
+                codeList.Program.BroadcastArgumentChange();
             });
 
             // Resize to fit the max preferred width

@@ -159,8 +159,9 @@ namespace Asm
 
     public class Instruction
     {
-        public OpCode opCode;
-        public Argument[] args;
+        private OpCode opCode;
+        private Argument[] args;
+
         public Instruction(OpCode opCode, params Argument[] args)
         {
             this.opCode = opCode;
@@ -176,6 +177,9 @@ namespace Asm
                 this.args[ai] = new Argument(argType, 0);
             }
         }
+
+        public OpCode OpCode { get { return opCode; } }
+        public Argument[] Args { get { return args; } }
     }
 
     public class Program
@@ -187,10 +191,16 @@ namespace Asm
         public List<Label> constLabelList = new List<Label>();
 
         public event Action OnChange;
+        public event Action OnArgumentChange;
         public event Action OnInstructionChange;
         public event Action OnBranchLabelChange;
         public event Action OnConstLabelChange;
 
+        public void BroadcastArgumentChange()
+        {
+            OnArgumentChange?.Invoke();
+            OnChange?.Invoke();
+        }
         public void BroadcastInstructionChange()
         {
             OnInstructionChange?.Invoke();
@@ -206,6 +216,7 @@ namespace Asm
             OnConstLabelChange?.Invoke();
             OnChange?.Invoke();
         }
+
         public void RemoveLabel(Label label)
         {
             labelMap.Remove(label.name);
@@ -215,7 +226,7 @@ namespace Asm
 
             // Remove references in instructions
             foreach (Instruction i in instructions) {
-                foreach (Argument arg in i.args) {
+                foreach (Argument arg in i.Args) {
                     if (arg.type == Argument.Type.LABEL && arg.label == label) {
                         arg.label = null;
                         arg.type = Argument.Type.IMMEDIATE;

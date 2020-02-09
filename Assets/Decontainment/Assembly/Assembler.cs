@@ -40,11 +40,11 @@ namespace Asm
                     case ';':
                         if (instruction != null) {
                             // Check that register arguments are assigned
-                            for (int argNum = 0; argNum < instruction.args.Length; ++argNum) {
-                                ArgumentSpec argSpec = InstructionMaps.opArgSpecMap[instruction.opCode][argNum];
-                                if (argSpec.regOnly && instruction.args[argNum].type != Argument.Type.REGISTER) {
+                            for (int argNum = 0; argNum < instruction.Args.Length; ++argNum) {
+                                ArgumentSpec argSpec = InstructionMaps.opArgSpecMap[instruction.OpCode][argNum];
+                                if (argSpec.regOnly && instruction.Args[argNum].type != Argument.Type.REGISTER) {
                                     Debug.LogError("Register number not provided for argument " + argNum
-                                        + " for operation " + instruction.opCode.ToString()
+                                        + " for operation " + instruction.OpCode.ToString()
                                         + " on line " + lineCount);
                                     return null;
                                 }
@@ -76,7 +76,7 @@ namespace Asm
                             instruction = new Instruction(opCode);
                         } else {
                             // Argument
-                            OpCode opCode = instruction.opCode;
+                            OpCode opCode = instruction.OpCode;
                             ArgumentSpec[] argSpecs = InstructionMaps.opArgSpecMap[opCode];
                             if (argCount == argSpecs.Length) {
                                 Debug.LogError("Invalid number of arguments for operation " + opCode.ToString()
@@ -127,14 +127,14 @@ namespace Asm
                                     return null;
                                 }
 
-                                instruction.args[argCount++] = new Argument(type, argVal);
+                                instruction.Args[argCount++] = new Argument(type, argVal);
                             } else {
                                 bool validLabel = output.labelMap.ContainsKey(word);
                                 if (!validLabel) {
                                     Debug.LogError("Invalid label " + word + " on line " + lineCount);
                                     return null;
                                 }
-                                instruction.args[argCount++] = new Argument(type, output.labelMap[word]);
+                                instruction.Args[argCount++] = new Argument(type, output.labelMap[word]);
                             }
                         }
                         i = wordEnd;
