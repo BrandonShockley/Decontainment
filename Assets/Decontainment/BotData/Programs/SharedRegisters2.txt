@@ -1,0 +1,10 @@
+TRN Left $90 Sync
+BranchLabel0:
+BNE BranchLabel0 %6 $1
+DRV Backward $1 Sync
+SET %6 $2
+BranchLabel1:
+BNE BranchLabel1 %6 $3
+DRV Forward $1 Sync
+SET %6 $4
+BUN BranchLabel0

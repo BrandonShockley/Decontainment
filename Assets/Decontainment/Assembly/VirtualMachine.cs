@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class VirtualMachine
 {
-    public const int NUM_REGS = 5;
+    public const int NUM_REGS = 10;
     public const int STACK_SIZE = 20;
 
 
@@ -103,24 +103,31 @@ public class VirtualMachine
                 // Data manipulation
                 case OpCode.SET:
                     regs[i.args[0].val] = GetArgValue(i.args[1]);
+                    if (i.args[0].val > 4) { BotManager.Instance.StartCoroutine(BotManager.Instance.PropagationCoroutine(i.args[0].val, regs[i.args[0].val], controller.TeamID)); }
                     break;
                 case OpCode.ADD:
                     regs[i.args[0].val] = GetArgValue(i.args[1]) + GetArgValue(i.args[2]);
+                    if (i.args[0].val > 4) { BotManager.Instance.StartCoroutine(BotManager.Instance.PropagationCoroutine(i.args[0].val, regs[i.args[0].val], controller.TeamID)); }
                     break;
                 case OpCode.SUB:
                     regs[i.args[0].val] = GetArgValue(i.args[1]) - GetArgValue(i.args[2]);
+                    if (i.args[0].val > 4) { BotManager.Instance.StartCoroutine(BotManager.Instance.PropagationCoroutine(i.args[0].val, regs[i.args[0].val], controller.TeamID)); }
                     break;
                 case OpCode.MUL:
                     regs[i.args[0].val] = GetArgValue(i.args[1]) * GetArgValue(i.args[2]);
+                    if (i.args[0].val > 4) { BotManager.Instance.StartCoroutine(BotManager.Instance.PropagationCoroutine(i.args[0].val, regs[i.args[0].val], controller.TeamID)); }
                     break;
                 case OpCode.DIV:
                     regs[i.args[0].val] = GetArgValue(i.args[1]) / GetArgValue(i.args[2]);
+                    if (i.args[0].val > 4) { BotManager.Instance.StartCoroutine(BotManager.Instance.PropagationCoroutine(i.args[0].val, regs[i.args[0].val], controller.TeamID)); }
                     break;
                 case OpCode.MOD:
                     regs[i.args[0].val] = GetArgValue(i.args[1]) % GetArgValue(i.args[2]);
+                    if (i.args[0].val > 4) { BotManager.Instance.StartCoroutine(BotManager.Instance.PropagationCoroutine(i.args[0].val, regs[i.args[0].val], controller.TeamID)); }
                     break;
                 case OpCode.ABS:
                     regs[i.args[0].val] = Math.Abs(GetArgValue(i.args[1]));
+                    if (i.args[0].val > 4) { BotManager.Instance.StartCoroutine(BotManager.Instance.PropagationCoroutine(i.args[0].val, regs[i.args[0].val], controller.TeamID)); }
                     break;
 
                 // Sensing
@@ -162,6 +169,10 @@ public class VirtualMachine
         }
         ++tickCounter;
         OnTick?.Invoke();
+    }
+
+    public void updateSharedReg(int registerNumber, int registerValue) {
+        regs[registerNumber] = registerValue;
     }
 
     private int GetArgValue(Argument arg)

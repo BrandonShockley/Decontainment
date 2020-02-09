@@ -1,4 +1,5 @@
 using Bot;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,6 +16,8 @@ class BotManager : PersistentSingleton<BotManager>
         FARTHEST,
     }
 
+    public float propagationDelay;
+
     private List<Controller> bots;
     private List<Controller>[] teams = new List<Controller>[2];
     private List<Transform> projectiles = new List<Transform>();
@@ -23,6 +26,7 @@ class BotManager : PersistentSingleton<BotManager>
 
     void Awake()
     {
+        propagationDelay = 3.0f;
         for (int tid = 0; tid < teams.Length; ++tid) {
             teams[tid] = new List<Controller>();
         }
@@ -70,5 +74,15 @@ class BotManager : PersistentSingleton<BotManager>
         Controller target = bots[targetIndex];
         Vector2 look = target.transform.position - targeter.transform.position;
         return (int)Vector2.SignedAngle(targeter.transform.right, look);
+    }
+
+    public IEnumerator PropagationCoroutine (int registerNumber, int registerValue, int botTeamID) {
+        //Debug.Log("Propagating with delay: " + propagationDelay);
+        yield return new WaitForSecondsRealtime(propagationDelay);
+        //Debug.Log("Setting Register Number: " + registerNumber + " to Register Value: " + registerValue + " on Team: " + botTeamID);
+        foreach (Controller bot in teams[botTeamID]) {
+            bot.VM.updateSharedReg(registerNumber, registerValue);
+        }
+        yield break;
     }
 }
