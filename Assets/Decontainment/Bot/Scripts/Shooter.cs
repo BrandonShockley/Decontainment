@@ -22,7 +22,19 @@ namespace Bot
                 cooldownTimer = weapon.cooldown;
                 async = true;
 
-                Projectile.CreateProjectile(this, weapon.projectilePrefab, hardpoint.transform.position, hardpoint.transform.right);
+                if (weapon.numShots > 1)
+                {
+                    float offset = Mathf.Floor(((float)weapon.numShots) / 2.0f - weapon.numShots);
+
+                    for (int i = 0; i < weapon.numShots; i++)
+                    {
+                        Projectile.CreateProjectile(this, weapon.projectilePrefab, hardpoint.transform.position, hardpoint.transform.right + new Vector3(Mathf.Cos(Mathf.Deg2Rad * (weapon.shotSpacing * (offset + i))), Mathf.Sin(Mathf.Deg2Rad * (weapon.shotSpacing * (offset + i))), 0));
+                    }
+                }
+                else
+                {
+                    Projectile.CreateProjectile(this, weapon.projectilePrefab, hardpoint.transform.position, hardpoint.transform.right);
+                }
             }
         }
 

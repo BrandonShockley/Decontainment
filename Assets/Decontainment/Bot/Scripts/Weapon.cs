@@ -9,5 +9,8 @@ namespace Bot
         /// In seconds
         public float cooldown;
         public Color hardpointColor = Color.white;
+        public int numShots = 1;
+        ///In Degrees
+        public float shotSpacing = 15f;
     }
 }
