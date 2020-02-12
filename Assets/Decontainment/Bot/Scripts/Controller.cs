@@ -37,6 +37,7 @@ namespace Bot
 
         public int TeamID { get { return teamID; } }
         public VirtualMachine VM { get { return vm; } }
+        public Health Health { get { return health; } }
 
         void Awake()
         {
@@ -77,8 +78,11 @@ namespace Bot
         public static void CreateBot(GameObject prefab, BotData data, int teamID, Vector2 position, Vector2 look)
         {
             GameObject go = GameObject.Instantiate(prefab, position, Quaternion.identity);
-            go.GetComponent<Controller>().Init(data, teamID);
+            Controller controller = go.GetComponent<Controller>();
+            controller.Init(data, teamID);
             go.transform.right = look;
+
+            BotManager.Instance.AddBot(controller);
         }
 
         public void Init(BotData data, int teamID)

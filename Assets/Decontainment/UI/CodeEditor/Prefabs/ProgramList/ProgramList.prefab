@@ -60,7 +60,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.35686275, g: 0.38823533, b: 0.43137258, a: 1}
+  m_Color: {r: 0.23575, g: 0.246, b: 0.287, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -475,8 +475,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   codeList: {fileID: 0}
-  assetLocationProgram: {fileID: 4900000, guid: cd015b285900a6142ad259415518cf72,
-    type: 3}
   listEntryPrefab: {fileID: 2216712257053310180, guid: d168590f589df7f488642bd2e6a40794,
     type: 3}
 --- !u!1 &8256923225373848830
