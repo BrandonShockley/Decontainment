@@ -48,10 +48,10 @@ public class Pools : SceneSingleton<Pools>
                 size = 1,
             });
 
-            go = Instantiate<GameObject>(poolData.prefab, Vector3.zero, Quaternion.identity);
+            go = Instantiate<GameObject>(poolData.prefab, position, rotation);
         } else {
             if (poolData.pool.Count == 0) {
-                go = Instantiate<GameObject>(poolData.prefab, Vector3.zero, Quaternion.identity);
+                go = Instantiate<GameObject>(poolData.prefab, position, rotation);
             } else {
                 go = poolData.pool.Pop();
                 go.SetActive(true);
