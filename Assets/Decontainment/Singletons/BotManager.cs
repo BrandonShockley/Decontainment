@@ -1,9 +1,6 @@
 using Bot;
-<<<<<<< HEAD
-using System.Collections;
-=======
 using System;
->>>>>>> master
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -19,15 +16,11 @@ class BotManager : PersistentSingleton<BotManager>
         NEAREST,
         FARTHEST,
     }
-
-<<<<<<< HEAD
+    
     [SerializeField]
     private float propagationDelay;
-
-    private List<Controller> bots;
-=======
+    
     private List<Controller> bots = new List<Controller>();
->>>>>>> master
     private List<Controller>[] teams = new List<Controller>[2];
     private List<Transform> projectiles = new List<Transform>();
 
