@@ -6,7 +6,9 @@ using UnityEngine;
 
 public class VirtualMachine
 {
-    public const int NUM_REGS = 5;
+    public const int NUM_LOCAL_REGS = 5;
+    public const int NUM_SHARED_REGS = 5;
+    public const int NUM_TOTAL_REGS = NUM_LOCAL_REGS + NUM_SHARED_REGS;
     public const int STACK_SIZE = 20;
 
     private static readonly Instruction NOP = new Instruction(OpCode.NOP);
@@ -14,7 +16,7 @@ public class VirtualMachine
     private Program program;
     private int tickCounter;
     private int sleepTickThreshold;
-    private int[] regs = new int[NUM_REGS];
+    private int[] regs = new int[NUM_TOTAL_REGS];
     private Stack<int> callStack = new Stack<int>(STACK_SIZE);
 
     private int pc;
@@ -111,24 +113,31 @@ public class VirtualMachine
                 // Data manipulation
                 case OpCode.SET:
                     regs[i.args[0].val] = GetArgValue(i.args[1]);
+                    if (i.args[0].val > NUM_LOCAL_REGS) { BotManager.Instance.PropagateRegister(i.args[0].val, regs[i.args[0].val], controller.TeamID); }
                     break;
                 case OpCode.ADD:
                     regs[i.args[0].val] = GetArgValue(i.args[1]) + GetArgValue(i.args[2]);
+                    if (i.args[0].val > NUM_LOCAL_REGS) { BotManager.Instance.PropagateRegister(i.args[0].val, regs[i.args[0].val], controller.TeamID); }
                     break;
                 case OpCode.SUB:
                     regs[i.args[0].val] = GetArgValue(i.args[1]) - GetArgValue(i.args[2]);
+                    if (i.args[0].val > NUM_LOCAL_REGS) { BotManager.Instance.PropagateRegister(i.args[0].val, regs[i.args[0].val], controller.TeamID); }
                     break;
                 case OpCode.MUL:
                     regs[i.args[0].val] = GetArgValue(i.args[1]) * GetArgValue(i.args[2]);
+                    if (i.args[0].val > NUM_LOCAL_REGS) { BotManager.Instance.PropagateRegister(i.args[0].val, regs[i.args[0].val], controller.TeamID); }
                     break;
                 case OpCode.DIV:
                     regs[i.args[0].val] = GetArgValue(i.args[1]) / GetArgValue(i.args[2]);
+                    if (i.args[0].val > NUM_LOCAL_REGS) { BotManager.Instance.PropagateRegister(i.args[0].val, regs[i.args[0].val], controller.TeamID); }
                     break;
                 case OpCode.MOD:
                     regs[i.args[0].val] = GetArgValue(i.args[1]) % GetArgValue(i.args[2]);
+                    if (i.args[0].val > NUM_LOCAL_REGS) { BotManager.Instance.PropagateRegister(i.args[0].val, regs[i.args[0].val], controller.TeamID); }
                     break;
                 case OpCode.ABS:
                     regs[i.args[0].val] = Math.Abs(GetArgValue(i.args[1]));
+                    if (i.args[0].val > NUM_LOCAL_REGS) { BotManager.Instance.PropagateRegister(i.args[0].val, regs[i.args[0].val], controller.TeamID); }
                     break;
 
                 // Sensing
@@ -170,6 +179,10 @@ public class VirtualMachine
         }
         ++tickCounter;
         OnTick?.Invoke();
+    }
+
+    public void UpdateSharedReg(int registerNumber, int registerValue) {
+        regs[registerNumber] = registerValue;
     }
 
     private int GetArgValue(Argument arg)

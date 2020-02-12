@@ -1,9 +1,10 @@
 using Bot;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-class BotManager : PersistentSingleton<BotManager>
+class BotManager : SceneSingleton<BotManager>
 {
     public enum TargetType
     {
@@ -15,7 +16,10 @@ class BotManager : PersistentSingleton<BotManager>
         NEAREST,
         FARTHEST,
     }
-
+    
+    [SerializeField]
+    private float propagationDelay;
+    
     private List<Controller> bots = new List<Controller>();
     private List<Controller>[] teams = new List<Controller>[2];
     private List<Transform> projectiles = new List<Transform>();
@@ -80,6 +84,18 @@ class BotManager : PersistentSingleton<BotManager>
         Controller target = bots[targetIndex];
         Vector2 look = target.transform.position - targeter.transform.position;
         return (int)Vector2.SignedAngle(targeter.transform.right, look);
+    }
+    
+    public void PropagateRegister(int registerNumber, int registerValue, int botTeamID) {
+        StartCoroutine(PropagationCoroutine(registerNumber, registerValue, botTeamID));
+    }
+
+    private IEnumerator PropagationCoroutine(int registerNumber, int registerValue, int botTeamID) {
+        yield return new WaitForSeconds(propagationDelay);
+        foreach (Controller bot in teams[botTeamID]) {
+            bot.VM.UpdateSharedReg(registerNumber, registerValue);
+        }
+        yield break;
     }
 
     private void HandleDisable(int teamID)
