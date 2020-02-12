@@ -16,7 +16,8 @@ class BotManager : PersistentSingleton<BotManager>
         FARTHEST,
     }
 
-    public float propagationDelay;
+    [SerializeField]
+    private float propagationDelay;
 
     private List<Controller> bots;
     private List<Controller>[] teams = new List<Controller>[2];
@@ -76,12 +77,14 @@ class BotManager : PersistentSingleton<BotManager>
         return (int)Vector2.SignedAngle(targeter.transform.right, look);
     }
 
-    public IEnumerator PropagationCoroutine (int registerNumber, int registerValue, int botTeamID) {
-        //Debug.Log("Propagating with delay: " + propagationDelay);
-        yield return new WaitForSecondsRealtime(propagationDelay);
-        //Debug.Log("Setting Register Number: " + registerNumber + " to Register Value: " + registerValue + " on Team: " + botTeamID);
+    public void PropagateRegister(int registerNumber, int registerValue, int botTeamID) {
+        StartCoroutine(PropagationCoroutine(registerNumber, registerValue, botTeamID));
+    }
+
+    private IEnumerator PropagationCoroutine(int registerNumber, int registerValue, int botTeamID) {
+        yield return new WaitForSeconds(propagationDelay);
         foreach (Controller bot in teams[botTeamID]) {
-            bot.VM.updateSharedReg(registerNumber, registerValue);
+            bot.VM.UpdateSharedReg(registerNumber, registerValue);
         }
         yield break;
     }

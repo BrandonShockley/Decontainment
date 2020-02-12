@@ -15,7 +15,7 @@ namespace Editor
 
             float maxPreferredWidth = 0;
             if (argSpec.regOnly) {
-                for (int regNum = 0; regNum < VirtualMachine.NUM_REGS; ++regNum) {
+                for (int regNum = 0; regNum < VirtualMachine.NUM_TOTAL_REGS; ++regNum) {
                     string regName = "R" + regNum;
                     dropdown.options.Add(new TMP_Dropdown.OptionData(regName));
                     maxPreferredWidth = Mathf.Max(tm.GetPreferredValues(regName).x, maxPreferredWidth);

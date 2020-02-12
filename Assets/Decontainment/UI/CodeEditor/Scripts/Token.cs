@@ -54,7 +54,9 @@ namespace Editor
 
             // Configure token color
             ArgTokenColorMap.Type tokenType = arg.type == Argument.Type.REGISTER
-                ? ArgTokenColorMap.Type.REGISTER
+                ? arg.val < VirtualMachine.NUM_LOCAL_REGS 
+                ? ArgTokenColorMap.Type.LOCAL_REGISTER 
+                : ArgTokenColorMap.Type.SHARED_REGISTER
                 : arg.label.type == Label.Type.BRANCH
                 ? ArgTokenColorMap.Type.BRANCH_LABEL
                 : ArgTokenColorMap.Type.CONST_LABEL;
