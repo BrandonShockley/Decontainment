@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-class BotManager : PersistentSingleton<BotManager>
+class BotManager : SceneSingleton<BotManager>
 {
     public enum TargetType
     {
@@ -30,7 +30,6 @@ class BotManager : PersistentSingleton<BotManager>
 
     void Awake()
     {
-        propagationDelay = 3.0f;
         for (int tid = 0; tid < teams.Length; ++tid) {
             teams[tid] = new List<Controller>();
         }
