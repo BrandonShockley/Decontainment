@@ -2,8 +2,8 @@ using UnityEngine;
 
 namespace Bot
 {
-    [CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/Weapon", order = 1)]
-    public class Weapon : ScriptableObject
+    [CreateAssetMenu(fileName = "WeaponData", menuName = "ScriptableObjects/Weapon", order = 1)]
+    public class WeaponData : ScriptableObject
     {
         public GameObject projectilePrefab;
         /// In seconds

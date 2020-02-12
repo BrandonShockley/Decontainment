@@ -1,5 +1,9 @@
 using Bot;
+<<<<<<< HEAD
 using System.Collections;
+=======
+using System;
+>>>>>>> master
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -16,12 +20,18 @@ class BotManager : PersistentSingleton<BotManager>
         FARTHEST,
     }
 
+<<<<<<< HEAD
     [SerializeField]
     private float propagationDelay;
 
     private List<Controller> bots;
+=======
+    private List<Controller> bots = new List<Controller>();
+>>>>>>> master
     private List<Controller>[] teams = new List<Controller>[2];
     private List<Transform> projectiles = new List<Transform>();
+
+    public event Action<int> OnTeamDisable;
 
     public List<Transform> Projectiles { get { return projectiles; } }
 
@@ -32,10 +42,17 @@ class BotManager : PersistentSingleton<BotManager>
             teams[tid] = new List<Controller>();
         }
 
-        bots = new List<Controller>(FindObjectsOfType<Controller>());
-        foreach (Controller bot in bots) {
-            teams[bot.TeamID].Add(bot);
+        foreach (Controller bot in FindObjectsOfType<Controller>()) {
+            AddBot(bot);
         }
+    }
+
+    public void AddBot(Controller bot)
+    {
+        bot.Health.OnDisable += () => HandleDisable(bot.TeamID);
+
+        bots.Add(bot);
+        teams[bot.TeamID].Add(bot);
     }
 
     /// Returns -1 if no valid targets
@@ -76,7 +93,7 @@ class BotManager : PersistentSingleton<BotManager>
         Vector2 look = target.transform.position - targeter.transform.position;
         return (int)Vector2.SignedAngle(targeter.transform.right, look);
     }
-
+    
     public void PropagateRegister(int registerNumber, int registerValue, int botTeamID) {
         StartCoroutine(PropagationCoroutine(registerNumber, registerValue, botTeamID));
     }
@@ -87,5 +104,20 @@ class BotManager : PersistentSingleton<BotManager>
             bot.VM.UpdateSharedReg(registerNumber, registerValue);
         }
         yield break;
+    }
+
+    private void HandleDisable(int teamID)
+    {
+        bool allDisabled = true;
+        foreach (Controller bot in teams[teamID]) {
+            if (!bot.Health.Disabled) {
+                allDisabled = false;
+                break;
+            }
+        }
+
+        if (allDisabled) {
+            OnTeamDisable?.Invoke(teamID);
+        }
     }
 }

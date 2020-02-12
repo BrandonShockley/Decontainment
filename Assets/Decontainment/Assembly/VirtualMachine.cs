@@ -11,6 +11,7 @@ public class VirtualMachine
     public const int NUM_TOTAL_REGS = NUM_LOCAL_REGS + NUM_SHARED_REGS;
     public const int STACK_SIZE = 20;
 
+    private static readonly Instruction NOP = new Instruction(OpCode.NOP);
 
     private Program program;
     private int tickCounter;
@@ -46,8 +47,15 @@ public class VirtualMachine
     public void Tick()
     {
         if (tickCounter > sleepTickThreshold) {
-            Instruction i = program.instructions[pc];
-            int newPC = (pc + 1) % program.instructions.Count;
+            Instruction i;
+            int newPC;
+            if (program == null || program.instructions.Count == 0) {
+                i = NOP;
+                newPC = 0;
+            } else {
+                i = program.instructions[pc];
+                newPC = (pc + 1) % program.instructions.Count;
+            }
             switch(i.opCode)
             {
                 // Control flow

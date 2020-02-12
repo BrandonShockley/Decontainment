@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 515fc3ba0ae50e44fbb147f5e3cbe600, type: 3}
-  m_Name: BasicPulseConfig
+  m_Script: {fileID: 11500000, guid: 61f5ec1c540caab45ad53d6e9945d46a, type: 3}
+  m_Name: BasicLevel
   m_EditorClassIdentifier: 
-  configs:
-  - hardpointNum: 0
-    weapon: {fileID: 11400000, guid: 425d82cfe20f1f743ad2f53b9d04e7a1, type: 2}
+  levelPrefab: {fileID: 3998424540559823655, guid: a3c3424e89f372c48ab0b4f695e8aa88,
+    type: 3}
+  teamData: {fileID: 11400000, guid: eb49a271812a27249984583ad60a4213, type: 2}
