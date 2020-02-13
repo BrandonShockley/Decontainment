@@ -31,11 +31,11 @@ namespace Editor
             unselectedColor = image.color;
         }
 
-        public void Init(Program program, CodeList codeList, Action<Program, int, string> handleRename)
+        public void Init(Program program, CodeList codeList, Func<Program, int, string, bool> handleRename)
         {
             this.program = program;
             this.codeList = codeList;
-            rn.OnRename += (string name) => handleRename(program, transform.GetSiblingIndex(), name);
+            rn.onRename = (string name) => handleRename(program, transform.GetSiblingIndex(), name);
             inputField.text = program.name;
         }
 

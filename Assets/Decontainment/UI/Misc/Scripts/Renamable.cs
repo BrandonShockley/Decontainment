@@ -9,11 +9,15 @@ public class Renamable : MonoBehaviour, IPointerClickHandler
     public bool autoResize = false;
     public bool extraValidation = false;
 
+    private Trigger shouldDeactivate;
+    private string prevText;
+
     private RectTransform rt;
     private TextMeshProUGUI tm;
     private TMP_InputField inputField;
 
-    public event Action<string> OnRename;
+    // Returns false if text should be reverted
+    public Func<string, bool> onRename;
 
     void Awake()
     {
@@ -21,8 +25,14 @@ public class Renamable : MonoBehaviour, IPointerClickHandler
         tm = GetComponentInChildren<TextMeshProUGUI>();
         inputField = GetComponent<TMP_InputField>();
 
-        inputField.onDeselect.AddListener((string s) => OnRename?.Invoke(s));
-        inputField.onSubmit.AddListener((string val) => EventSystem.current.SetSelectedGameObject(null));
+        inputField.onEndEdit.AddListener((string s) =>
+        {
+            if (onRename != null && !onRename.Invoke(s)) {
+                inputField.text = prevText;
+            }
+
+            shouldDeactivate.Value = true;
+        });
         if (autoResize) {
             inputField.onValueChanged.AddListener((string newVal) => Resize());
         }
@@ -38,13 +48,20 @@ public class Renamable : MonoBehaviour, IPointerClickHandler
         }
     }
 
+    void Update()
+    {
+        if (shouldDeactivate.Value) {
+            inputField.interactable = false;
+        }
+    }
+
     public void OnPointerClick(PointerEventData pointerEventData)
     {
         bool isRightClick = pointerEventData.button == PointerEventData.InputButton.Right;
         if (isRightClick) {
             inputField.interactable = true;
             inputField.ActivateInputField();
-            inputField.interactable = false;
+            prevText = inputField.text;
         }
     }
 
