@@ -9,10 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 58acfad9802a29847b6c93bb7747eaf0, type: 3}
-  m_Name: PulseWeapon
+  m_Script: {fileID: 11500000, guid: 0820138dba3ce2e428a22f9b7a480245, type: 3}
+  m_Name: HealthShooter
   m_EditorClassIdentifier: 
-  projectilePrefab: {fileID: 5202299059419044755, guid: 27e0a792cb0a06b4f966045d1ffd499e,
-    type: 3}
-  cooldown: 1
-  hardpointColor: {r: 0.313938, g: 0, b: 0.509434, a: 1}
+  builtInProgram: {fileID: 4900000, guid: 85c7c278c915d0447845774f4d9e7dc2, type: 3}
+  weaponData: {fileID: 11400000, guid: a1fcdd241bce75949b5b54439b3e7a8b, type: 2}
