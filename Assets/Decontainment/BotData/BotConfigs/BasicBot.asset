@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: BasicBot
   m_EditorClassIdentifier: 
   builtInProgram: {fileID: 4900000, guid: cd015b285900a6142ad259415518cf72, type: 3}
-  weaponData: {fileID: 11400000, guid: 425d82cfe20f1f743ad2f53b9d04e7a1, type: 2}
+  weaponData: {fileID: 11400000, guid: 49f1d6d20a4b3dc4e80977af7f57a204, type: 2}
