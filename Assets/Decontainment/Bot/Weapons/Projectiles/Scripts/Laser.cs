@@ -5,6 +5,11 @@ using UnityEngine;
 
 public class Laser : Projectile
 {
+    private static LayerMask MASK;
+    private static Trigger doOnce;
+
+    [SerializeField]
+    private int damage = 1;
     [SerializeField]
     private int damage = 1;
     [SerializeField]
@@ -22,6 +27,10 @@ public class Laser : Projectile
     protected override void SubAwake()
     {
         lr = GetComponent<LineRenderer>();
+
+        if (!doOnce.Value) {
+            MASK = LayerMask.GetMask("Obstacle", "Bot");
+        }
     }
 
     protected override void Init()
@@ -31,8 +40,7 @@ public class Laser : Projectile
 
     void Update()
     {
-        LayerMask mask = LayerMask.GetMask("Obstacle", "Bot");
-        RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, transform.right, maxDistance, mask);
+        RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, transform.right, maxDistance, MASK);
         int hitIndex = -1;
         for (int i = 0; i < hits.Length; ++i) {
             if (hits[i].collider.gameObject != shooter.gameObject) {
@@ -74,7 +82,7 @@ public class Laser : Projectile
                 if (doOnce)
                     yield return null;
 
-                RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, transform.right, maxDistance);
+                RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, transform.right, maxDistance, MASK);
                 int hitIndex = -1;
                 for (int i = 0; i < hits.Length; ++i) {
                     if (hits[i].collider.gameObject != shooter.gameObject) {

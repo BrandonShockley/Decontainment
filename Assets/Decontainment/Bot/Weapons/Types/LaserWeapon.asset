@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58acfad9802a29847b6c93bb7747eaf0, type: 3}
   m_Name: LaserWeapon
   m_EditorClassIdentifier: 
-  projectilePrefab: {fileID: 0}
-  cooldown: 0
-  hardpointColor: {r: 1, g: 1, b: 1, a: 1}
+  projectilePrefab: {fileID: 2249038086161332113, guid: 71f2eb08b377f604f8a7bc9aebb20372,
+    type: 3}
+  cooldown: 1
+  hardpointColor: {r: 1, g: 0, b: 0.8534627, a: 1}
