@@ -29,7 +29,7 @@ namespace Bot
                     for (int i = 0; i < weapon.numShots; i++)
                     {
                         Projectile.CreateProjectile(this, weapon.projectilePrefab, hardpoint.transform.position, hardpoint.transform.right + new Vector3(Mathf.Cos(Mathf.Deg2Rad * (weapon.shotSpacing * (offset + i) + hardpoint.transform.eulerAngles.z)),
-                                                                                                                                                Mathf.Sin(Mathf.Deg2Rad * (weapon.shotSpacing * (offset + i) + hardpoint.transform.eulerAngles.z)), 0));
+                                                                                                                                               Mathf.Sin(Mathf.Deg2Rad * (weapon.shotSpacing * (offset + i) + hardpoint.transform.eulerAngles.z)), 0));
                     }
                 }
                 else

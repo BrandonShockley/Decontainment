@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58acfad9802a29847b6c93bb7747eaf0, type: 3}
   m_Name: Shotgun
   m_EditorClassIdentifier: 
-  projectilePrefab: {fileID: 5202299059419044755, guid: 27e0a792cb0a06b4f966045d1ffd499e,
+  projectilePrefab: {fileID: 4312774953735687039, guid: fc0beace315e1144d98b41bd35e892ea,
     type: 3}
-  cooldown: 5
-  hardpointColor: {r: 1, g: 1, b: 1, a: 1}
+  cooldown: 4
+  hardpointColor: {r: 0.056470275, g: 0.254717, b: 0.05887941, a: 1}
   numShots: 5
   shotSpacing: 15
