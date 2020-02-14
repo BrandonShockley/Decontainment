@@ -7,7 +7,7 @@ namespace Editor
 {
     public class DropdownField : MonoBehaviour
     {
-        public void Init(ArgumentSpec argSpec, Argument arg)
+        public void Init(ArgumentSpec argSpec, Argument arg, CodeList codeList)
         {
             // Configure dropdown options
             TMP_Dropdown dropdown = GetComponent<TMP_Dropdown>();
@@ -15,7 +15,7 @@ namespace Editor
 
             float maxPreferredWidth = 0;
             if (argSpec.regOnly) {
-                for (int regNum = 0; regNum < VirtualMachine.NUM_REGS; ++regNum) {
+                for (int regNum = 0; regNum < VirtualMachine.NUM_TOTAL_REGS; ++regNum) {
                     string regName = "R" + regNum;
                     dropdown.options.Add(new TMP_Dropdown.OptionData(regName));
                     maxPreferredWidth = Mathf.Max(tm.GetPreferredValues(regName).x, maxPreferredWidth);
@@ -33,6 +33,7 @@ namespace Editor
             dropdown.onValueChanged.AddListener((int val) =>
             {
                 arg.val = val;
+                codeList.Program.BroadcastArgumentChange();
             });
 
             // Resize to fit the max preferred width
