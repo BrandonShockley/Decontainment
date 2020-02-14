@@ -12,6 +12,7 @@ namespace Editor
         [SerializeField]
         protected Color dragOverColor = Color.white;
 
+        protected CodeList codeList;
         protected Color origColor;
 
         protected CanvasGroup cg;
@@ -28,11 +29,12 @@ namespace Editor
             rt = GetComponent<RectTransform>();
         }
 
-        public void Init(Divider myDivider)
+        protected void Init(Divider myDivider, CodeList codeList)
         {
             this.myDivider = myDivider;
+            this.codeList = codeList;
 
-            draggable.Init(Globals.dividers, Globals.trashSlots);
+            draggable.Init(codeList.Dividers, codeList.TrashSlots);
             draggable.filterFunc = (Draggable.Slot slot) => slot == myDivider;
             draggable.onDragStart = () =>
             {
