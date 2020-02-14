@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShotgunPellet : Pulse
+public class ShotgunPellet : Projectile
 {
 
     [SerializeField]
@@ -28,7 +28,7 @@ public class ShotgunPellet : Pulse
         col.enabled = false;
     }
 
-    public override void Init()
+    protected override void Init()
     {
         rb.velocity = transform.right * speed;
         col.enabled = true;

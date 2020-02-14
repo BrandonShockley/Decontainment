@@ -22,24 +22,22 @@ namespace Bot
                 cooldownTimer = weaponData.cooldown;
                 async = true;
 
-<<<<<<< HEAD
-                if (weapon.numShots > 1)
+                if (weaponData.numShots > 1)
                 {
-                    float offset = Mathf.Ceil(((float) weapon.numShots) / 2.0f - weapon.numShots);
+                    float offset = Mathf.Ceil(((float)weaponData.numShots) / 2.0f - weaponData.numShots);
 
-                    for (int i = 0; i < weapon.numShots; i++)
+                    for (int i = 0; i < weaponData.numShots; i++)
                     {
-                        Projectile.CreateProjectile(this, weapon.projectilePrefab, hardpoint.transform.position, hardpoint.transform.right + new Vector3(Mathf.Cos(Mathf.Deg2Rad * (weapon.shotSpacing * (offset + i) + hardpoint.transform.eulerAngles.z)),
-                                                                                                                                               Mathf.Sin(Mathf.Deg2Rad * (weapon.shotSpacing * (offset + i) + hardpoint.transform.eulerAngles.z)), 0));
+                        Projectile.CreateProjectile(this, weaponData.projectilePrefab, hardpoint.transform.position, hardpoint.transform.right + new Vector3(Mathf.Cos(Mathf.Deg2Rad * (weaponData.shotSpacing * (offset + i) + hardpoint.transform.eulerAngles.z)),
+                                                                                                                                               Mathf.Sin(Mathf.Deg2Rad * (weaponData.shotSpacing * (offset + i) + hardpoint.transform.eulerAngles.z)), 0));
                     }
                 }
                 else
                 {
-                    Projectile.CreateProjectile(this, weapon.projectilePrefab, hardpoint.transform.position, hardpoint.transform.right);
+                    Projectile.CreateProjectile(this, weaponData.projectilePrefab, hardpoint.transform.position, hardpoint.transform.right);
                 }
-=======
+
                 Projectile.CreateProjectile(this, weaponData.projectilePrefab, hardpoint.transform.position, hardpoint.transform.right);
->>>>>>> 5e29002480a6f74d7cd9dc3c6367b38ec854bcbb
             }
         }
 
