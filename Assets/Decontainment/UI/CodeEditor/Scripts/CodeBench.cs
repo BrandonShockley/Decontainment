@@ -16,7 +16,9 @@ namespace Editor
         [SerializeField]
         private Transform instructionList = null;
         [SerializeField]
-        private Transform regTokenList = null;
+        private Transform localRegTokenList = null;
+        [SerializeField]
+        private Transform sharedRegTokenList = null;
         [SerializeField]
         private Transform branchLabelTokenList = null;
         [SerializeField]
@@ -71,10 +73,16 @@ namespace Editor
                 }
             }
 
-            // Create register tokens
-            for (int regNum = 0; regNum < VirtualMachine.NUM_REGS; ++regNum) {
+            // Create local register tokens
+            for (int regNum = 0; regNum < VirtualMachine.NUM_LOCAL_REGS; ++regNum) {
                 Argument arg = new Argument(Argument.Type.REGISTER, regNum);
-                CreateToken(arg, regTokenList);
+                CreateToken(arg, localRegTokenList);
+            }
+
+            // Create shared register tokens
+            for (int regNum = VirtualMachine.NUM_LOCAL_REGS; regNum < VirtualMachine.NUM_SHARED_REGS + VirtualMachine.NUM_LOCAL_REGS; ++regNum) {
+                Argument arg = new Argument(Argument.Type.REGISTER, regNum);
+                CreateToken(arg, sharedRegTokenList);
             }
         }
 

@@ -15,23 +15,14 @@ namespace Editor
 
         /// Used to locate in-project program directory
         [SerializeField]
-        private TextAsset assetLocationProgram = null;
-        [SerializeField]
         private GameObject listEntryPrefab = null;
 
-        private string programDirectory;
         private List<Program> programs = new List<Program>();
 
         void Awake()
         {
-            #if UNITY_EDITOR
-            programDirectory = Directory.GetCurrentDirectory() + "/" + Path.GetDirectoryName(AssetDatabase.GetAssetPath(assetLocationProgram));
-            #else
-            programDirectory = Directory.GetCurrentDirectory();
-            #endif
-
             // Assemble all program files
-            string[] filePaths = Directory.GetFiles(programDirectory, "*.txt");
+            string[] filePaths = Directory.GetFiles(ProgramDirectory.value, "*.txt");
             foreach (string filePath in filePaths) {
                 string programText = File.ReadAllText(filePath);
                 Program program = Assembler.Assemble(programText);
@@ -94,7 +85,7 @@ namespace Editor
         private void SaveProgram(Program program)
         {
             string programText = Disassembler.Disassemble(program);
-            StreamWriter programFile = File.CreateText(ProgramPath(program));
+            StreamWriter programFile = File.CreateText(ProgramDirectory.ProgramPath(program.name));
             programFile.Write(programText);
             programFile.Close();
         }
@@ -108,10 +99,17 @@ namespace Editor
             }
         }
 
-        private void RenameProgram(Program program, int index, string name)
+        private bool RenameProgram(Program program, int index, string name)
         {
+            // Check that we don't override an existing file
+            foreach (Program p in programs) {
+                if (p.name == name) {
+                    return false;
+                }
+            }
+
             // Remove old file
-            File.Delete(ProgramPath(program));
+            File.Delete(ProgramDirectory.ProgramPath(program.name));
 
             // Update back end
             programs.RemoveAt(index);
@@ -123,8 +121,7 @@ namespace Editor
 
             // Create new file
             SaveProgram(program);
+            return true;
         }
-
-        private string ProgramPath(Program program) { return programDirectory + "/" + program.name + ".txt"; }
     }
 }

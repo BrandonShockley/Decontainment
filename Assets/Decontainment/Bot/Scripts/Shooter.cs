@@ -9,7 +9,7 @@ namespace Bot
         public bool async;
 
         public Hardpoint hardpoint;
-        public Weapon weapon;
+        public WeaponData weaponData;
 
         private float cooldownTimer;
 
@@ -19,9 +19,10 @@ namespace Bot
         {
             cooldownTimer -= Time.fixedDeltaTime;
             if (shotRequested.Value && cooldownTimer <= 0) {
-                cooldownTimer = weapon.cooldown;
+                cooldownTimer = weaponData.cooldown;
                 async = true;
 
+<<<<<<< HEAD
                 if (weapon.numShots > 1)
                 {
                     float offset = Mathf.Ceil(((float) weapon.numShots) / 2.0f - weapon.numShots);
@@ -36,15 +37,18 @@ namespace Bot
                 {
                     Projectile.CreateProjectile(this, weapon.projectilePrefab, hardpoint.transform.position, hardpoint.transform.right);
                 }
+=======
+                Projectile.CreateProjectile(this, weaponData.projectilePrefab, hardpoint.transform.position, hardpoint.transform.right);
+>>>>>>> 5e29002480a6f74d7cd9dc3c6367b38ec854bcbb
             }
         }
 
-        public void Init(Hardpoint hardpoint, Weapon weapon)
+        public void Init(Hardpoint hardpoint, WeaponData weaponData)
         {
             this.hardpoint = hardpoint;
-            this.weapon = weapon;
+            this.weaponData = weaponData;
 
-            this.hardpoint.Init(weapon.hardpointColor);
+            this.hardpoint.Init(weaponData.hardpointColor);
         }
     }
 }

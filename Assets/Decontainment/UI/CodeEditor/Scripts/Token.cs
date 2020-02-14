@@ -37,7 +37,7 @@ namespace Editor
             tm = GetComponentInChildren<TextMeshProUGUI>();
             inputField = GetComponent<TMP_InputField>();
 
-            rn.OnRename += RenameLabel;
+            rn.onRename = RenameLabel;
         }
 
         public void Init(Argument initArg, CodeList codeList)
@@ -54,7 +54,9 @@ namespace Editor
 
             // Configure token color
             ArgTokenColorMap.Type tokenType = arg.type == Argument.Type.REGISTER
-                ? ArgTokenColorMap.Type.REGISTER
+                ? arg.val < VirtualMachine.NUM_LOCAL_REGS
+                ? ArgTokenColorMap.Type.LOCAL_REGISTER
+                : ArgTokenColorMap.Type.SHARED_REGISTER
                 : arg.label.type == Label.Type.BRANCH
                 ? ArgTokenColorMap.Type.BRANCH_LABEL
                 : ArgTokenColorMap.Type.CONST_LABEL;
@@ -86,17 +88,17 @@ namespace Editor
             };
         }
 
-        private void RenameLabel(string newName)
+        private bool RenameLabel(string newName)
         {
             if (newName == arg.label.name) {
-                return;
+                return true;
             }
 
             // Make sure we're not renaming to a preexisting label or an invalid name
             if (codeList.Program.labelMap.ContainsKey(newName) || newName == "") {
                 // TODO: Display a prompt when this happens (Trello #18)
                 inputField.text = arg.label.name;
-                return;
+                return false;
             }
 
             codeList.Program.labelMap.Remove(arg.label.name);
@@ -111,6 +113,7 @@ namespace Editor
             }
 
             labelChangeAction();
+            return true;
         }
 
     }
