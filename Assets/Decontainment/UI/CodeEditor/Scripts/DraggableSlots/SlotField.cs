@@ -54,6 +54,7 @@ namespace Editor
 
         public void InsertArg(Argument newArg, GameObject transferedToken = null)
         {
+            inputField.text = "0";
             Debug.Assert(newArg.type != Argument.Type.IMMEDIATE);
 
             arg.CopyValues(newArg);
