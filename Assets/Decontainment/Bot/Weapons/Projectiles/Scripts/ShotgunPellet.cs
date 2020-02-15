@@ -3,13 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShotgunPellet : Projectile {
+public class ShotgunPellet : Projectile
+{
 
     [SerializeField]
-    private float lifeTimer;
+    private float lifeTimer = 1.5f;
 
     [SerializeField]
     private float speed = 1;
+
+    [SerializeField]
+    private int damage = 1;
 
     private Collider2D col;
     private LineRenderer lr;
@@ -37,11 +41,9 @@ public class ShotgunPellet : Projectile {
 
     void OnTriggerEnter2D(Collider2D c)
     {
-        if (c.gameObject != shooter.gameObject)
-        {
-            if (c.TryGetComponent<Health>(out Health health))
-            {
-                health.TakeDamage(1);
+        if (c.gameObject != shooter.gameObject) {
+            if (c.TryGetComponent<Health>(out Health health)) {
+                health.TakeDamage(damage);
             }
             Pools.Instance.Free(gameObject);
         }
