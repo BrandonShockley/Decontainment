@@ -90,7 +90,7 @@ namespace Editor.Code
         // Ensure that code blocks are always at least as wide as the viewport
         void OnRectTransformDimensionsChange()
         {
-            if (instructionBlockTransforms == null) {
+            if (instructionBlockTransforms == null || Program == null) {
                 return;
             }
 

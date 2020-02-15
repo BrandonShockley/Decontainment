@@ -75,6 +75,19 @@ namespace Editor.Code
             CreateListEntry(newProgram, index);
         }
 
+        public void DeleteProgram()
+        {
+            if (codeList.Program == null) {
+                return;
+            }
+
+            int index = programs.IndexOf(codeList.Program);
+            programs.RemoveAt(index);
+            Destroy(transform.GetChild(index).gameObject);
+            File.Delete(ProgramDirectory.ProgramPath(codeList.Program.name));
+            codeList.Program = null;
+        }
+
         private void Clear()
         {
             for (int i = transform.childCount - 1; i >= 0; --i) {

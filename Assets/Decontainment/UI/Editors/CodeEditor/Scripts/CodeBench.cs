@@ -44,8 +44,8 @@ namespace Editor.Code
                 ResetConstLabelList();
 
                 if (oldProgram != null) {
-                    codeList.Program.OnBranchLabelChange -= ResetBranchLabelList;
-                    codeList.Program.OnConstLabelChange -= ResetConstLabelList;
+                    oldProgram.OnBranchLabelChange -= ResetBranchLabelList;
+                    oldProgram.OnConstLabelChange -= ResetConstLabelList;
                 }
 
                 if (codeList.Program != null) {
