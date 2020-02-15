@@ -15,34 +15,27 @@ namespace Bot
 
         public bool Running { get { return !async && cooldownTimer > 0; } }
 
-        void FixedUpdate()
-        {
+        void FixedUpdate() {
             cooldownTimer -= Time.fixedDeltaTime;
             if (shotRequested.Value && cooldownTimer <= 0) {
                 cooldownTimer = weaponData.cooldown;
                 async = true;
 
-                if (weaponData.numShots > 1)
-                {
-                    float offset = Mathf.Ceil(((float)weaponData.numShots) / 2.0f - weaponData.numShots);
+                if (weaponData.numShots > 1) {
+                    float offset = -(((float) weaponData.numShots - 1) / 2.0f) * weaponData.shotSpacing;
 
                     for (int i = 0; i < weaponData.numShots; i++)
                     {
-                        Projectile.CreateProjectile(this, weaponData.projectilePrefab, hardpoint.transform.position, hardpoint.transform.right + new Vector3(Mathf.Cos(Mathf.Deg2Rad * (weaponData.shotSpacing * (offset + i) + hardpoint.transform.eulerAngles.z)),
-                                                                                                                                               Mathf.Sin(Mathf.Deg2Rad * (weaponData.shotSpacing * (offset + i) + hardpoint.transform.eulerAngles.z)), 0));
+                        Projectile.CreateProjectile(this, weaponData.projectilePrefab, hardpoint.transform.position, hardpoint.transform.right + new Vector3(Mathf.Cos(Mathf.Deg2Rad * (weaponData.shotSpacing * i + offset + hardpoint.transform.eulerAngles.z)),
+                                                                                                                                               Mathf.Sin(Mathf.Deg2Rad * (weaponData.shotSpacing * i + offset + hardpoint.transform.eulerAngles.z)), 0));
                     }
-                }
-                else
-                {
+                } else {
                     Projectile.CreateProjectile(this, weaponData.projectilePrefab, hardpoint.transform.position, hardpoint.transform.right);
                 }
-
-                Projectile.CreateProjectile(this, weaponData.projectilePrefab, hardpoint.transform.position, hardpoint.transform.right);
             }
         }
 
-        public void Init(Hardpoint hardpoint, WeaponData weaponData)
-        {
+        public void Init(Hardpoint hardpoint, WeaponData weaponData) {
             this.hardpoint = hardpoint;
             this.weaponData = weaponData;
 
