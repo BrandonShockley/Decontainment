@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Editor
+namespace Editor.Code
 {
     public abstract class Block : MonoBehaviour
     {

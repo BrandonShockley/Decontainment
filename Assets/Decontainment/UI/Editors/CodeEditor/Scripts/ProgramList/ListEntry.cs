@@ -6,8 +6,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-// TODO: Add a .Program subnamspace to Editor
-namespace Editor
+namespace Editor.Code
 {
     public class ListEntry : MonoBehaviour, IPointerClickHandler
     {

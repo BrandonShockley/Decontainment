@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace Editor
+namespace Editor.Code
 {
     public class SlotField : Draggable.Slot
     {

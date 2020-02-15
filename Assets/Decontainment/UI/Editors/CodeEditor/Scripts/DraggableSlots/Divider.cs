@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Editor
+namespace Editor.Code
 {
     public class Divider : ColorChangeSlot
     {

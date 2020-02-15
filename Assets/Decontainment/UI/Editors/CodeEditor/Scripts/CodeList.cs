@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Editor
+namespace Editor.Code
 {
     public class CodeList : MonoBehaviour
     {

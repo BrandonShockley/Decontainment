@@ -1,5 +1,5 @@
 ﻿using Bot;
-using Editor;
+using Editor.Code;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 

@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Editor
+namespace Editor.Code
 {
     [CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/ArgTokenColorMap", order = 1)]
     public class ArgTokenColorMap : ScriptableObject

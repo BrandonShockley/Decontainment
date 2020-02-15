@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEditor;
 
-namespace Editor
+namespace Editor.Code
 {
     public class ProgramList : MonoBehaviour
     {

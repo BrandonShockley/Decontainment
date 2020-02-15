@@ -6,7 +6,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Editor
+namespace Editor.Code
 {
     public class CodeBench : MonoBehaviour
     {

@@ -11,7 +11,7 @@ using UnityEngine.UI;
 //
 // If this changes, we will need to setup on-change events within
 // the instruction/argument classes and make handlers for them here
-namespace Editor
+namespace Editor.Code
 {
     public class InstructionBlock : Block
     {
