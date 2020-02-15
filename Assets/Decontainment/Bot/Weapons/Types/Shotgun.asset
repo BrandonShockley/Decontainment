@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 58acfad9802a29847b6c93bb7747eaf0, type: 3}
-  m_Name: PulseWeapon
+  m_Name: Shotgun
   m_EditorClassIdentifier: 
-  projectilePrefab: {fileID: 5202299059419044755, guid: 27e0a792cb0a06b4f966045d1ffd499e,
+  projectilePrefab: {fileID: 4312774953735687039, guid: fc0beace315e1144d98b41bd35e892ea,
     type: 3}
-  cooldown: 2
-  hardpointColor: {r: 0.2146267, g: 0, b: 0.4339623, a: 1}
-  numShots: 1
+  cooldown: 4
+  hardpointColor: {r: 0.11374155, g: 0.33962262, b: 0.13821743, a: 1}
+  numShots: 5
   shotSpacing: 15
