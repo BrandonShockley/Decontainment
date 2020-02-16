@@ -33,7 +33,9 @@ namespace Editor.Code
         void OnEnable()
         {
             foreach (Entry e in entries) {
-                map.Add(e.argType, e.color);
+                if (!map.ContainsKey(e.argType)) {
+                    map.Add(e.argType, e.color);
+                }
             }
         }
     }

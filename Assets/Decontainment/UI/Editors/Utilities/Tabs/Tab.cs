@@ -6,14 +6,13 @@ namespace Editor
 {
     public class Tab : MonoBehaviour
     {
-        void Start()
+        /// The UI container that will be pushed to the front when the tab is clicked
+        [SerializeField]
+        private Transform container = null;
+
+        public void BringToTop()
         {
-
-        }
-
-        void Update()
-        {
-
+            container.SetAsLastSibling();
         }
     }
 }
