@@ -14,8 +14,9 @@ namespace Editor
         private GameObject tokenPrefab = null;
 
         private Argument arg;
+        private CodeList codeList;
         private GameObject tokenGO;
-        Vector2 origSize;
+        private Vector2 origSize;
 
         private Outline outline;
         private RectTransform rt;
@@ -32,14 +33,16 @@ namespace Editor
             origSize = rt.sizeDelta;
         }
 
-        public void Init(Argument arg)
+        public void Init(Argument arg, CodeList codeList)
         {
             this.arg = arg;
-            Globals.slotFields.Add(this);
+            this.codeList = codeList;
+            codeList.SlotFields.Add(this);
 
             inputField.onEndEdit.AddListener((string val) =>
             {
                 arg.val = int.Parse(val);
+                codeList.Program.BroadcastArgumentChange();
             });
 
             if (arg.type == Argument.Type.IMMEDIATE) {
@@ -54,9 +57,11 @@ namespace Editor
 
         public void InsertArg(Argument newArg, GameObject transferedToken = null)
         {
+            inputField.text = "0";
             Debug.Assert(newArg.type != Argument.Type.IMMEDIATE);
 
             arg.CopyValues(newArg);
+            codeList.Program.BroadcastArgumentChange();
 
             if (tokenGO != null) {
                 Destroy(tokenGO);
@@ -67,7 +72,7 @@ namespace Editor
                 // Create a new one
                 tokenGO = Instantiate(tokenPrefab, transform, false);
                 token = tokenGO.GetComponent<Token>();
-                token.Init(arg);
+                token.Init(arg, codeList);
             } else {
                 // Transfer the one we're given
                 tokenGO = transferedToken;
@@ -96,6 +101,7 @@ namespace Editor
             tokenGO = null;
             arg.type = Argument.Type.IMMEDIATE;
             arg.val = int.Parse(inputField.text);
+            codeList.Program.BroadcastArgumentChange();
             inputField.interactable = true;
             Resize();
 

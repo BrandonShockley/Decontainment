@@ -204,6 +204,7 @@ GameObject:
   - component: {fileID: 7719977853727039653}
   - component: {fileID: -2923271725067951924}
   - component: {fileID: -5143058973267972008}
+  - component: {fileID: -6120221613832631061}
   - component: {fileID: 8738387265528958632}
   m_Layer: 5
   m_Name: Token
@@ -294,8 +295,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slotField: {fileID: 0}
-  renamable: 0
   argTokenColorMap: {fileID: 11400000, guid: 702fde817b0fc144ebd8b5c6b15e706e, type: 2}
+--- !u!114 &-6120221613832631061
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8435557820183652977}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fa0c6aa4726f664c95870ecb2c1ece3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  autoResize: 1
+  extraValidation: 1
 --- !u!114 &8738387265528958632
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -391,4 +405,4 @@ MonoBehaviour:
   m_RestoreOriginalTextOnEscape: 1
   m_isRichTextEditingAllowed: 0
   m_LineLimit: 0
-  m_InputValidator: {fileID: 11400000, guid: 51b724fb89a0821449841d45547f77ab, type: 2}
+  m_InputValidator: {fileID: 0}
