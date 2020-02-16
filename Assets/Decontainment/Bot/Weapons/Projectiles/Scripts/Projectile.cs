@@ -25,7 +25,7 @@ public abstract class Projectile : MonoBehaviour
         proj.managed = true;
     }
 
-    public virtual void Init() {}
+    protected virtual void Init() {}
 
     protected void Awake()
     {
