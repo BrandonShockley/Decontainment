@@ -21,6 +21,8 @@ namespace Editor
         private GameObject dropdownFieldPrefab = null;
         [SerializeField]
         private GameObject slotFieldPrefab = null;
+        [SerializeField]
+        private GameObject headerPrefab = null;
 
         private int lineNumber;
         private Instruction instruction;
@@ -34,9 +36,9 @@ namespace Editor
         }
 
         // lineNumber == -1 signifies no line number
-        public void Init(int lineNumber, Instruction instruction, Divider myDivider, CodeList codeList)
+        public void Init(int lineNumber, Instruction instruction, Divider myDivider)
         {
-            base.Init(myDivider, codeList);
+            base.Init(myDivider);
             this.lineNumber = lineNumber;
             this.instruction = instruction;
 
@@ -45,13 +47,13 @@ namespace Editor
                 Insert(slot);
                 // Reset frontend
                 Destroy(gameObject);
-                codeList.Program.BroadcastInstructionChange();
+                Globals.program.BroadcastInstructionChange();
             };
             draggable.onDragTrash = (Draggable.Slot slot) =>
             {
                 if (lineNumber != -1) {
                     Remove();
-                    codeList.Program.BroadcastInstructionChange();
+                    Globals.program.BroadcastInstructionChange();
                 }
                 Destroy(gameObject);
             };
@@ -71,11 +73,15 @@ namespace Editor
 
                 if (argSpecs[argNum].regOnly || argSpecs[argNum].presets != null) {
                     field = Instantiate(dropdownFieldPrefab, transform);
-                    field.GetComponent<DropdownField>().Init(argSpecs[argNum], arg, codeList);
+                    field.GetComponent<DropdownField>().Init(argSpecs[argNum], arg);
                 } else {
                     field = Instantiate(slotFieldPrefab, transform);
-                    field.GetComponent<SlotField>().Init(arg, codeList);
+                    field.GetComponent<SlotField>().Init(arg);
                 }
+
+                // Add header
+                // GameObject header = Instantiate(headerPrefab, field.transform);
+                // header.GetComponent<TextMeshProUGUI>().text = argSpecs[argNum].name;
             }
         }
 
@@ -95,11 +101,11 @@ namespace Editor
             }
 
             // Insert new instruction
-            codeList.Program.instructions.Insert(adjustedNewLineNumber, instruction);
+            Globals.program.instructions.Insert(adjustedNewLineNumber, instruction);
 
             // Adjust labels
             bool crossed = false;
-            foreach (Label label in codeList.Program.branchLabelList) {
+            foreach (Label label in Globals.program.branchLabelList) {
                 if (targetDivider.label == label) {
                     crossed = true;
                 }
@@ -112,10 +118,10 @@ namespace Editor
         private void Remove()
         {
             if (lineNumber != -1) {
-                codeList.Program.instructions.RemoveAt(lineNumber);
+                Globals.program.instructions.RemoveAt(lineNumber);
 
                 // Adjust labels
-                foreach (Label label in codeList.Program.branchLabelList) {
+                foreach (Label label in Globals.program.branchLabelList) {
                     if (label.val > lineNumber) {
                         --label.val; // TODO: This will need to be variable when we add dragging selected blocks
                     }

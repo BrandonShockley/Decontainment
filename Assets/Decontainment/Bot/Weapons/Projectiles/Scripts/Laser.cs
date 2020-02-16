@@ -5,11 +5,6 @@ using UnityEngine;
 
 public class Laser : Projectile
 {
-    private static LayerMask MASK;
-    private static Trigger doOnce;
-
-    [SerializeField]
-    private int damage = 1;
     [SerializeField]
     private float maxDistance = 100;
     [SerializeField]
@@ -25,20 +20,16 @@ public class Laser : Projectile
     protected override void SubAwake()
     {
         lr = GetComponent<LineRenderer>();
-
-        if (!doOnce.Value) {
-            MASK = LayerMask.GetMask("Obstacle", "Bot");
-        }
     }
 
-    protected override void Init()
+    void Start()
     {
         StartCoroutine(LaserRoutine());
     }
 
     void Update()
     {
-        RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, transform.right, maxDistance, MASK);
+        RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, transform.right, maxDistance);
         int hitIndex = -1;
         for (int i = 0; i < hits.Length; ++i) {
             if (hits[i].collider.gameObject != shooter.gameObject) {
@@ -80,7 +71,7 @@ public class Laser : Projectile
                 if (doOnce)
                     yield return null;
 
-                RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, transform.right, maxDistance, MASK);
+                RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, transform.right, maxDistance);
                 int hitIndex = -1;
                 for (int i = 0; i < hits.Length; ++i) {
                     if (hits[i].collider.gameObject != shooter.gameObject) {
@@ -89,7 +80,7 @@ public class Laser : Projectile
                     }
                 }
                 if (hitIndex != -1 && hits[hitIndex].collider.TryGetComponent<Health>(out Health bh)) {
-                    bh.TakeDamage(damage);
+                    bh.TakeDamage(1);
                 }
 
                 doOnce = true;
@@ -111,6 +102,6 @@ public class Laser : Projectile
                 doOnce = true;
             } while (Time.time - startTime < laserFadeTime);
         }
-        Pools.Instance.Free(gameObject);
+        Destroy(gameObject);
     }
 }

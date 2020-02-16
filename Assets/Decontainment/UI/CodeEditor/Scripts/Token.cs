@@ -3,29 +3,29 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Editor
 {
-    public class Token : MonoBehaviour
+    public class Token : MonoBehaviour, IPointerClickHandler
     {
         public SlotField slotField;
+        public bool renamable;
 
         [SerializeField]
         private ArgTokenColorMap argTokenColorMap = null;
 
         private Argument arg;
-        private CodeList codeList;
 
         private CanvasGroup cg;
         private Draggable draggable;
         private Image image;
         private RectTransform rt;
-        private Renamable rn;
         private TextMeshProUGUI tm;
         private TMP_InputField inputField;
 
-        public Argument Arg { get { return arg; } }
+        public Argument Arg { get { return arg; }}
 
         void Awake()
         {
@@ -33,17 +33,14 @@ namespace Editor
             draggable = GetComponent<Draggable>();
             image = GetComponent<Image>();
             rt = GetComponent<RectTransform>();
-            rn = GetComponent<Renamable>();
             tm = GetComponentInChildren<TextMeshProUGUI>();
             inputField = GetComponent<TMP_InputField>();
-
-            rn.onRename = RenameLabel;
         }
 
-        public void Init(Argument initArg, CodeList codeList)
+        public void Init(Argument initArg, bool renamable = false)
         {
             arg = initArg;
-            this.codeList = codeList;
+            this.renamable = renamable;
 
             // Configure text
             if (arg.type == Argument.Type.REGISTER) {
@@ -54,16 +51,17 @@ namespace Editor
 
             // Configure token color
             ArgTokenColorMap.Type tokenType = arg.type == Argument.Type.REGISTER
-                ? arg.val < VirtualMachine.NUM_LOCAL_REGS
-                ? ArgTokenColorMap.Type.LOCAL_REGISTER
-                : ArgTokenColorMap.Type.SHARED_REGISTER
+                ? ArgTokenColorMap.Type.REGISTER
                 : arg.label.type == Label.Type.BRANCH
                 ? ArgTokenColorMap.Type.BRANCH_LABEL
                 : ArgTokenColorMap.Type.CONST_LABEL;
             image.color = argTokenColorMap.map[tokenType];
 
+            // Resize to fit the preferred width
+            Resize();
+
             // Configure callbacks n' stuff
-            draggable.Init(codeList.SlotFields, codeList.TrashSlots);
+            draggable.Init(Globals.slotFields, Globals.trashSlots);
             draggable.onDragStart = () =>
             {
                 image.raycastTarget = false;
@@ -86,14 +84,49 @@ namespace Editor
                 slotField?.ReleaseArg();
                 Destroy(gameObject);
             };
+
+            inputField.onDeselect.AddListener(RenameLabel);
+            inputField.onSubmit.AddListener((string val) => EventSystem.current.SetSelectedGameObject(null));
+            inputField.onValueChanged.AddListener((string newVal) => Resize());
+            inputField.onValidateInput = ValidateInput;
         }
 
-        private bool RenameLabel(string newName)
+        public void OnPointerClick(PointerEventData pointerEventData)
+        {
+            bool isRightClick = pointerEventData.button == PointerEventData.InputButton.Right;
+            if (renamable && (pointerEventData.clickCount == 2 || isRightClick)) {
+                Debug.Assert(arg.type == Argument.Type.LABEL);
+
+                inputField.interactable = true;
+                inputField.ActivateInputField();
+                inputField.interactable = false;
+            }
+        }
+
+        private char ValidateInput(string text, int pos, char ch)
+        {
+            bool isNumber = ch >= '0' && ch <= '9';
+            bool isUpperAlpha = ch >= 'A' && ch <= 'Z';
+            bool isLowerAlpha = ch >= 'a' && ch <= 'z';
+            bool isExtra = ch == '_' || ch == '-';
+
+            if (isNumber || isUpperAlpha || isLowerAlpha || isExtra) {
+                return ch;
+            } else {
+                return (char)0;
+            }
+        }
+
+        private void Resize()
+        {
+            rt.sizeDelta = new Vector2(tm.GetPreferredValues(inputField.text).x, rt.sizeDelta.y);
+        }
+
+        private void RenameLabel(string newName)
         {
             if (newName == arg.label.name) {
-                return true;
+                return;
             }
-
             // Make sure we're not renaming to a preexisting label or an invalid name
             if (codeList.Program.labelMap.ContainsKey(newName) || newName == "") {
                 inputField.text = arg.label.name;
@@ -101,19 +134,18 @@ namespace Editor
                 return false;
             }
 
-            codeList.Program.labelMap.Remove(arg.label.name);
+            Globals.program.labelMap.Remove(arg.label.name);
             arg.label.name = newName;
-            codeList.Program.labelMap.Add(newName, arg.label);
+            Globals.program.labelMap.Add(newName, arg.label);
 
             Action labelChangeAction;
             if (arg.label.type == Label.Type.BRANCH) {
-                labelChangeAction = codeList.Program.BroadcastBranchLabelChange;
+                labelChangeAction = Globals.program.BroadcastBranchLabelChange;
             } else {
-                labelChangeAction = codeList.Program.BroadcastConstLabelChange;
+                labelChangeAction = Globals.program.BroadcastConstLabelChange;
             }
 
             labelChangeAction();
-            return true;
         }
 
     }

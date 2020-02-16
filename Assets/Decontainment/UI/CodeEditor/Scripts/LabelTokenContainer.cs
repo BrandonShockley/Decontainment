@@ -18,7 +18,6 @@ namespace Editor
         private TMP_InputField inputField = null;
 
         private Label label;
-        private CodeList codeList;
 
         private RectTransform inputFieldRT;
         private TextMeshProUGUI inputFieldTM;
@@ -45,12 +44,7 @@ namespace Editor
                 inputField.text = label.val.ToString();
             }
 
-            removeButton.onClick.AddListener(() => codeList.Program.RemoveLabel(label));
-        }
-
-        public void Init(CodeList codeList)
-        {
-            this.codeList = codeList;
+            removeButton.onClick.AddListener(() => Globals.program.RemoveLabel(label));
         }
 
         private void Resize(string newText = null)

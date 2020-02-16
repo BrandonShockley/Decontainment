@@ -10,8 +10,7 @@ namespace Editor
     {
         public enum Type
         {
-            LOCAL_REGISTER,
-            SHARED_REGISTER,
+            REGISTER,
             BRANCH_LABEL,
             CONST_LABEL,
             _SIZE,
