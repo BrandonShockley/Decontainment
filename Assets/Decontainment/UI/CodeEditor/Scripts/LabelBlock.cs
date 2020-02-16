@@ -10,9 +10,9 @@ namespace Editor
     {
         private Label label;
 
-        public void Init(Label label, Divider myDivider, CodeList codeList)
+        public void Init(Label label, Divider myDivider)
         {
-            base.Init(myDivider, codeList);
+            base.Init(myDivider);
             this.label = label;
 
             string labelText = label.name + " (" + label.val + ")";
@@ -22,7 +22,7 @@ namespace Editor
             draggable.onDragSuccess = Move;
             draggable.onDragTrash = (Draggable.Slot slot) =>
             {
-                codeList.Program.RemoveLabel(label);
+                Globals.program.RemoveLabel(label);
                 Destroy(gameObject);
             };
         }
@@ -37,12 +37,12 @@ namespace Editor
             label.val = newLineNumber;
 
             // Remove old entry
-            codeList.Program.branchLabelList.Remove(label);
+            Globals.program.branchLabelList.Remove(label);
 
             // Find new entry
             int insertionIndex = 0;
-            for (int i = 0; i < codeList.Program.branchLabelList.Count; ++i) {
-                Label l = codeList.Program.branchLabelList[i];
+            for (int i = 0; i < Globals.program.branchLabelList.Count; ++i) {
+                Label l = Globals.program.branchLabelList[i];
                 if (l.val > label.val) {
                     break;
                 } else if (l.val < label.val) {
@@ -57,8 +57,8 @@ namespace Editor
                 }
             }
 
-            codeList.Program.branchLabelList.Insert(insertionIndex, label);
-            codeList.Program.BroadcastBranchLabelChange();
+            Globals.program.branchLabelList.Insert(insertionIndex, label);
+            Globals.program.BroadcastBranchLabelChange();
 
             // Reset frontend
             Destroy(gameObject);

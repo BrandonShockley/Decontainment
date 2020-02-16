@@ -1,22 +1,28 @@
 Inf: 1000000000
+
 Sync: 0
 Async: 1
+
 TAR_Near: 0
 TAR_Far: 1
+
 DRV_Forward: 0
 DRV_Backward: 1
 DRV_Left: 2
 DRV_Right: 3
+
 TRN_Left: 0
 TRN_Right: 1
-NOP
+
+; Begin
+
 MoveLoop:
 DRV DRV_Forward Inf Async
-SLP $20
+SLP 20
 DRV DRV_Right Inf Async
-SLP $20
+SLP 20
 DRV DRV_Backward Inf Async
-SLP $20
+SLP 20
 DRV DRV_Left Inf Async
-SLP $20
-BEQ MoveLoop %0 %0
+SLP 20
+BEQ MoveLoop R0 R0
