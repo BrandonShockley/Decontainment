@@ -127,12 +127,11 @@ namespace Editor
             if (newName == arg.label.name) {
                 return;
             }
-
-            // Make sure we're not renaming to a preexisting label
-            if (Globals.program.labelMap.ContainsKey(newName)) {
-                // TODO: Display a prompt when this happens (Trello #18)
+            // Make sure we're not renaming to a preexisting label or an invalid name
+            if (codeList.Program.labelMap.ContainsKey(newName) || newName == "") {
                 inputField.text = arg.label.name;
-                return;
+                PromptSystem.Instance.PromptInvalidLabelName(newName);
+                return false;
             }
 
             Globals.program.labelMap.Remove(arg.label.name);
