@@ -103,7 +103,8 @@ namespace Editor
         {
             // Check that we don't override an existing file
             foreach (Program p in programs) {
-                if (p.name == name) {
+                if ((p != program && p.name == name) || name == "") {
+                    PromptSystem.Instance.PromptInvalidProgramName(name);
                     return false;
                 }
             }
