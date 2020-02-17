@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: BasicTeam
   m_EditorClassIdentifier: 
   botDatas:
-  - {fileID: 11400000, guid: 05ed94aeaff74fc4b857a05e201ba64b, type: 2}
+  - {fileID: 11400000, guid: b55db88a6cff2f2448e2fc4ab7ad3220, type: 2}
   - {fileID: 11400000, guid: 05ed94aeaff74fc4b857a05e201ba64b, type: 2}
   - {fileID: 11400000, guid: 05ed94aeaff74fc4b857a05e201ba64b, type: 2}

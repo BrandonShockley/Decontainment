@@ -30,7 +30,7 @@ namespace Bot
                         programText = File.ReadAllText(ProgramDirectory.ProgramPath(customProgramName));
                     } catch {
                         Debug.LogWarning("Error opening program " + customProgramName + ". Using fallback program.");
-                        // TODO: When the error prompt ticket is complete, do a prompt here
+                        // TODO: When the error prompt ticket is complete (Trello #18), do a prompt here
                     }
                 }
 
@@ -49,14 +49,87 @@ namespace Bot
             }
         }
 
-        public WeaponData WeaponData { get { return weaponData; } }
+        public WeaponData WeaponData
+        {
+            get { return weaponData; }
+            set {
+                weaponData = value;
+                Save();
+            }
+        }
 
-        public static BotData CreateNew(string programName, WeaponData weaponData)
+        public string CustomProgramName
+        {
+            get { return customProgramName; }
+            set {
+                customProgramName = value;
+                Save();
+            }
+        }
+
+        public static BotData CreateNew(string botName, string programName, WeaponData weaponData)
         {
             BotData botData = ScriptableObject.CreateInstance<BotData>();
+            botData.name = botName;
             botData.customProgramName = programName;
             botData.weaponData = weaponData;
+            botData.Save();
             return botData;
         }
+
+        public static BotData Load(string path)
+        {
+            #if UNITY_EDITOR
+            return AssetDatabase.LoadAssetAtPath<BotData>(path);
+            #else
+            StreamReader file = File.OpenText(path);
+            string botName = Path.GetFileNameWithoutExtension(path);
+            string programName = file.ReadLine();
+            string weaponName = file.ReadLine();
+            WeaponData weaponData = Resources.Load<WeaponData>(WeaponData.RESOURCES_DIR + "/" + weaponName);
+            return CreateNew(botName, programName, weaponData);
+            #endif
+        }
+
+        public void Save()
+        {
+            string path = BotDirectory.BotPath(name);
+
+            #if UNITY_EDITOR
+            BotData existingAsset = AssetDatabase.LoadAssetAtPath<BotData>(path);
+            if (existingAsset == null) {
+                AssetDatabase.CreateAsset(this, path);
+            } else {
+                existingAsset.builtInProgram = builtInProgram;
+                existingAsset.customProgramName = customProgramName;
+                existingAsset.weaponData = weaponData;
+            }
+            #else
+            StreamWriter file = File.CreateText(path);
+            file.WriteLine(customProgramName);
+            file.WriteLine(weaponData.name);
+            file.Close();
+            #endif
+        }
+
+        public void DeleteOnDisk()
+        {
+            string path = BotDirectory.BotPath(name);
+
+            #if UNITY_EDITOR
+            AssetDatabase.DeleteAsset(path);
+            #else
+            File.Delete(path);
+            #endif
+        }
+
+        public void Rename(string newName)
+        {
+            DeleteOnDisk();
+            name = newName;
+            Save();
+        }
+
+        public override string ToString() { return name; }
     }
 }

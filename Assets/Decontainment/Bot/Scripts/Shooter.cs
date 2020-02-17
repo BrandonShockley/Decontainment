@@ -18,7 +18,7 @@ namespace Bot
         void FixedUpdate()
         {
             cooldownTimer -= Time.fixedDeltaTime;
-            if (shotRequested.Value && cooldownTimer <= 0) {
+            if (weaponData != null && shotRequested.Value && cooldownTimer <= 0) {
                 cooldownTimer = weaponData.cooldown;
                 async = true;
 
