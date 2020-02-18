@@ -26,7 +26,6 @@ namespace Editor.Code
                 Program program = Assembler.Assemble(programText);
                 if (program != null) {
                     program.name = Path.GetFileNameWithoutExtension(filePath);
-                    Debug.Log("Assembly of program " + program.name + " succeeded");
 
                     // Setup autosave
                     program.OnChange += () => SaveProgram(program);

@@ -15,7 +15,7 @@ public class TempMatchStart : MonoBehaviour
     public void StartMatch()
     {
         LevelManager.Instance.levelData = levelData;
-        BotData playerBotData = BotData.CreateNew(codeList.Program.name, playerWeapon);
+        BotData playerBotData = BotData.CreateNew("BottyMcBotFace", codeList.Program.name, playerWeapon);
         LevelManager.Instance.playerTeamData = TeamData.CreateNew(new BotData[] { playerBotData, playerBotData, playerBotData });
         SceneManager.LoadScene("Arena");
     }
