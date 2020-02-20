@@ -200,7 +200,7 @@ namespace Editor.Code
         {
             Token token = Instantiate(tokenPrefab, parent, false).GetComponent<Token>();
             Renamable tokenRN = token.GetComponent<Renamable>();
-            token.Init(arg.ShallowCopy(), codeList);
+            token.Init(arg.ShallowCopy(), codeList, null);
             tokenRN.enabled = true;
 
             if (originalToken != null) {

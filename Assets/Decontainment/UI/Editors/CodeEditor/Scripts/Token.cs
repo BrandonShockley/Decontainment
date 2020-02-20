@@ -40,10 +40,11 @@ namespace Editor.Code
             rn.onRename = RenameLabel;
         }
 
-        public void Init(Argument initArg, CodeList codeList)
+        public void Init(Argument initArg, CodeList codeList, SlotField slotField)
         {
             arg = initArg;
             this.codeList = codeList;
+            this.slotField = slotField;
 
             // Configure text
             if (arg.type == Argument.Type.REGISTER) {
@@ -79,7 +80,10 @@ namespace Editor.Code
                 if (slotField != null) {
                     arg = slotField.ReleaseArg();
                 }
-                ((SlotField)slot).InsertArg(arg, gameObject);
+                ((SlotField)slot).InsertArg(arg);
+                if (slotField == null) {
+                    Destroy(gameObject);
+                }
             };
             draggable.onDragTrash = (Draggable.Slot slot) =>
             {

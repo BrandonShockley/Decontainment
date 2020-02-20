@@ -42,67 +42,32 @@ namespace Editor.Code
             inputField.onEndEdit.AddListener((string val) =>
             {
                 arg.val = int.Parse(val);
+                arg.BroadcastChange();
                 codeList.Program.BroadcastArgumentChange();
             });
 
-            if (arg.type == Argument.Type.IMMEDIATE) {
-                inputField.text = arg.val.ToString();
-                Resize();
-            } else {
-                InsertArg(arg);
-                inputField.text = "0";
-            }
+            arg.OnChange += UpdateFrontend;
+            UpdateFrontend();
             inputField.onValueChanged.AddListener(Resize);
         }
 
-        public void InsertArg(Argument newArg, GameObject transferedToken = null)
+        public void InsertArg(Argument newArg)
         {
             Debug.Assert(newArg.type != Argument.Type.IMMEDIATE);
 
             arg.CopyValues(newArg);
+            arg.BroadcastChange();
             codeList.Program.BroadcastArgumentChange();
-
-            if (tokenGO != null) {
-                Destroy(tokenGO);
-            }
-
-            Token token;
-            if (transferedToken == null) {
-                // Create a new one
-                tokenGO = Instantiate(tokenPrefab, transform, false);
-                token = tokenGO.GetComponent<Token>();
-                token.Init(arg, codeList);
-            } else {
-                // Transfer the one we're given
-                tokenGO = transferedToken;
-                token = tokenGO.GetComponent<Token>();
-
-                // Center it
-                RectTransform tokenRT = tokenGO.GetComponent<RectTransform>();
-                tokenRT.SetParent(transform, false);
-                tokenRT.anchorMin = new Vector2(0.5f, 0.5f);
-                tokenRT.anchorMax = new Vector2(0.5f, 0.5f);
-                tokenRT.anchoredPosition = Vector2.zero;
-            }
-
-            Resize();
-            inputField.interactable = false;
-            token.slotField = this;
         }
 
         public Argument ReleaseArg()
         {
-            Debug.Assert(tokenGO != null);
-
             Argument releasedArg = arg.ShallowCopy();
 
-            // Reconfigure for text field mode
-            tokenGO = null;
             arg.type = Argument.Type.IMMEDIATE;
             arg.val = int.Parse(inputField.text);
+            arg.BroadcastChange();
             codeList.Program.BroadcastArgumentChange();
-            inputField.interactable = true;
-            Resize();
 
             return releasedArg;
         }
@@ -130,6 +95,25 @@ namespace Editor.Code
                 RectTransform tokenRT = tokenGO.GetComponent<RectTransform>();
                 rt.sizeDelta = tokenRT.sizeDelta;
             }
+        }
+
+        private void UpdateFrontend()
+        {
+            if (arg.type == Argument.Type.IMMEDIATE) {
+                if (tokenGO != null) {
+                    Destroy(tokenGO);
+                }
+                inputField.text = arg.val.ToString();
+                inputField.interactable = true;
+            } else {
+                if (tokenGO == null) {
+                    tokenGO = Instantiate(tokenPrefab, transform, false);
+                }
+                tokenGO.GetComponent<Token>().Init(arg, codeList, this);
+                inputField.text = "0";
+                inputField.interactable = false;
+            }
+            Resize();
         }
     }
 }

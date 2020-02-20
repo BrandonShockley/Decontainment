@@ -1,7 +1,6 @@
 using Extensions;
-using System.Collections;
+using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using UnityEngine;
 
 namespace Editor
@@ -13,19 +12,15 @@ namespace Editor
         [SerializeField]
         private GameObject listEntryPrefab = null;
 
-        private int _selectedIndex = -1;
+        private int selectedIndex = -1;
 
-        protected int SelectedIndex
-        {
-            get { return _selectedIndex; }
-            set {
-                if (_selectedIndex != -1) {
-                    transform.GetChild(_selectedIndex).GetComponent<ListEntry>().Deselect();
-                }
+        public event Action<int> OnItemAdded;
+        public event Action<int, T> OnItemDeleted;
+        public event Action<string, int, int> OnItemRenamed;
 
-                _selectedIndex = value;
-            }
-        }
+        public int Count { get { return items.Count; } }
+
+        protected int SelectedIndex { get { return selectedIndex; } }
         protected abstract string DefaultName { get; }
 
         public void Add()
@@ -49,24 +44,29 @@ namespace Editor
             T newItem = CreateNewItem(newName);
             int index = items.InsertAlphabetically(newItem);
             CreateListEntry(newItem, index);
+            OnItemAdded?.Invoke(index);
         }
 
-        public void Remove()
+        public void Delete()
         {
-            if (SelectedIndex == -1) {
+            if (selectedIndex == -1) {
                 return;
             }
 
-            int removalIndex = SelectedIndex;
-            SelectedIndex = -1;
+            int removalIndex = selectedIndex;
+            selectedIndex = -1;
             Destroy(transform.GetChild(removalIndex).gameObject);
             T item = items[removalIndex];
             items.RemoveAt(removalIndex);
             DeleteItem(item);
+            OnItemDeleted?.Invoke(removalIndex, item);
         }
+
+        public T Index(int index) { return items[index]; }
 
         protected void Awake()
         {
+            SubAwake();
             InitList();
 
             foreach (T item in items) {
@@ -85,24 +85,32 @@ namespace Editor
 
             {
                 T item = items[index];
+                string oldName = item.ToString();
                 items.RemoveAt(index);
                 RenameItem(item, name);
                 int newIndex = items.InsertAlphabetically(item);
 
                 transform.GetChild(index).SetSiblingIndex(newIndex);
 
-                if (index == SelectedIndex) {
-                    _selectedIndex = newIndex;
+                if (index == selectedIndex) {
+                    selectedIndex = newIndex;
                 }
+
+                OnItemRenamed?.Invoke(oldName, index, newIndex);
             }
             return true;
         }
 
         protected void HandleSelect(int index)
         {
-            SelectedIndex = index;
+            if (selectedIndex != -1 && selectedIndex != index) {
+                transform.GetChild(selectedIndex).GetComponent<ListEntry>().Deselect();
+            }
+            selectedIndex = index;
             SubHandleSelect();
         }
+
+        protected virtual void SubAwake() {}
 
         protected abstract void InitList();
         protected abstract T CreateNewItem(string name);

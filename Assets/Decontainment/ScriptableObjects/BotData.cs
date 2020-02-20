@@ -19,35 +19,8 @@ namespace Bot
 
         private string customProgramName;
 
-        public Program Program
-        {
-            get {
-                string programText = null;
-                if (builtInProgram != null) {
-                    programText = builtInProgram.text;
-                } else if (customProgramName != null) {
-                    try {
-                        programText = File.ReadAllText(ProgramDirectory.ProgramPath(customProgramName));
-                    } catch {
-                        Debug.LogWarning("Error opening program " + customProgramName + ". Using fallback program.");
-                        // TODO: When the error prompt ticket is complete (Trello #18), do a prompt here
-                    }
-                }
-
-                if (programText == null) {
-                    Debug.LogWarning("No program provided. Using fallback program.");
-                    return FALLBACK_PROGRAM;
-                } else {
-                    Program program = Assembler.Assemble(programText);
-                    if (program == null) {
-                        Debug.LogWarning("Assembly failed. Using fallback program.");
-                        return FALLBACK_PROGRAM;
-                    } else {
-                        return program;
-                    }
-                }
-            }
-        }
+        public event Action OnProgramChange;
+        public event Action OnWeaponChange;
 
         public WeaponData WeaponData
         {
@@ -55,15 +28,37 @@ namespace Bot
             set {
                 weaponData = value;
                 Save();
+                OnWeaponChange?.Invoke();
             }
         }
 
-        public string CustomProgramName
+        public string ProgramName
         {
-            get { return customProgramName; }
+            get {
+                #if UNITY_EDITOR
+                if (builtInProgram == null) {
+                    return null;
+                } else {
+                    return builtInProgram.name;
+                }
+                #else
+                return customProgramName;
+                #endif
+            }
             set {
-                customProgramName = value;
+                if (value == null) {
+                    builtInProgram = null;
+                    customProgramName = null;
+                } else {
+                    string path = ProgramDirectory.ProgramPath(value);
+                    #if UNITY_EDITOR
+                    builtInProgram = AssetDatabase.LoadAssetAtPath<TextAsset>(path);
+                    #else
+                    customProgramName = value;
+                    #endif
+                }
                 Save();
+                OnProgramChange?.Invoke();
             }
         }
 
@@ -89,6 +84,34 @@ namespace Bot
             WeaponData weaponData = Resources.Load<WeaponData>(WeaponData.RESOURCES_DIR + "/" + weaponName);
             return CreateNew(botName, programName, weaponData);
             #endif
+        }
+
+        public Program AssembleProgram()
+        {
+            string programText = null;
+            if (builtInProgram != null) {
+                programText = builtInProgram.text;
+            } else if (customProgramName != null) {
+                try {
+                    programText = File.ReadAllText(ProgramDirectory.ProgramPath(customProgramName));
+                } catch {
+                    Debug.LogWarning("Error opening program " + customProgramName + ". Using fallback program.");
+                    // TODO: When the error prompt ticket is complete (Trello #18), do a prompt here
+                }
+            }
+
+            if (programText == null) {
+                Debug.LogWarning("No program provided. Using fallback program.");
+                return FALLBACK_PROGRAM;
+            } else {
+                Program program = Assembler.Assemble(customProgramName, programText);
+                if (program == null) {
+                    Debug.LogWarning("Assembly failed. Using fallback program.");
+                    return FALLBACK_PROGRAM;
+                } else {
+                    return program;
+                }
+            }
         }
 
         public void Save()
@@ -125,9 +148,15 @@ namespace Bot
 
         public void Rename(string newName)
         {
-            DeleteOnDisk();
+            string fromPath = BotDirectory.BotPath(name);
+            string toPath = BotDirectory.BotPath(newName);
+
+            #if UNITY_EDITOR
+            AssetDatabase.RenameAsset(fromPath, newName);
+            #else
+            File.Move(fromPath, toPath);
+            #endif
             name = newName;
-            Save();
         }
 
         public override string ToString() { return name; }

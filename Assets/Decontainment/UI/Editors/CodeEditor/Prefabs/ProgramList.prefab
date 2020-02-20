@@ -119,7 +119,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 8256923224910060880}
-        m_MethodName: AddProgram
+        m_MethodName: Add
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -467,7 +467,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 8256923224910060880}
-        m_MethodName: DeleteProgram
+        m_MethodName: Delete
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -676,9 +676,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a329f1dcfad064e42b2b94bf74daed5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  codeList: {fileID: 0}
   listEntryPrefab: {fileID: 2216712257053310180, guid: d168590f589df7f488642bd2e6a40794,
     type: 3}
+  codeList: {fileID: 0}
 --- !u!1 &8256923225373848830
 GameObject:
   m_ObjectHideFlags: 0
@@ -1161,6 +1161,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_textInfo.characterCount
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 3673806923499832191, guid: d13cf2f2c92b9294d8d964dda72b6d19,
+        type: 3}
+      propertyPath: m_firstOverflowCharacterIndex
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 3673806923499832191, guid: d13cf2f2c92b9294d8d964dda72b6d19,
+        type: 3}
+      propertyPath: m_textInfo.lineCount
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5975290776852894894, guid: d13cf2f2c92b9294d8d964dda72b6d19,
         type: 3}

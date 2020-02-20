@@ -17,16 +17,19 @@ namespace Editor.Code
 
         protected override string DefaultName { get { return "Program"; } }
 
+        public Program FindProgram(string name)
+        {
+            return items.Find((Program p) => p.name == name);
+        }
+
         protected override void InitList()
         {
             // Assemble all program files
             string[] filePaths = Directory.GetFiles(ProgramDirectory.PATH, "*.txt");
             foreach (string filePath in filePaths) {
                 string programText = File.ReadAllText(filePath);
-                Program program = Assembler.Assemble(programText);
+                Program program = Assembler.Assemble(Path.GetFileNameWithoutExtension(filePath), programText);
                 if (program != null) {
-                    program.name = Path.GetFileNameWithoutExtension(filePath);
-
                     // Setup autosave
                     program.OnChange += () => SaveProgram(program);
 
@@ -55,14 +58,14 @@ namespace Editor.Code
 
         protected override void RenameItem(Program program, string name)
         {
-            // Remove old file
-            File.Delete(ProgramDirectory.ProgramPath(program.name));
-
-            // Update back end
+            string fromPath = ProgramDirectory.ProgramPath(program.name);
+            string toPath = ProgramDirectory.ProgramPath(name);
+            #if UNITY_EDITOR
+            Debug.Log(AssetDatabase.RenameAsset(fromPath, name));
+            #else
+            File.Move(fromPath, toPath);
+            #endif
             program.name = name;
-
-            // Create new file
-            SaveProgram(program);
         }
 
         protected override void SubHandleSelect()

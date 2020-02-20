@@ -7,10 +7,24 @@ namespace Editor.Code
 {
     public class DropdownField : MonoBehaviour
     {
+        private Argument arg;
+        private Trigger selfChange;
+
+        private TMP_Dropdown dropdown;
+
+        void OnDestroy()
+        {
+            if (arg != null) {
+                arg.OnChange -= HandleArgChange;
+            }
+        }
+
         public void Init(ArgumentSpec argSpec, Argument arg, CodeList codeList)
         {
+            this.arg = arg;
+
             // Configure dropdown options
-            TMP_Dropdown dropdown = GetComponent<TMP_Dropdown>();
+            dropdown = GetComponent<TMP_Dropdown>();
             TextMeshProUGUI tm = GetComponentInChildren<TextMeshProUGUI>();
 
             float maxPreferredWidth = 0;
@@ -26,20 +40,40 @@ namespace Editor.Code
                     maxPreferredWidth = Mathf.Max(tm.GetPreferredValues(presetName).x, maxPreferredWidth);
                 }
             }
-            dropdown.value = arg.val;
 
-            // Register value change handler
+            // Init value
+            HandleArgChange();
+
+            // Register value change handlers
             Argument.Type argType = argSpec.regOnly ? Argument.Type.REGISTER : Argument.Type.IMMEDIATE;
             dropdown.onValueChanged.AddListener((int val) =>
             {
+                if (selfChange.Value) {
+                    return;
+                }
                 arg.val = val;
+                selfChange.Value = true;
+                arg.BroadcastChange();
                 codeList.Program.BroadcastArgumentChange();
             });
+            arg.OnChange += HandleArgChange;
 
             // Resize to fit the max preferred width
             RectTransform dropdownRT = dropdown.GetComponent<RectTransform>();
             RectTransform labelRT = tm.GetComponent<RectTransform>();
             dropdownRT.sizeDelta = new Vector2(maxPreferredWidth - labelRT.sizeDelta.x, dropdownRT.sizeDelta.y);
+        }
+
+        private void HandleArgChange()
+        {
+            if (selfChange.Value) {
+                return;
+            }
+
+            if (dropdown.value != arg.val) {
+                selfChange.Value = true;
+                dropdown.value = arg.val;
+            }
         }
     }
 }

@@ -4,7 +4,7 @@ using System.IO;
 public static class ProgramDirectory
 {
     #if UNITY_EDITOR
-    public static readonly string PATH = Directory.GetCurrentDirectory() + "/Assets/Decontainment/BotData/Programs";
+    public static readonly string PATH = "Assets/Decontainment/BotData/Programs";
     #else
     public static readonly string PATH = Directory.GetCurrentDirectory() + "/Programs";
     #endif
