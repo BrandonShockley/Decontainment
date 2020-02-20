@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: PulseShooter
   m_EditorClassIdentifier: 
   builtInProgram: {fileID: 4900000, guid: 85c7c278c915d0447845774f4d9e7dc2, type: 3}
-  weaponData: {fileID: 11400000, guid: 425d82cfe20f1f743ad2f53b9d04e7a1, type: 2}
+  weaponData: {fileID: 11400000, guid: 7b06a04191a3b40478ab88040ec75edb, type: 2}
