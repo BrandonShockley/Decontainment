@@ -5,6 +5,9 @@ using UnityEngine;
 
 public abstract class Beam : Projectile 
 {
+    private static LayerMask MASK;
+    private static Trigger doOnce;
+
     [SerializeField]
     private float maxDistance = 100;
     [SerializeField]
@@ -17,19 +20,23 @@ public abstract class Beam : Projectile
 
     private LineRenderer lr;
 
-    protected override void SubAwake() 
+    protected override void SubAwake()
     {
         lr = GetComponent<LineRenderer>();
+
+        if (!doOnce.Value) {
+            MASK = LayerMask.GetMask("Obstacle", "Bot");
+        }
     }
 
-    protected override void Init() {
+    protected override void Init()
+    {
         StartCoroutine(beamRoutine());
     }
 
-    void Update() 
+    void Update()
     {
-        LayerMask mask = LayerMask.GetMask("Obstacle", "Bot");
-        RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, transform.right, maxDistance, mask);
+        RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, transform.right, maxDistance, MASK);
         int hitIndex = -1;
         for (int i = 0; i < hits.Length; ++i) {
             if (hits[i].collider.gameObject != shooter.gameObject) {
@@ -45,7 +52,10 @@ public abstract class Beam : Projectile
         }
     }
 
-    private IEnumerator beamRoutine() {
+    protected virtual void HealthEffect(Health bh) { }
+
+    private IEnumerator beamRoutine()
+    {
         // beam growth
         {
             float startTime = Time.time;
@@ -66,12 +76,12 @@ public abstract class Beam : Projectile
         {
             float startTime = Time.time;
             bool doOnce = false;
+            bool hit = false;
             do {
                 if (doOnce)
-                    break;
-
-                LayerMask mask = LayerMask.GetMask("Obstacle", "Bot");
-                RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, transform.right, maxDistance, mask);
+                    yield return null;
+                
+                RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, transform.right, maxDistance, MASK);
                 int hitIndex = -1;
                 for (int i = 0; i < hits.Length; ++i) {
                     if (hits[i].collider.gameObject != shooter.gameObject) {
@@ -79,8 +89,9 @@ public abstract class Beam : Projectile
                         break;
                     }
                 }
-                if (hitIndex != -1 && hits[hitIndex].collider.TryGetComponent<Health>(out Health bh)) {
+                if (!hit &&  hitIndex != -1 && hits[hitIndex].collider.TryGetComponent<Health>(out Health bh)) {
                     HealthEffect(bh);
+                    hit = true;
                 }
 
                 doOnce = true;
@@ -104,6 +115,4 @@ public abstract class Beam : Projectile
         }
         Pools.Instance.Free(gameObject);
     }
-
-    protected virtual void HealthEffect(Health bh) {}
 }
