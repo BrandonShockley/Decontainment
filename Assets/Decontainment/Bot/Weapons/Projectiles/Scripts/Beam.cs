@@ -80,7 +80,7 @@ public abstract class Beam : Projectile
             do {
                 if (doOnce)
                     yield return null;
-                
+
                 RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, transform.right, maxDistance, MASK);
                 int hitIndex = -1;
                 for (int i = 0; i < hits.Length; ++i) {
@@ -89,12 +89,16 @@ public abstract class Beam : Projectile
                         break;
                     }
                 }
-                if (!hit &&  hitIndex != -1 && hits[hitIndex].collider.TryGetComponent<Health>(out Health bh)) {
+                if (hitIndex != -1 && hits[hitIndex].collider.TryGetComponent<Health>(out Health bh)) {
                     HealthEffect(bh);
                     hit = true;
                 }
 
                 doOnce = true;
+
+                if (hit)
+                    yield return new WaitForSeconds(beamDuration - (Time.time - startTime));
+
             } while (Time.time - startTime < beamDuration);
         }
 
