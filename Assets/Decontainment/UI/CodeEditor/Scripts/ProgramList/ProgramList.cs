@@ -99,8 +99,15 @@ namespace Editor
             }
         }
 
-        private void RenameProgram(Program program, int index, string name)
+        private bool RenameProgram(Program program, int index, string name)
         {
+            // Check that we don't override an existing file
+            foreach (Program p in programs) {
+                if (p.name == name) {
+                    return false;
+                }
+            }
+
             // Remove old file
             File.Delete(ProgramDirectory.ProgramPath(program.name));
 
@@ -114,6 +121,7 @@ namespace Editor
 
             // Create new file
             SaveProgram(program);
+            return true;
         }
     }
 }
