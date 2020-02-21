@@ -8,8 +8,10 @@ namespace Bot
         public Trigger shotRequested;
         public bool async;
 
-        public Hardpoint hardpoint;
         public WeaponData weaponData;
+
+        [SerializeField]
+        private Hardpoint hardpoint = null;
 
         private float cooldownTimer;
 
@@ -18,7 +20,7 @@ namespace Bot
         void FixedUpdate()
         {
             cooldownTimer -= Time.fixedDeltaTime;
-            if (shotRequested.Value && cooldownTimer <= 0) {
+            if (weaponData != null && shotRequested.Value && cooldownTimer <= 0) {
                 cooldownTimer = weaponData.cooldown;
                 async = true;
 
@@ -37,12 +39,11 @@ namespace Bot
             }
         }
 
-        public void Init(Hardpoint hardpoint, WeaponData weaponData)
+        public void Init(WeaponData weaponData)
         {
-            this.hardpoint = hardpoint;
             this.weaponData = weaponData;
 
-            this.hardpoint.Init(weaponData.hardpointColor);
+            hardpoint.Init(weaponData);
         }
     }
 }
