@@ -80,8 +80,8 @@ namespace Editor.Code
                 } else {
                     field = Instantiate(slotFieldPrefab, transform);
                     field.GetComponent<SlotField>().Init(arg, codeList);
-                    field.GetComponent<DisplaysTips>().Init(argSpecs[argNum].name);
                 }
+                field.GetComponent<DisplaysTips>().Init(argSpecs[argNum].name);
             }
         }
 

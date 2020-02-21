@@ -11,20 +11,23 @@ namespace Editor
     {
 
         public GameObject toolTipContainer;
+        public int tipDelay = 40;
 
         private GameObject toolTipInstance;
         private GameObject canvas;
         private int t;
         private bool hovered;
-        private bool isSlot;
+        private bool isField;
         private string tipText;
 
-        private const int tipDelay = 40;
+
 
         void Awake()
         {
             canvas = GameObject.Find("Canvas");
-            isSlot = (GetComponent<SlotField>() != null) ? true : false;
+            isField = (GetComponent<SlotField>() != null
+                             || GetComponent<DropdownField>() != null) 
+                             ? true : false;
         }
 
         public void Init(string text)
@@ -55,7 +58,7 @@ namespace Editor
             hovered = true;
             t = 0;
 
-            if (isSlot)
+            if (isField)
             {
                 //if entering a slot, destroy the instruction block tip
                 DisplaysTips[] parents = GetComponentsInParent<DisplaysTips>();
@@ -76,7 +79,7 @@ namespace Editor
                 Destroy(toolTipInstance);
             }
 
-            if (isSlot)
+            if (isField)
             {
                 //if exiting a slot, instruction block is now hovered over
                 DisplaysTips[] parents = GetComponentsInParent<DisplaysTips>();
