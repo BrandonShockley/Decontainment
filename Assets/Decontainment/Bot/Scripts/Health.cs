@@ -36,7 +36,7 @@ namespace Bot
             get { return _amount; }
             set {
                 int oldHealth = _amount;
-                _amount = Mathf.Max(value, 0);
+                _amount = Mathf.Min(maxAmount, Mathf.Max(value, 0));
                 OnHealthChange?.Invoke();
 
                 if (_amount == 0 && oldHealth > 0) {
@@ -83,6 +83,12 @@ namespace Bot
                 if (!Disabled) {
                     StartCoroutine(InvulnerableRoutine());
                 }
+            }
+        }
+
+        public void HealUp(int healthRegain) {
+            if (!Disabled) {
+                Amount += healthRegain;
             }
         }
 
