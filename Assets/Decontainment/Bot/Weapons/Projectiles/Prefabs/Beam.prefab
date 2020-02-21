@@ -10,10 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2249038086161332116}
   - component: {fileID: 2249038086161332115}
-  - component: {fileID: 2249038086161332114}
   - component: {fileID: 1521997667662475259}
   m_Layer: 8
-  m_Name: Laser
+  m_Name: Beam
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -129,23 +128,6 @@ LineRenderer:
     generateLightingData: 0
   m_UseWorldSpace: 0
   m_Loop: 0
---- !u!114 &2249038086161332114
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2249038086161332113}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8db14bad7549ab84d8a40b8c55f02edd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  shotSound: {fileID: 8300000, guid: ad47c1249e426c844af34b69d3aba624, type: 3}
-  maxDistance: 10
-  laserGrowTime: 0.05
-  laserDuration: 0.3
-  laserFadeTime: 0.05
 --- !u!114 &1521997667662475259
 MonoBehaviour:
   m_ObjectHideFlags: 0
