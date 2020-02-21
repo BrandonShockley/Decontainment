@@ -63,6 +63,8 @@ namespace Asm
         public int val;
         public Label label;
 
+        public event Action OnChange;
+
         public Argument(Type type, int val)
         {
             this.type = type;
@@ -86,6 +88,11 @@ namespace Asm
             type = arg.type;
             val = arg.val;
             label = arg.label;
+        }
+
+        public void BroadcastChange()
+        {
+            OnChange?.Invoke();
         }
     }
 

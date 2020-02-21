@@ -1,5 +1,5 @@
 ﻿using Bot;
-using Editor;
+using Editor.Bot;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -8,15 +8,12 @@ public class TempMatchStart : MonoBehaviour
     [SerializeField]
     private LevelData levelData = null;
     [SerializeField]
-    private WeaponData playerWeapon = null;
-    [SerializeField]
-    private CodeList codeList = null;
+    private BotConfiguration botConfiguration = null;
 
     public void StartMatch()
     {
         LevelManager.Instance.levelData = levelData;
-        BotData playerBotData = BotData.CreateNew(codeList.Program.name, playerWeapon);
-        LevelManager.Instance.playerTeamData = TeamData.CreateNew(new BotData[] { playerBotData, playerBotData, playerBotData });
+        LevelManager.Instance.playerTeamData = TeamData.CreateNew(new BotData[] { botConfiguration.CurrentBot, botConfiguration.CurrentBot, botConfiguration.CurrentBot });
         SceneManager.LoadScene("Arena");
     }
 }

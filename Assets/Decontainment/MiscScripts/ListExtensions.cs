@@ -5,7 +5,7 @@ namespace Extensions
     public static class ListExtensions
     {
         /// Returns the index inserted at
-        public static int InsertAlphabetically<T>(this List<T> list, T item)
+        public static int InsertAlphabetically<T>(this IList<T> list, T item)
         {
             int index;
             for (index = 0; index < list.Count; ++index) {

@@ -102,7 +102,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbf6cc87087728f4d930cff5c970ff2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hardpoint: {fileID: 7687559846924733500}
+  teamColors:
+  - {r: 0, g: 1, b: 1, a: 1}
+  - {r: 1, g: 0, b: 0, a: 1}
   data: {fileID: 11400000, guid: 05ed94aeaff74fc4b857a05e201ba64b, type: 2}
   clockInterval: 0.02
   teamID: 0
@@ -171,8 +173,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   async: 0
-  hardpoint: {fileID: 0}
-  weapon: {fileID: 0}
+  weaponData: {fileID: 0}
+  hardpoint: {fileID: 7687559846924733500}
 --- !u!114 &7664877444064244165
 MonoBehaviour:
   m_ObjectHideFlags: 0

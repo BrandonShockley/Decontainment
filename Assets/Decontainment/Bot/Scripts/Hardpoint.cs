@@ -11,10 +11,14 @@ namespace Bot
             sr = GetComponent<SpriteRenderer>();
         }
 
-        public void Init(Color color)
+        public void Init(WeaponData weaponData)
         {
-            sr.color = color;
-            sr.enabled = true;
+            if (weaponData == null) {
+                sr.enabled = false;
+            } else {
+                sr.enabled = true;
+                sr.color = weaponData.hardpointColor;
+            }
         }
     }
 }
