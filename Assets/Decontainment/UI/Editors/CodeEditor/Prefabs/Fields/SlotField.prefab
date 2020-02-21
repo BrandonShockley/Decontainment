@@ -62,6 +62,7 @@ GameObject:
   - component: {fileID: 57394884683567635}
   - component: {fileID: 5479632898850276553}
   - component: {fileID: -5834681427256547880}
+  - component: {fileID: -31343560182556489}
   m_Layer: 5
   m_Name: SlotField
   m_TagString: Untagged
@@ -251,6 +252,21 @@ MonoBehaviour:
   m_EffectColor: {r: 1, g: 1, b: 1, a: 1}
   m_EffectDistance: {x: 2, y: 2}
   m_UseGraphicAlpha: 1
+--- !u!114 &-31343560182556489
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6760883868350057258}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b3573b8e9b433f4dadaee419bfb2d78, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  toolTipContainer: {fileID: 7984365647478970598, guid: be5fc5ac14c501d408a332b22273a03e,
+    type: 3}
+  toolTipInstance: {fileID: 0}
 --- !u!1 &8781700198214451846
 GameObject:
   m_ObjectHideFlags: 0

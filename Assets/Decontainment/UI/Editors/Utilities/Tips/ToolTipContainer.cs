@@ -19,12 +19,9 @@ namespace Editor
             textObject.text = buffer;
         }
 
-        public void setOpCode(OpCode opCode)
+        public void setText(string text)
         {
-            this.opCode = opCode;
-            string buffer;
-            InstructionMaps.opDescriptiveNameMap.TryGetValue(opCode, out buffer);
-            textObject.text = buffer;
+            textObject.text = text;
         }
     }
 }

@@ -63,6 +63,11 @@ namespace Editor.Code
             OpCategory category = InstructionMaps.opCodeOpCategoryMap[instruction.opCode];
             bg.color = opCategoryColorMap.map[category];
 
+            // Configure tips
+            string buffer;
+            InstructionMaps.opDescriptiveNameMap.TryGetValue(instruction.opCode, out buffer);
+            GetComponent<DisplaysTips>().Init(buffer);
+
             // Create argument fields
             ArgumentSpec[] argSpecs = InstructionMaps.opArgSpecMap[instruction.opCode];
             for (int argNum = 0; argNum < instruction.args.Length; ++argNum) {
@@ -75,13 +80,9 @@ namespace Editor.Code
                 } else {
                     field = Instantiate(slotFieldPrefab, transform);
                     field.GetComponent<SlotField>().Init(arg, codeList);
+                    field.GetComponent<DisplaysTips>().Init(argSpecs[argNum].name);
                 }
             }
-        }
-
-        public OpCode getOpCode()
-        {
-            return instruction.opCode;
         }
 
         private void Insert(Draggable.Slot slot)
