@@ -100,14 +100,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fbf6cc87087728f4d930cff5c970ff2d, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
-  code: {fileID: 0}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  teamColors:
+  - {r: 0, g: 1, b: 1, a: 1}
+  - {r: 1, g: 0, b: 0, a: 1}
+  data: {fileID: 11400000, guid: 05ed94aeaff74fc4b857a05e201ba64b, type: 2}
   clockInterval: 0.02
-  hardpoints:
-  - {fileID: 7687559846924733500}
-  shooterConfigsTemplate: {fileID: 11400000, guid: 0a340f83203a2414cb3371dcf2d3b738,
-    type: 2}
   teamID: 0
 --- !u!114 &5491903226993273825
 MonoBehaviour:
@@ -119,8 +118,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8721b8eb36b5e5e4785d9fdac9fcbabd, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
+  m_Name: 
+  m_EditorClassIdentifier: 
   async: 0
   speed: 3
   remainingDistance: 0
@@ -135,8 +134,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bcde968f30f7e4a459517916a3b83557, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
+  m_Name: 
+  m_EditorClassIdentifier: 
   async: 0
   speed: 90
   remainingDegrees: 0
@@ -151,8 +150,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a88ddbab7c3510f448824ffc7bf2a9b9, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
+  m_Name: 
+  m_EditorClassIdentifier: 
   vulnerable: 1
   maxAmount: 5
   invulnerabilityDuration: 1
@@ -171,11 +170,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e4b5dfe619508da4f809c1c55283f236, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
+  m_Name: 
+  m_EditorClassIdentifier: 
   async: 0
-  hardpoint: {fileID: 0}
-  weapon: {fileID: 0}
+  weaponData: {fileID: 0}
+  hardpoint: {fileID: 7687559846924733500}
 --- !u!114 &7664877444064244165
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -186,8 +185,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cb23cef5618c9ab4bb460e0ca22a69c2, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!60 &7595162700242697401
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -309,8 +308,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 62e804ea6633ca1449f4f81c5405f956, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
+  m_Name: 
+  m_EditorClassIdentifier: 
   idealDegreesPerPoint: 10
 --- !u!1001 &7887081858196464118
 PrefabInstance:
@@ -397,5 +396,5 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b171bc3610db8ab4fb768e8bcbd6353c, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
+  m_Name: 
+  m_EditorClassIdentifier: 
