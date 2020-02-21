@@ -11,8 +11,6 @@ public class Laser : Projectile
     [SerializeField]
     private int damage = 1;
     [SerializeField]
-    private int damage = 1;
-    [SerializeField]
     private float maxDistance = 100;
     [SerializeField]
     private float laserGrowTime = 1;
