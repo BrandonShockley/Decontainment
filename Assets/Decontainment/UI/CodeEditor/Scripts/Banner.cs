@@ -7,16 +7,14 @@ using TMPro;
 public class Banner : MonoBehaviour
 {
 	[SerializeField]
-	private int ticks = 5;
+	private float duration = 2.5f;
 
-    private int counter = -1;
+    private float counter = -1.0f;
     private Image image;
     private TextMeshProUGUI text;
 
-    protected Color defaultColor = new Color(0, 0, 0, 0);
-
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         image = GetComponent<Image>();
         text = GetComponentInChildren<TextMeshProUGUI>();
@@ -27,12 +25,11 @@ public class Banner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-		if (counter >= 0)
+        if (counter >= 0)
         {
-            image.enabled = true;
-            text.enabled = true;
-            counter = counter - 1;
-        } else
+            counter -= Time.fixedDeltaTime;
+        }
+        if (counter < 0)
         {
             image.enabled = false;
             text.enabled = false;
@@ -41,6 +38,8 @@ public class Banner : MonoBehaviour
 
     public void Activate()
     {
-        counter = ticks;
+        counter = duration;
+        image.enabled = true;
+        text.enabled = true;
     }
 }

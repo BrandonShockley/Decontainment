@@ -3,20 +3,17 @@ using System.Collections;
 using TMPro;
 using UnityEngine.UI;
 
-public class PromptSystem : PersistentSingleton<PromptSystem>
+public class PromptSystem : SceneSingleton<PromptSystem>
 {
-    private GameObject obj;
     private TextMeshProUGUI text;
     private Image image;
     private Banner banner;
 
-
     void Awake()
     {
         banner = FindObjectOfType<Banner>();
-        obj = banner.gameObject;
-        text = obj.GetComponentInChildren<TextMeshProUGUI>();
-        image = obj.GetComponent<Image>();
+        text = banner.GetComponentInChildren<TextMeshProUGUI>();
+        image = banner.GetComponent<Image>();
         text.SetText("NOBODY");
     }
 
