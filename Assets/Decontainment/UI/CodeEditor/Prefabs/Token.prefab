@@ -391,4 +391,4 @@ MonoBehaviour:
   m_RestoreOriginalTextOnEscape: 1
   m_isRichTextEditingAllowed: 0
   m_LineLimit: 0
-  m_InputValidator: {fileID: 11400000, guid: 51b724fb89a0821449841d45547f77ab, type: 2}
+  m_InputValidator: {fileID: 0}

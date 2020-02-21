@@ -126,6 +126,7 @@ namespace Editor
                         --label.val; // TODO: This will need to be variable when we add dragging selected blocks
                     }
                 }
+                
             }
         }
     }
