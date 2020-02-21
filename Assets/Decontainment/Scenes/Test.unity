@@ -230,17 +230,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 1aa4325c056d9074891c490b2f771ae7,
         type: 2}
-    - target: {fileID: 4685929009172171662, guid: dcb872f8505c05f419fa3282048b6883,
-        type: 3}
-      propertyPath: weaponData
-      value: 
-      objectReference: {fileID: 11400000, guid: 49f1d6d20a4b3dc4e80977af7f57a204,
-        type: 2}
-    - target: {fileID: 4685929009172171662, guid: dcb872f8505c05f419fa3282048b6883,
-        type: 3}
-      propertyPath: hardpoint
-      value: 
-      objectReference: {fileID: 792821240}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dcb872f8505c05f419fa3282048b6883, type: 3}
 --- !u!1 &149472566 stripped
@@ -686,18 +675,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 711311296}
   m_CullTransparentMesh: 0
---- !u!114 &792821240 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7687559846924733500, guid: dcb872f8505c05f419fa3282048b6883,
-    type: 3}
-  m_PrefabInstance: {fileID: 3528470376923045950}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b171bc3610db8ab4fb768e8bcbd6353c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &837323668
 GameObject:
   m_ObjectHideFlags: 0
@@ -1007,17 +984,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 13c5b3ee6e8003842884d2aa1b028f43,
         type: 2}
-    - target: {fileID: 4685929009172171662, guid: dcb872f8505c05f419fa3282048b6883,
-        type: 3}
-      propertyPath: weaponData
-      value: 
-      objectReference: {fileID: 11400000, guid: 49f1d6d20a4b3dc4e80977af7f57a204,
-        type: 2}
-    - target: {fileID: 4685929009172171662, guid: dcb872f8505c05f419fa3282048b6883,
-        type: 3}
-      propertyPath: hardpoint
-      value: 
-      objectReference: {fileID: 792821240}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dcb872f8505c05f419fa3282048b6883, type: 3}
 --- !u!1 &1490775254
@@ -2078,17 +2044,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 13c5b3ee6e8003842884d2aa1b028f43,
         type: 2}
-    - target: {fileID: 4685929009172171662, guid: dcb872f8505c05f419fa3282048b6883,
-        type: 3}
-      propertyPath: weaponData
-      value: 
-      objectReference: {fileID: 11400000, guid: 49f1d6d20a4b3dc4e80977af7f57a204,
-        type: 2}
-    - target: {fileID: 4685929009172171662, guid: dcb872f8505c05f419fa3282048b6883,
-        type: 3}
-      propertyPath: hardpoint
-      value: 
-      objectReference: {fileID: 792821240}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dcb872f8505c05f419fa3282048b6883, type: 3}
 --- !u!1001 &3707740107735353632
