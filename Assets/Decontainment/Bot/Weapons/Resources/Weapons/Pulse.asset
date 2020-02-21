@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 58acfad9802a29847b6c93bb7747eaf0, type: 3}
-  m_Name: PulseWeapon
+  m_Name: Pulse
   m_EditorClassIdentifier: 
   projectilePrefab: {fileID: 5202299059419044755, guid: 27e0a792cb0a06b4f966045d1ffd499e,
     type: 3}

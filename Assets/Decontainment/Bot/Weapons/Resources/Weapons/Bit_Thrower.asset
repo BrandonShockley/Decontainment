@@ -10,9 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 58acfad9802a29847b6c93bb7747eaf0, type: 3}
-  m_Name: LaserWeapon
+  m_Name: Bit_Thrower
   m_EditorClassIdentifier: 
-  projectilePrefab: {fileID: 2249038086161332113, guid: 71f2eb08b377f604f8a7bc9aebb20372,
+  projectilePrefab: {fileID: 4312774953735687039, guid: fc0beace315e1144d98b41bd35e892ea,
     type: 3}
-  cooldown: 1
-  hardpointColor: {r: 1, g: 0, b: 0.8534627, a: 1}
+  cooldown: 4
+  hardpointColor: {r: 0.11374155, g: 0.33962262, b: 0.13821743, a: 1}
+  numShots: 5
+  shotSpacing: 15
