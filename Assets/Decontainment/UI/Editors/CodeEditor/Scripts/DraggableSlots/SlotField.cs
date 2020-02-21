@@ -33,6 +33,13 @@ namespace Editor.Code
             origSize = rt.sizeDelta;
         }
 
+        void OnDestroy()
+        {
+            if (arg != null) {
+                arg.OnChange -= UpdateFrontend;
+            }
+        }
+
         public void Init(Argument arg, CodeList codeList)
         {
             this.arg = arg;
@@ -102,6 +109,7 @@ namespace Editor.Code
             if (arg.type == Argument.Type.IMMEDIATE) {
                 if (tokenGO != null) {
                     Destroy(tokenGO);
+                    tokenGO = null;
                 }
                 inputField.text = arg.val.ToString();
                 inputField.interactable = true;

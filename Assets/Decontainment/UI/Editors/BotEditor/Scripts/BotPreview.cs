@@ -29,6 +29,18 @@ namespace Editor.Bot
 
         private void HandleBotSelected(BotData oldBot)
         {
+            if (oldBot != null) {
+                oldBot.OnWeaponChange -= HandleWeaponChanged;
+            }
+
+            if (botConfiguration.CurrentBot != null) {
+                botConfiguration.CurrentBot.OnWeaponChange += HandleWeaponChanged;
+            }
+            HandleWeaponChanged();
+        }
+
+        private void HandleWeaponChanged()
+        {
             if (botConfiguration.CurrentBot == null) {
                 botImage.enabled = false;
                 hardpointImage.enabled = false;

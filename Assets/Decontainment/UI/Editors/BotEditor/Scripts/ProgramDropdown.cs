@@ -33,13 +33,16 @@ namespace Editor.Bot
 
             dropdown.onValueChanged.AddListener((int val) =>
             {
-                Debug.Log("Value changed to " + val);
                 if (selfChange.Value) {
                     return;
                 }
 
                 selfChange.Value = true;
-                botConfiguration.CurrentBot.ProgramName = dropdown.options[val].text;
+                if (val == dropdown.options.Count - 1) {
+                    botConfiguration.CurrentBot.ProgramName = null;
+                } else {
+                    botConfiguration.CurrentBot.ProgramName = dropdown.options[val].text;
+                }
             });
         }
 

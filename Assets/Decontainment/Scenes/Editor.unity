@@ -587,8 +587,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelData: {fileID: 11400000, guid: 8cfc6417f1200ac438c36671bd214cbb, type: 2}
-  playerWeapon: {fileID: 11400000, guid: 49f1d6d20a4b3dc4e80977af7f57a204, type: 2}
-  codeList: {fileID: 144337128}
+  botConfiguration: {fileID: 1278511300}
 --- !u!1 &246481385
 GameObject:
   m_ObjectHideFlags: 0
