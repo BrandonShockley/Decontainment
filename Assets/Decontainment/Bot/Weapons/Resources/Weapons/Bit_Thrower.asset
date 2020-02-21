@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58acfad9802a29847b6c93bb7747eaf0, type: 3}
+  m_Name: Bit_Thrower
+  m_EditorClassIdentifier: 
+  projectilePrefab: {fileID: 4312774953735687039, guid: fc0beace315e1144d98b41bd35e892ea,
+    type: 3}
+  cooldown: 4
+  hardpointColor: {r: 0.11374155, g: 0.33962262, b: 0.13821743, a: 1}
+  numShots: 5
+  shotSpacing: 15

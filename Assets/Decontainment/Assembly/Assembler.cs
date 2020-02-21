@@ -7,9 +7,10 @@ namespace Asm
 {
     public static class Assembler
     {
-        public static Program Assemble(string codeString)
+        public static Program Assemble(string programName, string codeString)
         {
             Program output = new Program();
+            output.name = programName;
             if (!Preprocess(ref codeString, out output.branchLabelList, out output.constLabelList)) {
                 return null;
             }
@@ -116,9 +117,9 @@ namespace Asm
                                 if (presetValue != -1) {
                                     argVal = presetValue;
                                 } else if (int.TryParse(word, out argVal)) {
-                                    if (type == Argument.Type.REGISTER && (argVal < 0 || argVal >= VirtualMachine.NUM_REGS)) {
+                                    if (type == Argument.Type.REGISTER && (argVal < 0 || argVal >= VirtualMachine.NUM_TOTAL_REGS)) {
                                         Debug.LogError("Invalid register number " + argVal + " for operation " + opCode.ToString()
-                                            + " on line " + lineCount + ". Max register number is " + (VirtualMachine.NUM_REGS - 1));
+                                            + " on line " + lineCount + ". Max register number is " + (VirtualMachine.NUM_TOTAL_REGS - 1));
                                         return null;
                                     }
                                 } else {
