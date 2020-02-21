@@ -31,7 +31,7 @@ public abstract class Beam : Projectile
 
     protected override void Init()
     {
-        StartCoroutine(beamRoutine());
+        StartCoroutine(BeamRoutine());
     }
 
     void Update()
@@ -54,7 +54,7 @@ public abstract class Beam : Projectile
 
     protected virtual void HealthEffect(Health bh) { }
 
-    private IEnumerator beamRoutine()
+    private IEnumerator BeamRoutine()
     {
         // beam growth
         {
