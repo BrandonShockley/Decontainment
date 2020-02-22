@@ -27,7 +27,7 @@ public class Banner : MonoBehaviour
     {
         if (counter >= 0)
         {
-            counter -= Time.fixedDeltaTime;
+            counter -= Time.unscaledDeltaTime;
         }
         if (counter < 0)
         {
