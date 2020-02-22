@@ -16,8 +16,6 @@ namespace Bot
             Color.red,
         };
         [SerializeField]
-        private Hardpoint hardpoint = null;
-        [SerializeField]
         private BotData data = null;
         [SerializeField]
         private float clockInterval = 1;
@@ -57,9 +55,9 @@ namespace Bot
 
         void Start()
         {
-            shooter.Init(hardpoint, data.WeaponData);
+            shooter.Init(data.WeaponData);
             sr.color = teamColors[teamID];
-            vm.Program = data.Program;
+            vm.Program = data.AssembleProgram();
         }
 
         void FixedUpdate()

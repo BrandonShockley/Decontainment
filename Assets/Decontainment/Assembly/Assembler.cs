@@ -7,9 +7,10 @@ namespace Asm
 {
     public static class Assembler
     {
-        public static Program Assemble(string codeString)
+        public static Program Assemble(string programName, string codeString)
         {
             Program output = new Program();
+            output.name = programName;
             if (!Preprocess(ref codeString, out output.branchLabelList, out output.constLabelList)) {
                 return null;
             }
