@@ -9,12 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 58acfad9802a29847b6c93bb7747eaf0, type: 3}
-  m_Name: Laser
+  m_Script: {fileID: 11500000, guid: 0820138dba3ce2e428a22f9b7a480245, type: 3}
+  m_Name: HealthShooter
   m_EditorClassIdentifier: 
-  projectilePrefab: {fileID: 3802794176953701020, guid: fffbfa5d5f7209e4c818e872f0f7b3e7,
-    type: 3}
-  cooldown: 1
-  hardpointColor: {r: 1, g: 0, b: 0.8534627, a: 1}
-  numShots: 1
-  shotSpacing: 15
+  builtInProgram: {fileID: 4900000, guid: 85c7c278c915d0447845774f4d9e7dc2, type: 3}
+  weaponData: {fileID: 11400000, guid: a1fcdd241bce75949b5b54439b3e7a8b, type: 2}
