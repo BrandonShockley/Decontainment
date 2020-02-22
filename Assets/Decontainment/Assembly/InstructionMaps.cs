@@ -17,6 +17,7 @@ namespace Asm
             {OpCode.BLE, "Branch if less than or equal"},
             {OpCode.BGT, "Branch if greater than"},
             {OpCode.BGE, "Branch if greater than or equal"},
+            {OpCode.BCH, "Branch arg * 1 times out of a hundred"},
             {OpCode.CSR, "Call subroutine"},
             {OpCode.RSR, "Return from subroutine"},
 
@@ -30,6 +31,7 @@ namespace Asm
 
             {OpCode.TAR, "Acquire target"},
             {OpCode.HED, "Acquire heading to target"},
+            {OpCode.DIS, "Acquire distance to target"},
             {OpCode.SCN, "Scan"},
 
             {OpCode.DRV, "Drive"},
@@ -49,6 +51,7 @@ namespace Asm
             {OpCode.BLE, ArgumentSpec.TWO_INPUT_CONTROL_FLOW_SPECS},
             {OpCode.BGT, ArgumentSpec.TWO_INPUT_CONTROL_FLOW_SPECS},
             {OpCode.BGE, ArgumentSpec.TWO_INPUT_CONTROL_FLOW_SPECS},
+            {OpCode.BCH, ArgumentSpec.ONE_INPUT_CONTROL_FLOW_SPECS},
             {OpCode.CSR, ArgumentSpec.NO_INPUT_CONTROL_FLOW_SPECS},
             {OpCode.RSR, new ArgumentSpec[0]},
 
@@ -67,12 +70,8 @@ namespace Asm
                     new ArgumentSpec("Type", false, new string[]{ "Ally", "Enemy" })
                 }
             },
-            {OpCode.HED, new ArgumentSpec[]
-                {
-                    ArgumentSpec.DEST_REG,
-                    ArgumentSpec.MakeRegOnly("Target Index")
-                }
-            },
+            {OpCode.HED, ArgumentSpec.HANDLING_TARGET_SENSING_SPECS},
+            {OpCode.DIS, ArgumentSpec.HANDLING_TARGET_SENSING_SPECS},
             {OpCode.SCN, new ArgumentSpec[]
                 {
                     ArgumentSpec.DEST_REG,
@@ -117,6 +116,7 @@ namespace Asm
             {OpCode.BLE, OpCategory.CONTROL_FLOW},
             {OpCode.BGT, OpCategory.CONTROL_FLOW},
             {OpCode.BGE, OpCategory.CONTROL_FLOW},
+            {OpCode.BCH, OpCategory.CONTROL_FLOW},
             {OpCode.CSR, OpCategory.CONTROL_FLOW},
             {OpCode.RSR, OpCategory.CONTROL_FLOW},
 
@@ -130,6 +130,7 @@ namespace Asm
 
             {OpCode.TAR, OpCategory.SENSING},
             {OpCode.HED, OpCategory.SENSING},
+            {OpCode.DIS, OpCategory.SENSING},
             {OpCode.SCN, OpCategory.SENSING},
 
             {OpCode.DRV, OpCategory.ACTION},

@@ -94,6 +94,11 @@ public class VirtualMachine
                         newPC = GetArgValue(i.args[0]) % program.instructions.Count;
                     }
                     break;
+                case OpCode.BCH:
+                    if (GetArgValue(i.args[1]) > UnityEngine.Random.Range(0, 100)) {
+                        newPC = GetArgValue(i.args[0]) % program.instructions.Count;
+                    }
+                    break;
                 case OpCode.CSR:
                     if (callStack.Count > STACK_SIZE) {
                         Debug.LogWarning("Stack limit reached on CSR call");
@@ -148,6 +153,9 @@ public class VirtualMachine
                     break;
                 case OpCode.HED:
                     regs[i.args[0].val] = BotManager.Instance.GetTargetHeading(controller, GetArgValue(i.args[1]));
+                    break;
+                case OpCode.DIS:
+                    regs[i.args[0].val] = BotManager.Instance.GetTargetDistance(controller, GetArgValue(i.args[1]));
                     break;
                 case OpCode.SCN:
                     regs[i.args[0].val] = controller.Scan((Scanner.Target)GetArgValue(i.args[1]),

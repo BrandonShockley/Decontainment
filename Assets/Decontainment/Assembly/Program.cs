@@ -24,6 +24,7 @@ namespace Asm
         BLE, // Branch if less than or equal to
         BGT, // Branch if greater than
         BGE, // Branch if greater than or equal to
+        BCH, // Branch arg * 1 times out of a hundred 
         CSR, // Call subroutine
         RSR, // Return from subroutine
 
@@ -39,6 +40,7 @@ namespace Asm
         // Sensing
         TAR, // Target
         HED, // Heading
+        DIS, // Distance
         SCN, // Scan
 
         // Actions
@@ -109,6 +111,11 @@ namespace Asm
         {
             ArgumentSpec.BRANCH_LABEL
         };
+        public static readonly ArgumentSpec[] ONE_INPUT_CONTROL_FLOW_SPECS = new ArgumentSpec[]
+        {
+            ArgumentSpec.BRANCH_LABEL,
+            ArgumentSpec.VAL1
+        };
         public static readonly ArgumentSpec[] TWO_INPUT_CONTROL_FLOW_SPECS = new ArgumentSpec[]
         {
             ArgumentSpec.BRANCH_LABEL,
@@ -125,6 +132,11 @@ namespace Asm
             DEST_REG,
             ArgumentSpec.VAL1,
             ArgumentSpec.VAL2
+        };
+        public static readonly ArgumentSpec[] HANDLING_TARGET_SENSING_SPECS = new ArgumentSpec[]
+        {
+            DEST_REG,
+            ArgumentSpec.MakeRegOnly("Target Index")
         };
 
         /// Open arguments can take registers or immediate values
