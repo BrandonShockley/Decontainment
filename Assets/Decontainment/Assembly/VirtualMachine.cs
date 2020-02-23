@@ -94,7 +94,7 @@ public class VirtualMachine
                         newPC = GetArgValue(i.args[0]) % program.instructions.Count;
                     }
                     break;
-                case OpCode.BCH:
+                case OpCode.BRN:
                     if (GetArgValue(i.args[1]) > UnityEngine.Random.Range(0, 100)) {
                         newPC = GetArgValue(i.args[0]) % program.instructions.Count;
                     }
