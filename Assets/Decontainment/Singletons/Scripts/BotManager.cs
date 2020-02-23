@@ -86,6 +86,18 @@ class BotManager : SceneSingleton<BotManager>
         return (int)Vector2.SignedAngle(targeter.transform.right, look);
     }
 
+    public int GetTargetDistance(Controller targeter, int targetIndex)
+    {
+        if (targetIndex < 0 || targetIndex >= bots.Count) {
+            Debug.LogWarning("Bot " + targeter + " attempted to get target distance for invalid target index");
+            return 0;
+        }
+
+        Controller target = bots[targetIndex];
+        float dist = Vector2.Distance(targeter.transform.position, target.transform.position);
+        return (int)dist;
+    }
+
     public void PropagateRegister(int registerNumber, int registerValue, int botTeamID) {
         StartCoroutine(PropagationCoroutine(registerNumber, registerValue, botTeamID));
     }
