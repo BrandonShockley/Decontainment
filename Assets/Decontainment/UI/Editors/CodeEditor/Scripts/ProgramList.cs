@@ -17,11 +17,6 @@ namespace Editor.Code
 
         protected override string DefaultName { get { return "Program"; } }
 
-        public Program FindProgram(string name)
-        {
-            return items.Find((Program p) => p.name == name);
-        }
-
         protected override void InitList()
         {
             // Assemble all program files

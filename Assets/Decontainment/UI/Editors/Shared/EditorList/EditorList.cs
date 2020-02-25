@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Editor
 {
-    public abstract class EditorList<T> : MonoBehaviour
+    public abstract class EditorList<T> : MonoBehaviour where T : class
     {
         protected List<T> items = new List<T>();
 
@@ -17,7 +17,9 @@ namespace Editor
         public event Action<int> OnItemAdded;
         public event Action<int, T> OnItemDeleted;
         public event Action<string, int, int> OnItemRenamed;
+        public event Action OnItemSelected;
 
+        public T SelectedItem { get { return selectedIndex == -1 ? null : items[selectedIndex]; } }
         public int Count { get { return items.Count; } }
 
         protected int SelectedIndex { get { return selectedIndex; } }
@@ -64,6 +66,11 @@ namespace Editor
 
         public T Index(int index) { return items[index]; }
 
+        public T Find(string name)
+        {
+            return items.Find((T t) => t.ToString() == name);
+        }
+
         protected void Awake()
         {
             SubAwake();
@@ -108,6 +115,7 @@ namespace Editor
             }
             selectedIndex = index;
             SubHandleSelect();
+            OnItemSelected?.Invoke();
         }
 
         protected virtual void SubAwake() {}

@@ -9,6 +9,8 @@ public static class ProgramDirectory
     public static readonly string PATH = Directory.GetCurrentDirectory() + "/Programs";
     #endif
 
+    public const string EXTENSION = ".txt";
+
     public static string ProgramPath(string programName)
     {
         #if !UNITY_EDITOR
@@ -16,7 +18,7 @@ public static class ProgramDirectory
             Directory.CreateDirectory(PATH);
         }
         #endif
-        return PATH + "/" + programName + ".txt";
+        return PATH + "/" + programName + EXTENSION;
     }
 }
 
@@ -38,5 +40,26 @@ public static class BotDirectory
         }
         #endif
         return PATH + "/" + botName + EXTENSION;
+    }
+}
+
+public static class TeamDirectory
+{
+    #if UNITY_EDITOR
+    public static readonly string PATH = "Assets/Decontainment/BotData/Teams";
+    public const string EXTENSION = ".asset";
+    #else
+    public static readonly string PATH = Directory.GetCurrentDirectory() + "/Teams";
+    public const string EXTENSION = ".team";
+    #endif
+
+    public static string TeamPath(string teamName)
+    {
+        #if !UNITY_EDITOR
+        if (!Directory.Exists(PATH)) {
+            Directory.CreateDirectory(PATH);
+        }
+        #endif
+        return PATH + "/" + teamName + EXTENSION;
     }
 }

@@ -13,7 +13,9 @@ public class TempMatchStart : MonoBehaviour
     public void StartMatch()
     {
         LevelManager.Instance.levelData = levelData;
-        LevelManager.Instance.playerTeamData = TeamData.CreateNew(new BotData[] { botConfiguration.CurrentBot, botConfiguration.CurrentBot, botConfiguration.CurrentBot });
+        LevelManager.Instance.playerTeamData = TeamData.CreateNew(
+            "Super team",
+            new string[] { botConfiguration.CurrentBot.name, botConfiguration.CurrentBot.name, botConfiguration.CurrentBot.name });
         SceneManager.LoadScene("Arena");
     }
 }

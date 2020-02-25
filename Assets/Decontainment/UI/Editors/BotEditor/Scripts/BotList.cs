@@ -33,7 +33,9 @@ namespace Editor.Bot
 
         protected override BotData CreateNewItem(string name)
         {
-            return BotData.CreateNew(name, null, null);
+            BotData botData = BotData.CreateNew(name, null, null);
+            botData.Save();
+            return botData;
         }
 
         protected override void DeleteItem(BotData botData)

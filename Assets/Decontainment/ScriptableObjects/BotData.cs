@@ -7,6 +7,9 @@ using UnityEditor;
 
 namespace Bot
 {
+    // TODO: There are lots of similarities between this and TeamData
+    // Perhaps we could pull those out into an interface or abstract class
+    // If we add another player configurable scriptable object, we probably should
     [CreateAssetMenu(fileName = "BotData", menuName = "ScriptableObjects/BotData", order = 1)]
     public class BotData : ScriptableObject
     {
@@ -50,8 +53,8 @@ namespace Bot
                     builtInProgram = null;
                     customProgramName = null;
                 } else {
-                    string path = ProgramDirectory.ProgramPath(value);
                     #if UNITY_EDITOR
+                    string path = ProgramDirectory.ProgramPath(value);
                     builtInProgram = AssetDatabase.LoadAssetAtPath<TextAsset>(path);
                     #else
                     customProgramName = value;
@@ -66,9 +69,8 @@ namespace Bot
         {
             BotData botData = ScriptableObject.CreateInstance<BotData>();
             botData.name = botName;
-            botData.customProgramName = programName;
+            botData.ProgramName = programName;
             botData.weaponData = weaponData;
-            botData.Save();
             return botData;
         }
 

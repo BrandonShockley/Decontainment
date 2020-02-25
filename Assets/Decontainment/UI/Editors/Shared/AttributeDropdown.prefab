@@ -75,7 +75,7 @@ PrefabInstance:
     - target: {fileID: 974071610958459484, guid: 6363867cc1a301b43b7b248d32b17c07,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 80
+      value: 150
       objectReference: {fileID: 0}
     - target: {fileID: 974071610958459484, guid: 6363867cc1a301b43b7b248d32b17c07,
         type: 3}
@@ -161,7 +161,7 @@ PrefabInstance:
     - target: {fileID: 9008722315217321488, guid: 6363867cc1a301b43b7b248d32b17c07,
         type: 3}
       propertyPath: m_Name
-      value: BotAttributeDropdown
+      value: AttributeDropdown
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: -7431234497518076531, guid: 6363867cc1a301b43b7b248d32b17c07, type: 3}
