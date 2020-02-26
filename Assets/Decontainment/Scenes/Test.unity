@@ -1714,12 +1714,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-<<<<<<< HEAD
-    - target: {fileID: 8497852356269598017, guid: cbac44966c4dc4f4a8f3885057157673,
-        type: 3}
-      propertyPath: m_TagString
-      value: Untagged
-=======
     - target: {fileID: 8061175865199704166, guid: cbac44966c4dc4f4a8f3885057157673,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -1744,7 +1738,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_textInfo.pageCount
       value: 0
->>>>>>> master
       objectReference: {fileID: 0}
     - target: {fileID: 8775706885595667843, guid: cbac44966c4dc4f4a8f3885057157673,
         type: 3}

@@ -266,7 +266,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   toolTipContainer: {fileID: 7984365647478970598, guid: be5fc5ac14c501d408a332b22273a03e,
     type: 3}
-  toolTipInstance: {fileID: 0}
+  tipDelay: 100
 --- !u!1 &8781700198214451846
 GameObject:
   m_ObjectHideFlags: 0

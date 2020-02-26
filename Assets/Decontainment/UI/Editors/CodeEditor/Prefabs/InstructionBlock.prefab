@@ -250,6 +250,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   toolTipContainer: {fileID: 7984365647478970598, guid: be5fc5ac14c501d408a332b22273a03e,
     type: 3}
+  tipDelay: 100
 --- !u!114 &8724200043152340285
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -268,8 +269,6 @@ MonoBehaviour:
   dropdownFieldPrefab: {fileID: 9008722315217321488, guid: 6363867cc1a301b43b7b248d32b17c07,
     type: 3}
   slotFieldPrefab: {fileID: 6760883868350057258, guid: a77b4e9e1d87f7a49a5a49074c48605f,
-    type: 3}
-  headerPrefab: {fileID: 5942781556024676504, guid: 08b5d146b8aa0694c8ebbb08c1b006bf,
     type: 3}
 --- !u!114 &4324987571710731080
 MonoBehaviour:

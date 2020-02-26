@@ -11,7 +11,7 @@ namespace Editor
     {
 
         public GameObject toolTipContainer;
-        public int tipDelay = 40;
+        public int tipDelay;
 
         private GameObject toolTipInstance;
         private GameObject canvas;

@@ -1076,4 +1076,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   toolTipContainer: {fileID: 7984365647478970598, guid: be5fc5ac14c501d408a332b22273a03e,
     type: 3}
-  tipDelay: 40
+  tipDelay: 100

@@ -8,20 +8,19 @@ namespace Editor
 {
     public class ToolTipContainer : MonoBehaviour
     {
-        public OpCode opCode;
         private TextMeshProUGUI textObject;
+        private RectTransform rt;
 
         void Awake()
         {
             textObject = GetComponentInChildren<TextMeshProUGUI>();
-            string buffer;
-            InstructionMaps.opDescriptiveNameMap.TryGetValue(opCode,out buffer);
-            textObject.text = buffer;
+            rt = GetComponent<RectTransform>();
         }
 
         public void setText(string text)
         {
             textObject.text = text;
+            rt.sizeDelta = new Vector2(textObject.preferredWidth, 0);
         }
     }
 }
