@@ -12,17 +12,8 @@ namespace Editor.Team
     {
         [SerializeField]
         private BotList botList = null;
-        [SerializeField]
-        private MemberConfiguration[] memberConfigurations = new MemberConfiguration[TeamData.TEAM_SIZE];
 
         protected override string DefaultName { get { return "Team"; } }
-
-        protected override void SubAwake()
-        {
-            for (int i = 0; i < memberConfigurations.Length; ++i) {
-                memberConfigurations[i].OnBotSelected += (BotData botData) => HandleBotSelected(i);
-            }
-        }
 
         protected override void InitList()
         {
@@ -49,23 +40,23 @@ namespace Editor.Team
             teamData.Rename(name);
         }
 
-        protected override void SubHandleSelect()
+        protected override void SubHandleSelect(int oldIndex)
         {
-            if (SelectedItem == null) {
-                foreach (MemberConfiguration mc in memberConfigurations) {
-                    mc.CurrentBot = null;
-                }
-            } else {
-                for (int i = 0; i < SelectedItem.BotCount; ++i) {
-                    MemberConfiguration mc = memberConfigurations[i];
-                    BotData bot = SelectedItem.BotDatas[i];
-                    if (bot == null) {
-                        mc.CurrentBot = null;
-                    } else {
-                        mc.CurrentBot = botList.Find(bot.name);
-                    }
-                }
-            }
+            // if (SelectedItem == null) {
+            //     foreach (MemberConfiguration mc in memberConfigurations) {
+            //         mc.CurrentBot = null;
+            //     }
+            // } else {
+            //     for (int i = 0; i < SelectedItem.BotCount; ++i) {
+            //         MemberConfiguration mc = memberConfigurations[i];
+            //         BotData bot = SelectedItem.BotDatas[i];
+            //         if (bot == null) {
+            //             mc.CurrentBot = null;
+            //         } else {
+            //             mc.CurrentBot = botList.Find(bot.name);
+            //         }
+            //     }
+            // }
         }
 
         private void HandleBotDeleted(int index, string botName)
@@ -96,7 +87,7 @@ namespace Editor.Team
 
         private void HandleBotSelected(int index)
         {
-            SelectedItem.SetBotName(index, memberConfigurations[index].CurrentBot.name);
+            // SelectedItem.SetBotName(index, memberConfigurations[index].CurrentBot.name);
         }
     }
 }

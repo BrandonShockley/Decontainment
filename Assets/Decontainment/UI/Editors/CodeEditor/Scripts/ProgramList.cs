@@ -63,7 +63,7 @@ namespace Editor.Code
             program.name = name;
         }
 
-        protected override void SubHandleSelect()
+        protected override void SubHandleSelect(int oldIndex)
         {
             codeList.Program = items[SelectedIndex];
         }

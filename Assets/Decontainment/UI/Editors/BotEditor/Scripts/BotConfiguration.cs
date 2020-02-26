@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 namespace Editor.Bot
 {
-    public class BotConfiguration : MonoBehaviour, IBotSelector
+    public class BotConfiguration : MonoBehaviour
     {
         [SerializeField]
         private CodeList readonlyCodeList = null;
@@ -16,8 +16,6 @@ namespace Editor.Bot
         private ProgramList programList = null;
 
         private BotData _currentBot;
-
-        public event Action<BotData> OnBotSelected;
 
         public BotData CurrentBot
         {
@@ -36,7 +34,6 @@ namespace Editor.Bot
                     _currentBot.OnProgramChange += HandleProgramChanged;
                     HandleProgramChanged();
                 }
-                OnBotSelected?.Invoke(oldBot);
             }
         }
 

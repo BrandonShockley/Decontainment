@@ -17,8 +17,9 @@ namespace Editor
         public event Action<int> OnItemAdded;
         public event Action<int, T> OnItemDeleted;
         public event Action<string, int, int> OnItemRenamed;
-        public event Action OnItemSelected;
+        public event Action<int> OnItemSelected;
 
+        public T this[int i] { get { return i == -1 ? null : items[i]; } }
         public T SelectedItem { get { return selectedIndex == -1 ? null : items[selectedIndex]; } }
         public int Count { get { return items.Count; } }
 
@@ -71,6 +72,11 @@ namespace Editor
             return items.Find((T t) => t.ToString() == name);
         }
 
+        public int FindIndex(string name)
+        {
+            return items.FindIndex((T t) => t.ToString() == name);
+        }
+
         protected void Awake()
         {
             SubAwake();
@@ -113,9 +119,10 @@ namespace Editor
             if (selectedIndex != -1 && selectedIndex != index) {
                 transform.GetChild(selectedIndex).GetComponent<ListEntry>().Deselect();
             }
+            int oldIndex = index;
             selectedIndex = index;
-            SubHandleSelect();
-            OnItemSelected?.Invoke();
+            SubHandleSelect(oldIndex);
+            OnItemSelected?.Invoke(oldIndex);
         }
 
         protected virtual void SubAwake() {}
@@ -124,7 +131,7 @@ namespace Editor
         protected abstract T CreateNewItem(string name);
         protected abstract void DeleteItem(T item);
         protected abstract void RenameItem(T item, string name);
-        protected abstract void SubHandleSelect();
+        protected abstract void SubHandleSelect(int oldIndex);
 
         private void CreateListEntry(T item, int siblingIndex = -1)
         {

@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Editor.Team
 {
-    public class MemberConfiguration : MonoBehaviour, IBotSelector
+    public class MemberConfiguration : MonoBehaviour//, IBotSelector
     {
         [SerializeField]
         private int index;
@@ -19,28 +19,28 @@ namespace Editor.Team
 
         public event Action<BotData> OnBotSelected;
 
-        public BotData CurrentBot
-        {
-            get { return teamList.SelectedItem.BotDatas[index]; }
-            set {
-                BotData oldBot = _currentBot;
-                _currentBot = value;
+        // public BotData CurrentBot
+        // {
+        //     get { return teamList.SelectedItem.BotDatas[index]; }
+        //     set {
+        //         BotData oldBot = _currentBot;
+        //         _currentBot = value;
 
-                OnBotSelected?.Invoke(oldBot);
-            }
-        }
+        //         OnBotSelected?.Invoke(oldBot);
+        //     }
+        // }
 
-        void Awake()
-        {
-            dropdown = GetComponent<TMP_Dropdown>();
+        // void Awake()
+        // {
+        //     dropdown = GetComponent<TMP_Dropdown>();
 
-            teamList.OnItemSelected += HandleTeamSelected;
-        }
+        //     teamList.OnItemSelected += HandleTeamSelected;
+        // }
 
-        private void HandleTeamSelected()
-        {
-            dropdown.value =
-        }
+        // private void HandleTeamSelected()
+        // {
+        //     dropdown.value =
+        // }
 
         private void HandleBotAdded(int index)
         {

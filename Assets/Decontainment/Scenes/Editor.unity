@@ -1751,7 +1751,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 4160906450836935647}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 4160906450836935648}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a9a518f234d15404fbe9d9d4541a26f2, type: 3}
@@ -2901,7 +2901,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1444237927
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3592,6 +3592,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1f5cf1ead83c9614ca38ba93283f6f6f, type: 3}
+--- !u!1 &4160906450836935648 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5415853096819613862, guid: 1f5cf1ead83c9614ca38ba93283f6f6f,
+    type: 3}
+  m_PrefabInstance: {fileID: 4160906450836935647}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4901871367604182126
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3624,6 +3630,11 @@ PrefabInstance:
       propertyPath: m_textInfo.pageCount
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4901871368683966899, guid: 189a4d0057dc6ee438002bf02b73971c,
+        type: 3}
+      propertyPath: botSelectorGO
+      value: 
+      objectReference: {fileID: 4160906450836935648}
     - target: {fileID: 4901871368875807914, guid: 189a4d0057dc6ee438002bf02b73971c,
         type: 3}
       propertyPath: readonlyCodeList
@@ -3747,6 +3758,16 @@ PrefabInstance:
     - target: {fileID: 6583141776684960604, guid: 189a4d0057dc6ee438002bf02b73971c,
         type: 3}
       propertyPath: programList
+      value: 
+      objectReference: {fileID: 150481945}
+    - target: {fileID: 6583141776684960604, guid: 189a4d0057dc6ee438002bf02b73971c,
+        type: 3}
+      propertyPath: sourceEditorList
+      value: 
+      objectReference: {fileID: 971111925}
+    - target: {fileID: 6583141776684960604, guid: 189a4d0057dc6ee438002bf02b73971c,
+        type: 3}
+      propertyPath: attributeEditorList
       value: 
       objectReference: {fileID: 150481945}
     - target: {fileID: 7194699277856830819, guid: 189a4d0057dc6ee438002bf02b73971c,

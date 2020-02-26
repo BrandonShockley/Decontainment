@@ -1,19 +1,22 @@
 ﻿using Asm;
 using Bot;
 using Editor.Code;
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using System.IO;
 using UnityEngine;
 
 namespace Editor.Bot
 {
-    public class BotList : EditorList<BotData>
+    public class BotList : EditorList<BotData>, IBotSelector
     {
         [SerializeField]
         private BotConfiguration botConfiguration = null;
         [SerializeField]
         private ProgramList programList = null;
+
+        public event Action<BotData> OnBotSelected;
+
+        public BotData CurrentBot { get { return SelectedItem; } }
 
         protected override string DefaultName { get { return "Bot"; } }
 
@@ -49,9 +52,10 @@ namespace Editor.Bot
             botData.Rename(name);
         }
 
-        protected override void SubHandleSelect()
+        protected override void SubHandleSelect(int oldIndex)
         {
             botConfiguration.CurrentBot = items[SelectedIndex];
+            OnBotSelected?.Invoke(items[oldIndex]);
         }
 
         private void HandleProgramDeleted(int index, Program program)

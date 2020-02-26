@@ -11,7 +11,7 @@ namespace Editor.Bot
         private const string NULL_STRING = "[None]";
 
         [SerializeField]
-        private BotConfiguration botConfiguration = null;
+        private BotList botList = null;
 
         private Trigger selfChange;
         private WeaponData[] weaponDatas;
@@ -24,7 +24,7 @@ namespace Editor.Bot
 
             weaponDatas = Resources.LoadAll<WeaponData>(WeaponData.RESOURCES_DIR);
 
-            botConfiguration.OnBotSelected += HandleBotSelected;
+            botList.OnItemSelected += HandleBotSelected;
 
             foreach (WeaponData weaponData in weaponDatas) {
                 dropdown.options.Add(new TMP_Dropdown.OptionData(weaponData.name));
@@ -39,29 +39,30 @@ namespace Editor.Bot
 
                 selfChange.Value = true;
                 if (val == dropdown.options.Count - 1) {
-                    botConfiguration.CurrentBot.WeaponData = null;
+                    botList.SelectedItem.WeaponData = null;
                 } else {
-                    botConfiguration.CurrentBot.WeaponData = weaponDatas[val];
+                    botList.SelectedItem.WeaponData = weaponDatas[val];
                 }
             });
         }
 
         void Start()
         {
-            HandleBotSelected(null);
+            HandleBotSelected(-1);
         }
 
-        private void HandleBotSelected(BotData oldBot)
+        private void HandleBotSelected(int oldIndex)
         {
-            if (oldBot != null) {
-                oldBot.OnWeaponChange -= HandleWeaponChanged;
+            BotData oldItem = botList[oldIndex];
+            if (oldItem != null) {
+                oldItem.OnWeaponChange -= HandleWeaponChanged;
             }
 
-            if (botConfiguration.CurrentBot == null) {
+            if (botList.SelectedItem == null) {
                 dropdown.interactable = false;
             } else {
                 dropdown.interactable = true;
-                botConfiguration.CurrentBot.OnWeaponChange += HandleWeaponChanged;
+                botList.SelectedItem.OnWeaponChange += HandleWeaponChanged;
             }
 
             HandleWeaponChanged();
@@ -74,10 +75,10 @@ namespace Editor.Bot
             }
 
             int newValue;
-            if (botConfiguration.CurrentBot == null) {
+            if (botList.SelectedItem == null) {
                 newValue = dropdown.options.Count - 1;
             } else {
-                int index = Array.FindIndex(weaponDatas, (WeaponData weaponData) => weaponData == botConfiguration.CurrentBot.WeaponData);
+                int index = Array.FindIndex(weaponDatas, (WeaponData weaponData) => weaponData == botList.SelectedItem.WeaponData);
 
                 if (index == -1) {
                     index = dropdown.options.Count - 1;
