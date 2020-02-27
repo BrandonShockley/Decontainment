@@ -1,0 +1,6 @@
+TAR %0 Nearest Enemy
+DIS %1 %0
+SLP $100
+DRV Backward $1 Sync
+DIS %1 %0
+SLP $100
