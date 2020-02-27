@@ -19,25 +19,6 @@ public class TeamData : ScriptableObject
 
     public event Action<int> OnBotChanged;
 
-    public BotData[] BotDatas
-    {
-        get {
-            #if UNITY_EDITOR
-            return builtInBotDatas;
-            #else
-            if (customBotNames != null) {
-                BotData[] botDatas = new BotData[customBotNames.Length];
-                for (int i = 0; i < botDatas.Length; ++i) {
-                    botDatas[i] = BotData.Load(BotDirectory.BotPath(customBotNames[i]));
-                }
-                return botDatas;
-            } else {
-                return null;
-            }
-            #endif
-        }
-    }
-
     public int BotCount
     {
         get {
@@ -83,13 +64,13 @@ public class TeamData : ScriptableObject
     public string GetBotName(int index)
     {
         #if UNITY_EDITOR
-        if (builtInBotDatas == null) {
+        if (builtInBotDatas == null || builtInBotDatas[index] == null) {
             return null;
         } else {
             return builtInBotDatas[index].name;
         }
         #else
-        if (customBotNames == null) {
+        if (customBotNames == null || customBotNames[index] == null) {
             return null;
         } else {
             return customBotNames[index];
@@ -111,6 +92,19 @@ public class TeamData : ScriptableObject
         #endif
         Save();
         OnBotChanged?.Invoke(index);
+    }
+
+    public BotData GetBotData(int index)
+    {
+        #if UNITY_EDITOR
+        return builtInBotDatas[index];
+        #else
+        if (customBotNames != null) {
+            return BotData.Load(BotDirectory.BotPath(customBotNames[index]));
+        } else {
+            return null;
+        }
+        #endif
     }
 
     public void Save()

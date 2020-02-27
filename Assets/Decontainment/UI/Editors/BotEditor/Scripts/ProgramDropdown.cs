@@ -11,26 +11,26 @@ namespace Editor.Bot
 {
     public class ProgramDropdown : DynamicAttributeDropdown<BotData, BotList, Program, ProgramList>
     {
-        protected override string AttributeName { get { return sourceEditorList.SelectedItem.ProgramName; } }
+        protected override string AttributeName { get { return targetEditorList.SelectedItem.ProgramName; } }
 
         protected override void ClearAttribute()
         {
-            sourceEditorList.SelectedItem.ProgramName = null;
+            targetEditorList.SelectedItem.ProgramName = null;
         }
 
         protected override void SetAttribute(int index)
         {
-            sourceEditorList.SelectedItem.ProgramName = attributeEditorList[index].name;
+            targetEditorList.SelectedItem.ProgramName = attributes[index].name;
         }
 
-        protected override void RegisterChangeHandler(BotData botData, Action changeHandler)
+        protected override void RegisterChangeHandler()
         {
-            botData.OnProgramChange += changeHandler;
+            currentTarget.OnProgramChange += HandleAttributeChanged;
         }
 
-        protected override void UnregisterChangeHandler(BotData botData, Action changeHandler)
+        protected override void UnregisterChangeHandler()
         {
-            botData.OnProgramChange -= changeHandler;
+            currentTarget.OnProgramChange -= HandleAttributeChanged;
         }
     }
 }

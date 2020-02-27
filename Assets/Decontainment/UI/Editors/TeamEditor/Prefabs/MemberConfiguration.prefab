@@ -816,7 +816,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0eb6e7aaf160d554fa6fae182f2a91ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  botSelectorGO: {fileID: 0}
+  botSelectorGO: {fileID: 6221699134697896752}
   hardpointImage: {fileID: 5508649469178940141}
 --- !u!1 &5508649469178940139
 GameObject:
@@ -903,7 +903,7 @@ GameObject:
   - component: {fileID: 325651221837037281}
   - component: {fileID: 5216342330430009828}
   - component: {fileID: 4294034940515029783}
-  - component: {fileID: 7528947244391736793}
+  - component: {fileID: 7417143501582061018}
   m_Layer: 5
   m_Name: BotDropdown
   m_TagString: Untagged
@@ -1021,7 +1021,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &7528947244391736793
+--- !u!114 &7417143501582061018
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1030,9 +1030,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 6221699134697896752}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 96a96448451860345a675d48e90bfcb5, type: 3}
+  m_Script: {fileID: 11500000, guid: 6aa44d922c04ded46969c03890817e8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetEditorList: {fileID: 0}
+  attributes: {fileID: 0}
+  memberIndex: 0
 --- !u!1 &6277624677958534024
 GameObject:
   m_ObjectHideFlags: 0

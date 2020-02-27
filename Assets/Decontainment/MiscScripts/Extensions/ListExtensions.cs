@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Extensions
@@ -15,6 +16,16 @@ namespace Extensions
             }
             list.Insert(index, item);
             return index;
+        }
+
+        public static int FindIndex<T>(this IReadOnlyList<T> list, Predicate<T> predicate)
+        {
+            for (int i = 0; i < list.Count; ++i) {
+                if (predicate(list[i])) {
+                    return i;
+                }
+            }
+            return -1;
         }
     }
 }

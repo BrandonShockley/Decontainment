@@ -1,3 +1,4 @@
+using Extensions;
 using System;
 using System.Collections.Generic;
 using TMPro;
@@ -5,18 +6,24 @@ using UnityEngine;
 
 namespace Editor
 {
-    public abstract class AttributeDropdown<T, TL, A> : MonoBehaviour
+    public abstract class AttributeDropdown<T, TL, A, AL> : MonoBehaviour
         where T : class // Target
         where TL : EditorList<T> // Target editor list
         where A : class // Attribute
+        where AL : IReadOnlyList<A> // Attribute collection
     {
         private const string NULL_STRING = "[None]";
 
         /// Editor list handling things affected by the dropdown
         [SerializeField]
-        protected TL targetEditorList = null;
+        protected TL targetEditorList = default;
+
+        /// Collection handling things displayed by the dropdown
+        [SerializeField]
+        protected AL attributes = default;
 
         protected Trigger selfChange;
+        protected T currentTarget;
 
         protected TMP_Dropdown dropdown;
 
@@ -26,7 +33,8 @@ namespace Editor
         {
             dropdown = GetComponent<TMP_Dropdown>();
 
-            targetEditorList.OnItemSelected += HandleTargetItemSelected;
+            targetEditorList.OnItemSelected += (int oldIndex) => HandleTargetSelected();
+            targetEditorList.OnItemDeleted += (int oldIndex, T oldItem) => HandleTargetSelected();
 
             dropdown.onValueChanged.AddListener((int val) =>
             {
@@ -41,41 +49,52 @@ namespace Editor
                     SetAttribute(val);
                 }
             });
+
+            SubAwake();
         }
 
         protected void Start()
         {
-            for (int i = 0; i < attributeEditorList.Count; ++i) {
+            for (int i = 0; i < attributes.Count; ++i) {
                 HandleAttributeItemAdded(i);
             }
             dropdown.options.Add(new TMP_Dropdown.OptionData(NULL_STRING));
 
-            HandleTargetItemSelected(-1);
-        } // TODO: Deal with this when I'm not tired
-
-        protected abstract void ClearAttribute();
-        protected abstract void SetAttribute(int index);
-        protected abstract void RegisterChangeHandler(T sourceItem, Action changeHandler);
-        protected abstract void UnregisterChangeHandler(T sourceItem, Action changeHandler);
-
-        private void HandleTargetItemSelected(int oldIndex)
-        {
-            T oldItem = targetEditorList[oldIndex];
-            if (oldItem != null) {
-                UnregisterChangeHandler(oldItem, HandleAttributeItemChanged);
-            }
-
-            if (targetEditorList.SelectedItem == null) {
-                dropdown.interactable = false;
-            } else {
-                dropdown.interactable = true;
-                RegisterChangeHandler(targetEditorList.SelectedItem, HandleAttributeItemChanged);
-            }
-
-            HandleAttributeItemChanged();
+            HandleTargetSelected();
         }
 
-        private void HandleAttributeItemChanged()
+        protected void OnDestroy()
+        {
+            if (currentTarget != null) {
+                UnregisterChangeHandler();
+            }
+        }
+
+        protected void HandleAttributeItemAdded(int index)
+        {
+            dropdown.options.Insert(index, new TMP_Dropdown.OptionData(attributes[index].ToString()));
+            if (index <= dropdown.value) {
+                selfChange.Value = true;
+                ++dropdown.value;
+            }
+        }
+
+        protected void HandleAttributeItemDeleted(int index, A item)
+        {
+            dropdown.options.RemoveAt(index);
+            if (index < dropdown.value) {
+                selfChange.Value = true;
+                --dropdown.value;
+            }
+        }
+
+        protected void HandleAttributeItemRenamed(string oldName, int oldIndex, int newIndex)
+        {
+            dropdown.options.RemoveAt(oldIndex);
+            HandleAttributeItemAdded(newIndex);
+        }
+
+        protected void HandleAttributeChanged()
         {
             if (selfChange.Value) {
                 return;
@@ -85,7 +104,8 @@ namespace Editor
             if (targetEditorList.SelectedItem == null) {
                 newValue = dropdown.options.Count - 1;
             } else {
-                int index = attributeEditorList.FindIndex(AttributeName);
+                int index = attributes.FindIndex(
+                    (A attribute) => attribute.ToString() == AttributeName);
 
                 if (index == -1) {
                     index = dropdown.options.Count - 1;
@@ -99,5 +119,36 @@ namespace Editor
                 dropdown.value = newValue;
             }
         }
+
+        protected virtual void SubAwake() {}
+        protected virtual void SubHandleTargetSelected() {}
+
+        /// Should clear the currently selected item's attribute
+        protected abstract void ClearAttribute();
+        /// Should set the currently selected item's attribute
+        protected abstract void SetAttribute(int index);
+        protected abstract void RegisterChangeHandler();
+        protected abstract void UnregisterChangeHandler();
+
+        private void HandleTargetSelected()
+        {
+            if (currentTarget != null) {
+                UnregisterChangeHandler();
+            }
+
+            currentTarget = targetEditorList.SelectedItem;
+
+            if (currentTarget == null) {
+                dropdown.interactable = false;
+            } else {
+                dropdown.interactable = true;
+                RegisterChangeHandler();
+            }
+
+            HandleAttributeChanged();
+            SubHandleTargetSelected();
+        }
+
+
     }
 }

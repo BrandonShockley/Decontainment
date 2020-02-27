@@ -14,7 +14,7 @@ namespace Editor.Bot
         [SerializeField]
         private ProgramList programList = null;
 
-        public event Action<BotData> OnBotSelected;
+        public event Action OnBotSelected;
 
         public BotData CurrentBot { get { return SelectedItem; } }
 
@@ -52,10 +52,16 @@ namespace Editor.Bot
             botData.Rename(name);
         }
 
+        protected override void SubDelete(int oldIndex, BotData oldBot)
+        {
+            botConfiguration.CurrentBot = null;
+            OnBotSelected?.Invoke();
+        }
+
         protected override void SubHandleSelect(int oldIndex)
         {
-            botConfiguration.CurrentBot = items[SelectedIndex];
-            OnBotSelected?.Invoke(items[oldIndex]);
+            botConfiguration.CurrentBot = this[SelectedIndex];
+            OnBotSelected?.Invoke();
         }
 
         private void HandleProgramDeleted(int index, Program program)

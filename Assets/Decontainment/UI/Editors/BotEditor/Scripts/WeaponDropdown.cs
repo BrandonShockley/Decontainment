@@ -6,91 +6,42 @@ using UnityEngine;
 
 namespace Editor.Bot
 {
-    public class WeaponDropdown : MonoBehaviour
+    public class WeaponDropdown : AttributeDropdown<BotData, BotList, WeaponData, WeaponData[]>
     {
-        private const string NULL_STRING = "[None]";
-
-        [SerializeField]
-        private BotList botList = null;
-
-        private Trigger selfChange;
-        private WeaponData[] weaponDatas;
-
-        private TMP_Dropdown dropdown;
-
-        void Awake()
+        protected override string AttributeName
         {
-            dropdown = GetComponent<TMP_Dropdown>();
-
-            weaponDatas = Resources.LoadAll<WeaponData>(WeaponData.RESOURCES_DIR);
-
-            botList.OnItemSelected += HandleBotSelected;
-
-            foreach (WeaponData weaponData in weaponDatas) {
-                dropdown.options.Add(new TMP_Dropdown.OptionData(weaponData.name));
-            }
-            dropdown.options.Add(new TMP_Dropdown.OptionData(NULL_STRING));
-
-            dropdown.onValueChanged.AddListener((int val) =>
-            {
-                if (selfChange.Value) {
-                    return;
-                }
-
-                selfChange.Value = true;
-                if (val == dropdown.options.Count - 1) {
-                    botList.SelectedItem.WeaponData = null;
+            get {
+                if (targetEditorList.SelectedItem.WeaponData == null) {
+                    return null;
                 } else {
-                    botList.SelectedItem.WeaponData = weaponDatas[val];
+                    return targetEditorList.SelectedItem.WeaponData.name;
                 }
-            });
+            }
         }
 
-        void Start()
+        protected override void SubAwake()
         {
-            HandleBotSelected(-1);
+            attributes = Resources.LoadAll<WeaponData>(WeaponData.RESOURCES_DIR);
         }
 
-        private void HandleBotSelected(int oldIndex)
+        protected override void ClearAttribute()
         {
-            BotData oldItem = botList[oldIndex];
-            if (oldItem != null) {
-                oldItem.OnWeaponChange -= HandleWeaponChanged;
-            }
-
-            if (botList.SelectedItem == null) {
-                dropdown.interactable = false;
-            } else {
-                dropdown.interactable = true;
-                botList.SelectedItem.OnWeaponChange += HandleWeaponChanged;
-            }
-
-            HandleWeaponChanged();
+            targetEditorList.CurrentBot.WeaponData = null;
         }
 
-        private void HandleWeaponChanged()
+        protected override void SetAttribute(int index)
         {
-            if (selfChange.Value) {
-                return;
-            }
+            targetEditorList.CurrentBot.WeaponData = attributes[index];
+        }
 
-            int newValue;
-            if (botList.SelectedItem == null) {
-                newValue = dropdown.options.Count - 1;
-            } else {
-                int index = Array.FindIndex(weaponDatas, (WeaponData weaponData) => weaponData == botList.SelectedItem.WeaponData);
+        protected override void RegisterChangeHandler()
+        {
+            currentTarget.OnWeaponChange += HandleAttributeChanged;
+        }
 
-                if (index == -1) {
-                    index = dropdown.options.Count - 1;
-                }
-
-                newValue = index;
-            }
-
-            if (newValue != dropdown.value) {
-                selfChange.Value = true;
-                dropdown.value = newValue;
-            }
+        protected override void UnregisterChangeHandler()
+        {
+            currentTarget.OnWeaponChange -= HandleAttributeChanged;
         }
     }
 }

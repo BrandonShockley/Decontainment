@@ -13,6 +13,8 @@ namespace Editor.Bot
         [SerializeField]
         private Image hardpointImage = null;
 
+        private BotData currentBot;
+
         private IBotSelector botSelector;
         private Image botImage;
 
@@ -26,34 +28,43 @@ namespace Editor.Bot
 
         void Start()
         {
-            HandleBotSelected(null);
+            HandleBotSelected();
         }
 
-        private void HandleBotSelected(BotData oldBot)
+        void OnDestroy()
         {
-            if (oldBot != null) {
-                oldBot.OnWeaponChange -= HandleWeaponChanged;
+            if (currentBot != null) {
+                currentBot.OnWeaponChange -= HandleWeaponChanged;
+            }
+        }
+
+        private void HandleBotSelected()
+        {
+            if (currentBot != null) {
+                currentBot.OnWeaponChange -= HandleWeaponChanged;
             }
 
-            if (botSelector.CurrentBot != null) {
-                botSelector.CurrentBot.OnWeaponChange += HandleWeaponChanged;
+            currentBot = botSelector.CurrentBot;
+
+            if (currentBot != null) {
+                currentBot.OnWeaponChange += HandleWeaponChanged;
             }
             HandleWeaponChanged();
         }
 
         private void HandleWeaponChanged()
         {
-            if (botSelector.CurrentBot == null) {
+            if (currentBot == null) {
                 botImage.enabled = false;
                 hardpointImage.enabled = false;
             } else {
                 botImage.enabled = true;
 
-                if (botSelector.CurrentBot.WeaponData == null) {
+                if (currentBot.WeaponData == null) {
                     hardpointImage.enabled = false;
                 } else {
                     hardpointImage.enabled = true;
-                    hardpointImage.color = botSelector.CurrentBot.WeaponData.hardpointColor;
+                    hardpointImage.color = currentBot.WeaponData.hardpointColor;
                 }
             }
         }

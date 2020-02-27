@@ -5,7 +5,7 @@ namespace Editor
 {
     public interface IBotSelector
     {
-        event Action<BotData> OnBotSelected;
+        event Action OnBotSelected;
         BotData CurrentBot { get; }
     }
 }

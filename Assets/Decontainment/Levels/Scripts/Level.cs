@@ -18,17 +18,15 @@ public class Level : MonoBehaviour
 
         // Spawn enemies
         {
-            BotData[] botDatas = levelData.TeamData.BotDatas;
-            for (int i = 0; i < botDatas.Length; ++i) {
-                Controller.CreateBot(botPrefab, botDatas[i], 1, enemySpawns[i].position, Vector2.down);
+            for (int i = 0; i < levelData.TeamData.BotCount; ++i) {
+                Controller.CreateBot(botPrefab, levelData.TeamData.GetBotData(i), 1, enemySpawns[i].position, Vector2.down);
             }
         }
 
         // Spawn player bots
         {
-            BotData[] botDatas = LevelManager.Instance.playerTeamData.BotDatas;
-            for (int i = 0; i < botDatas.Length; ++i) {
-                Controller.CreateBot(botPrefab, botDatas[i], 0, playerSpawns[i].position, Vector2.up);
+            for (int i = 0; i < levelData.TeamData.BotCount; ++i) {
+                Controller.CreateBot(botPrefab, LevelManager.Instance.playerTeamData.GetBotData(i), 0, playerSpawns[i].position, Vector2.up);
             }
         }
     }

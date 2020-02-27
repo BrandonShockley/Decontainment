@@ -65,7 +65,7 @@ namespace Editor.Code
 
         protected override void SubHandleSelect(int oldIndex)
         {
-            codeList.Program = items[SelectedIndex];
+            codeList.Program = this[SelectedIndex];
         }
 
         private void SaveProgram(Program program)

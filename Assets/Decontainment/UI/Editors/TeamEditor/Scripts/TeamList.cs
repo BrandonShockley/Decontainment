@@ -10,9 +10,6 @@ namespace Editor.Team
 {
     public class TeamList : EditorList<TeamData>
     {
-        [SerializeField]
-        private BotList botList = null;
-
         protected override string DefaultName { get { return "Team"; } }
 
         protected override void InitList()
@@ -40,25 +37,6 @@ namespace Editor.Team
             teamData.Rename(name);
         }
 
-        protected override void SubHandleSelect(int oldIndex)
-        {
-            // if (SelectedItem == null) {
-            //     foreach (MemberConfiguration mc in memberConfigurations) {
-            //         mc.CurrentBot = null;
-            //     }
-            // } else {
-            //     for (int i = 0; i < SelectedItem.BotCount; ++i) {
-            //         MemberConfiguration mc = memberConfigurations[i];
-            //         BotData bot = SelectedItem.BotDatas[i];
-            //         if (bot == null) {
-            //             mc.CurrentBot = null;
-            //         } else {
-            //             mc.CurrentBot = botList.Find(bot.name);
-            //         }
-            //     }
-            // }
-        }
-
         private void HandleBotDeleted(int index, string botName)
         {
             foreach (TeamData teamData in items) {
@@ -83,11 +61,6 @@ namespace Editor.Team
                 }
             }
             #endif
-        }
-
-        private void HandleBotSelected(int index)
-        {
-            // SelectedItem.SetBotName(index, memberConfigurations[index].CurrentBot.name);
         }
     }
 }

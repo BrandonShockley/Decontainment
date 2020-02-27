@@ -1,11 +1,12 @@
 using Extensions;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Editor
 {
-    public abstract class EditorList<T> : MonoBehaviour where T : class
+    public abstract class EditorList<T> : MonoBehaviour, IReadOnlyList<T> where T : class
     {
         protected List<T> items = new List<T>();
 
@@ -47,6 +48,7 @@ namespace Editor
             T newItem = CreateNewItem(newName);
             int index = items.InsertAlphabetically(newItem);
             CreateListEntry(newItem, index);
+            SubAdd(index);
             OnItemAdded?.Invoke(index);
         }
 
@@ -62,10 +64,10 @@ namespace Editor
             T item = items[removalIndex];
             items.RemoveAt(removalIndex);
             DeleteItem(item);
+
+            SubDelete(removalIndex, item);
             OnItemDeleted?.Invoke(removalIndex, item);
         }
-
-        public T Index(int index) { return items[index]; }
 
         public T Find(string name)
         {
@@ -75,6 +77,16 @@ namespace Editor
         public int FindIndex(string name)
         {
             return items.FindIndex((T t) => t.ToString() == name);
+        }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            return items.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
 
         protected void Awake()
@@ -109,6 +121,7 @@ namespace Editor
                     selectedIndex = newIndex;
                 }
 
+                SubHandleRename(oldName, index, newIndex);
                 OnItemRenamed?.Invoke(oldName, index, newIndex);
             }
             return true;
@@ -126,12 +139,15 @@ namespace Editor
         }
 
         protected virtual void SubAwake() {}
+        protected virtual void SubAdd(int newIndex) {}
+        protected virtual void SubDelete(int oldIndex, T oldItem) {}
+        protected virtual void SubHandleRename(string oldName, int oldIndex, int newIndex) {}
+        protected virtual void SubHandleSelect(int oldIndex) {}
 
         protected abstract void InitList();
         protected abstract T CreateNewItem(string name);
         protected abstract void DeleteItem(T item);
         protected abstract void RenameItem(T item, string name);
-        protected abstract void SubHandleSelect(int oldIndex);
 
         private void CreateListEntry(T item, int siblingIndex = -1)
         {
