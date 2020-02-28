@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22374bc7af5c85b40b822ba5ca2f30ef, type: 3}
   m_Name: BasicTeam
   m_EditorClassIdentifier: 
-  botDatas:
-  - {fileID: 11400000, guid: b55db88a6cff2f2448e2fc4ab7ad3220, type: 2}
+  builtInBotDatas:
+  - {fileID: 11400000, guid: 05ed94aeaff74fc4b857a05e201ba64b, type: 2}
   - {fileID: 11400000, guid: 05ed94aeaff74fc4b857a05e201ba64b, type: 2}
   - {fileID: 11400000, guid: 05ed94aeaff74fc4b857a05e201ba64b, type: 2}

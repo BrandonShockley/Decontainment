@@ -14,5 +14,7 @@ namespace Bot
         public int numShots = 1;
         ///In Degrees
         public float shotSpacing = 15f;
+
+        public override string ToString() { return name; }
     }
 }

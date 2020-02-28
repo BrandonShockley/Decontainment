@@ -1,19 +1,22 @@
 ﻿using Asm;
 using Bot;
 using Editor.Code;
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using System.IO;
 using UnityEngine;
 
 namespace Editor.Bot
 {
-    public class BotList : EditorList<BotData>
+    public class BotList : EditorList<BotData>, IBotSelector
     {
         [SerializeField]
         private BotConfiguration botConfiguration = null;
         [SerializeField]
         private ProgramList programList = null;
+
+        public event Action OnBotSelected;
+
+        public BotData CurrentBot { get { return SelectedItem; } }
 
         protected override string DefaultName { get { return "Bot"; } }
 
@@ -33,7 +36,9 @@ namespace Editor.Bot
 
         protected override BotData CreateNewItem(string name)
         {
-            return BotData.CreateNew(name, null, null);
+            BotData botData = BotData.CreateNew(name, null, null);
+            botData.Save();
+            return botData;
         }
 
         protected override void DeleteItem(BotData botData)
@@ -47,9 +52,16 @@ namespace Editor.Bot
             botData.Rename(name);
         }
 
-        protected override void SubHandleSelect()
+        protected override void SubDelete(int oldIndex, BotData oldBot)
         {
-            botConfiguration.CurrentBot = items[SelectedIndex];
+            botConfiguration.CurrentBot = null;
+            OnBotSelected?.Invoke();
+        }
+
+        protected override void SubHandleSelect(int oldIndex)
+        {
+            botConfiguration.CurrentBot = this[SelectedIndex];
+            OnBotSelected?.Invoke();
         }
 
         private void HandleProgramDeleted(int index, Program program)

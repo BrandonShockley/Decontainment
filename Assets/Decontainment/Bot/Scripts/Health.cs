@@ -26,6 +26,7 @@ namespace Bot
         /// Invulnerability timer
         private float iTimer;
 
+        private Collider2D col;
         private GameObject healthBarGO;
         private SoundModulator sm;
         private SpriteRenderer sr;
@@ -52,6 +53,7 @@ namespace Bot
 
         void Awake()
         {
+            col = GetComponent<Collider2D>();
             sm = GetComponent<SoundModulator>();
             sr = GetComponent<SpriteRenderer>();
 
@@ -99,6 +101,7 @@ namespace Bot
             srColor.g = Mathf.Max(srColor.g - disabledTint, 0);
             srColor.b = Mathf.Max(srColor.b - disabledTint, 0);
             sr.color = srColor;
+            col.enabled = false;
         }
 
         private IEnumerator InvulnerableRoutine()

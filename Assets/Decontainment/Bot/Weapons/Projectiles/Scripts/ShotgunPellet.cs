@@ -15,6 +15,8 @@ public class ShotgunPellet : Projectile
     [SerializeField]
     private int damage = 1;
 
+    private Coroutine deathTimerCoroutine;
+
     private Collider2D col;
     private LineRenderer lr;
     private Rigidbody2D rb;
@@ -35,8 +37,7 @@ public class ShotgunPellet : Projectile
     {
         rb.velocity = transform.right * speed;
         col.enabled = true;
-        //Putting this co-routine in start proved non-functional
-        StartCoroutine(DeathTimer());
+        deathTimerCoroutine = StartCoroutine(DeathTimer());
     }
 
     void OnTriggerEnter2D(Collider2D c)
@@ -46,6 +47,9 @@ public class ShotgunPellet : Projectile
                 health.TakeDamage(damage);
             }
             Pools.Instance.Free(gameObject);
+            if (deathTimerCoroutine != null) {
+                StopCoroutine(deathTimerCoroutine);
+            }
         }
     }
 

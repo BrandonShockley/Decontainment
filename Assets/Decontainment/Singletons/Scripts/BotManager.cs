@@ -57,7 +57,7 @@ class BotManager : SceneSingleton<BotManager>
                 ? TargetType.ALLY
                 : TargetType.ENEMY;
 
-            if (bots[i] != targeter && targetType == type) {
+            if (bots[i] != targeter && targetType == type && !bots[i].Health.Disabled) {
                 if (targetIndex == -1) {
                     targetIndex = i;
                     targetDistance = Util.Distance(targeter.transform.position, bots[i].transform.position);

@@ -60,7 +60,6 @@ namespace Editor.Code
 
         public void InsertArg(Argument newArg)
         {
-            inputField.text = "0";
             Debug.Assert(newArg.type != Argument.Type.IMMEDIATE);
 
             arg.CopyValues(newArg);
