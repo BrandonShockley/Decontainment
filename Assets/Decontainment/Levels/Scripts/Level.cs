@@ -20,7 +20,9 @@ public class Level : MonoBehaviour
         {
             BotData[] botDatas = levelData.TeamData.BotDatas;
             for (int i = 0; i < botDatas.Length; ++i) {
-                Controller.CreateBot(botPrefab, botDatas[i], 1, enemySpawns[i].position, Vector2.down);
+                if (botDatas[i] != null) {
+                    Controller.CreateBot(botPrefab, botDatas[i], 1, enemySpawns[i].position, Vector2.down);
+                }
             }
         }
 
@@ -28,7 +30,9 @@ public class Level : MonoBehaviour
         {
             BotData[] botDatas = LevelManager.Instance.playerTeamData.BotDatas;
             for (int i = 0; i < botDatas.Length; ++i) {
-                Controller.CreateBot(botPrefab, botDatas[i], 0, playerSpawns[i].position, Vector2.up);
+                if (botDatas[i] != null) {
+                    Controller.CreateBot(botPrefab, botDatas[i], 0, playerSpawns[i].position, Vector2.up);
+                }
             }
         }
     }
