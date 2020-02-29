@@ -98,12 +98,12 @@ namespace Bot
                     programText = File.ReadAllText(ProgramDirectory.ProgramPath(customProgramName));
                 } catch {
                     Debug.LogWarning("Error opening program " + customProgramName + ". Using fallback program.");
-                    // TODO: When the error prompt ticket is complete (Trello #18), do a prompt here
                 }
             }
 
             if (programText == null) {
                 Debug.LogWarning("No program provided. Using fallback program.");
+                PromptSystem.Instance.PromptOtherAction("No program provided. Using fallback program.");
                 return FALLBACK_PROGRAM;
             } else {
                 Program program = Assembler.Assemble(customProgramName, programText);

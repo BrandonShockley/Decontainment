@@ -13,7 +13,6 @@ public class Banner : MonoBehaviour
     private Image image;
     private TextMeshProUGUI text;
 
-    // Start is called before the first frame update
     void Awake()
     {
         image = GetComponent<Image>();
@@ -22,15 +21,11 @@ public class Banner : MonoBehaviour
         text.enabled = false;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if (counter >= 0)
-        {
+        if (counter >= 0) {
             counter -= Time.unscaledDeltaTime;
-        }
-        if (counter < 0)
-        {
+        } else {
             image.enabled = false;
             text.enabled = false;
         }

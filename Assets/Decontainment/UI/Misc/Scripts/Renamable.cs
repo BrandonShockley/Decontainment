@@ -27,8 +27,12 @@ public class Renamable : MonoBehaviour, IPointerClickHandler
 
         inputField.onEndEdit.AddListener((string s) =>
         {
-            if (onRename != null && !onRename.Invoke(s) || s == "") {
-                PromptSystem.Instance.PromptInvalidProgramName(s);
+            if (s == "" || (onRename != null && !onRename.Invoke(s))) {
+                if (s == "") {
+                    PromptSystem.Instance.PromptInvalidAction("Invalid name!");
+                } else {
+                    PromptSystem.Instance.PromptInvalidAction(s + " already exists!");
+                }
                 inputField.text = prevText;
             }
 
