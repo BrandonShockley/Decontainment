@@ -25,10 +25,12 @@ namespace Bot
         [SerializeField]
         private int idealDegreesPerPoint = 10;
 
+        private Controller controller;
         private PolygonCollider2D pc;
 
         void Awake()
         {
+            controller = GetComponent<Controller>();
             pc = GetComponent<PolygonCollider2D>();
         }
 
@@ -57,9 +59,13 @@ namespace Bot
             int numResults = pc.OverlapCollider(filter, results);
 
             if (target == Target.ALLIES || target == Target.ENEMIES) {
-                // TODO: Extra filtering for bot allegiance
                 foreach (Collider2D result in results) {
-                    if (result.transform == transform.parent) {
+                    int targetTeamID = result.GetComponentInParent<Controller>().TeamID;
+                    bool isTargetAllegiance = target == Target.ALLIES
+                        ? targetTeamID == controller.TeamID
+                        : targetTeamID != controller.TeamID;
+
+                    if (result.transform == transform.parent || !isTargetAllegiance) {
                         --numResults;
                     }
                 }
