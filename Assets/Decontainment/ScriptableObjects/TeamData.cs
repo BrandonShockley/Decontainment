@@ -149,8 +149,10 @@ public class TeamData : ScriptableObject
         AssetDatabase.RenameAsset(fromPath, newName);
         #else
         File.Move(fromPath, toPath);
+
         #endif
         name = newName;
+
     }
 
     public override string ToString() { return name; }
