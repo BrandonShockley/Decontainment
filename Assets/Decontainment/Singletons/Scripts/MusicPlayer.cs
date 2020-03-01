@@ -30,8 +30,12 @@ public class MusicPlayer : PersistentSingleton<MusicPlayer>
         {
             if (SceneMusic.Instance != null) {
                 SceneMusic.Instance.OnMusicLoopDataChange += HandleMusicChange;
+                if (SceneMusic.Instance.MusicLoopData != mainLoop) {
+                    HandleMusicChange();
+                }
+            } else {
+                HandleMusicChange();
             }
-            HandleMusicChange();
         };
         HandleMusicChange();
     }

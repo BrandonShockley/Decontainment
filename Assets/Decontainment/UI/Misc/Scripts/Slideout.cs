@@ -31,6 +31,9 @@ public class Slideout : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         float deltaDistance = slideSpeed * Time.unscaledDeltaTime;
         float deltaInterpolation = deltaDistance / slideDeltaPos.magnitude;
+        if (float.IsNaN(deltaInterpolation)) {
+            deltaInterpolation = 0;
+        }
 
         if (hovered) {
             interpolation = Mathf.Clamp(interpolation + deltaInterpolation, 0, 1);

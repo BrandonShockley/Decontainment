@@ -14,7 +14,13 @@ public class MatchManager : SceneSingleton<MatchManager>
         };
     }
 
+    void Start()
+    {
+        Instantiate(MatchData.Instance.mapPrefab, Vector3.zero, Quaternion.identity);
+    }
+
     // TODO: This is a temp thing
+    // We should have a proper match results screen
     private IEnumerator ReturnToEditor()
     {
         yield return new WaitForSecondsRealtime(1);
