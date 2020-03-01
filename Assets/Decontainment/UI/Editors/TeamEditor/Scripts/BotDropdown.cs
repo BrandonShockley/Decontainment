@@ -19,7 +19,7 @@ namespace Editor.Team
                 if (targetEditorList.SelectedItem == null) {
                     return null;
                 } else {
-                    return targetEditorList.SelectedItem.GetBotData(memberIndex);
+                    return attributes.Find(targetEditorList.SelectedItem.GetBotName(memberIndex));
                 }
             }
         }

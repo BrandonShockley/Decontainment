@@ -28,6 +28,10 @@ namespace Editor.Bot
 
         protected override void InitList()
         {
+            if (!Directory.Exists(BotDirectory.PATH)) {
+                return;
+            }
+
             string[] filePaths = Directory.GetFiles(BotDirectory.PATH, "*" + BotDirectory.EXTENSION);
             foreach (string filePath in filePaths) {
                 items.Add(BotData.Load(filePath));
@@ -76,8 +80,8 @@ namespace Editor.Bot
         private void HandleProgramRenamed(string oldName, int oldIndex, int newIndex)
         {
             // The program references are automatically updated for TextAssets in the editor
-            #if !UNITY_EDITOR
-            string newName = programList.Index(newIndex).name;
+            #if !UNITY_EDITOR || BUILD_MODE
+            string newName = programList[newIndex].name;
             foreach (BotData botData in items) {
                 if (botData.ProgramName == oldName) {
                     botData.ProgramName = newName;

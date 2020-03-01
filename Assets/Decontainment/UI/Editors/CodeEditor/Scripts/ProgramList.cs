@@ -19,6 +19,10 @@ namespace Editor.Code
 
         protected override void InitList()
         {
+            if (!Directory.Exists(ProgramDirectory.PATH)) {
+                return;
+            }
+
             // Assemble all program files
             string[] filePaths = Directory.GetFiles(ProgramDirectory.PATH, "*.txt");
             foreach (string filePath in filePaths) {
@@ -55,7 +59,7 @@ namespace Editor.Code
         {
             string fromPath = ProgramDirectory.ProgramPath(program.name);
             string toPath = ProgramDirectory.ProgramPath(name);
-            #if UNITY_EDITOR
+           #if UNITY_EDITOR && !BUILD_MODE
             Debug.Log(AssetDatabase.RenameAsset(fromPath, name));
             #else
             File.Move(fromPath, toPath);

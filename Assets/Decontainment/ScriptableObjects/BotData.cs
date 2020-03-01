@@ -38,7 +38,7 @@ namespace Bot
         public string ProgramName
         {
             get {
-                #if UNITY_EDITOR
+                #if UNITY_EDITOR && !BUILD_MODE
                 if (builtInProgram == null) {
                     return null;
                 } else {
@@ -53,7 +53,7 @@ namespace Bot
                     builtInProgram = null;
                     customProgramName = null;
                 } else {
-                    #if UNITY_EDITOR
+                    #if UNITY_EDITOR && !BUILD_MODE
                     string path = ProgramDirectory.ProgramPath(value);
                     builtInProgram = AssetDatabase.LoadAssetAtPath<TextAsset>(path);
                     #else
@@ -70,19 +70,20 @@ namespace Bot
             BotData botData = ScriptableObject.CreateInstance<BotData>();
             botData.name = botName;
             botData.ProgramName = programName;
-            botData.weaponData = weaponData;
+            botData.WeaponData = weaponData;
             return botData;
         }
 
         public static BotData Load(string path)
         {
-            #if UNITY_EDITOR
+            #if UNITY_EDITOR && !BUILD_MODE
             return AssetDatabase.LoadAssetAtPath<BotData>(path);
             #else
             StreamReader file = File.OpenText(path);
             string botName = Path.GetFileNameWithoutExtension(path);
             string programName = file.ReadLine();
             string weaponName = file.ReadLine();
+            file.Close();
             WeaponData weaponData = Resources.Load<WeaponData>(WeaponData.RESOURCES_DIR + "/" + weaponName);
             return CreateNew(botName, programName, weaponData);
             #endif
@@ -120,7 +121,7 @@ namespace Bot
         {
             string path = BotDirectory.BotPath(name);
 
-            #if UNITY_EDITOR
+            #if UNITY_EDITOR && !BUILD_MODE && !BUILD_MODE
             BotData existingAsset = AssetDatabase.LoadAssetAtPath<BotData>(path);
             if (existingAsset == null) {
                 AssetDatabase.CreateAsset(this, path);
@@ -132,7 +133,11 @@ namespace Bot
             #else
             StreamWriter file = File.CreateText(path);
             file.WriteLine(customProgramName);
-            file.WriteLine(weaponData.name);
+            if (weaponData == null) {
+                file.WriteLine();
+            } else {
+                file.WriteLine(weaponData.name);
+            }
             file.Close();
             #endif
         }
@@ -141,7 +146,7 @@ namespace Bot
         {
             string path = BotDirectory.BotPath(name);
 
-            #if UNITY_EDITOR
+            #if UNITY_EDITOR && !BUILD_MODE
             AssetDatabase.DeleteAsset(path);
             #else
             File.Delete(path);
@@ -153,7 +158,7 @@ namespace Bot
             string fromPath = BotDirectory.BotPath(name);
             string toPath = BotDirectory.BotPath(newName);
 
-            #if UNITY_EDITOR
+            #if UNITY_EDITOR && !BUILD_MODE
             AssetDatabase.RenameAsset(fromPath, newName);
             #else
             File.Move(fromPath, toPath);

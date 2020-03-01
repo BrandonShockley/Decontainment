@@ -22,7 +22,7 @@ public class TeamData : ScriptableObject
     public int BotCount
     {
         get {
-            #if UNITY_EDITOR
+            #if UNITY_EDITOR && !BUILD_MODE
             return builtInBotDatas.Length;
             #else
             return customBotNames.Length;
@@ -34,7 +34,7 @@ public class TeamData : ScriptableObject
     {
         TeamData teamData = ScriptableObject.CreateInstance<TeamData>();
         teamData.name = teamName;
-        #if UNITY_EDITOR
+        #if UNITY_EDITOR && !BUILD_MODE
         teamData.builtInBotDatas = new BotData[TEAM_SIZE];
         #else
         teamData.customBotNames = new string[TEAM_SIZE];
@@ -47,7 +47,7 @@ public class TeamData : ScriptableObject
 
     public static TeamData Load(string path)
     {
-        #if UNITY_EDITOR
+        #if UNITY_EDITOR && !BUILD_MODE
         return AssetDatabase.LoadAssetAtPath<TeamData>(path);
         #else
         StreamReader file = File.OpenText(path);
@@ -57,13 +57,14 @@ public class TeamData : ScriptableObject
         for (int i = 0; i < numBots; ++i) {
             botNames[i] = file.ReadLine();
         }
+        file.Close();
         return CreateNew(teamName, botNames);
         #endif
     }
 
     public string GetBotName(int index)
     {
-        #if UNITY_EDITOR
+        #if UNITY_EDITOR && !BUILD_MODE
         if (builtInBotDatas == null || builtInBotDatas[index] == null) {
             return null;
         } else {
@@ -80,7 +81,7 @@ public class TeamData : ScriptableObject
 
     public void SetBotName(int index, string name)
     {
-        #if UNITY_EDITOR
+        #if UNITY_EDITOR && !BUILD_MODE
         if (name == null) {
             builtInBotDatas[index] = null;
         } else {
@@ -96,10 +97,10 @@ public class TeamData : ScriptableObject
 
     public BotData GetBotData(int index)
     {
-        #if UNITY_EDITOR
+        #if UNITY_EDITOR && !BUILD_MODE
         return builtInBotDatas[index];
         #else
-        if (customBotNames != null) {
+        if (customBotNames != null && customBotNames[index] != "") {
             return BotData.Load(BotDirectory.BotPath(customBotNames[index]));
         } else {
             return null;
@@ -111,7 +112,7 @@ public class TeamData : ScriptableObject
     {
         string path = TeamDirectory.TeamPath(name);
 
-        #if UNITY_EDITOR
+        #if UNITY_EDITOR && !BUILD_MODE
         TeamData existingAsset = AssetDatabase.LoadAssetAtPath<TeamData>(path);
         if (existingAsset == null) {
             AssetDatabase.CreateAsset(this, path);
@@ -133,7 +134,7 @@ public class TeamData : ScriptableObject
     {
         string path = TeamDirectory.TeamPath(name);
 
-        #if UNITY_EDITOR
+        #if UNITY_EDITOR && !BUILD_MODE
         AssetDatabase.DeleteAsset(path);
         #else
         File.Delete(path);
@@ -145,7 +146,7 @@ public class TeamData : ScriptableObject
         string fromPath = TeamDirectory.TeamPath(name);
         string toPath = TeamDirectory.TeamPath(newName);
 
-        #if UNITY_EDITOR
+        #if UNITY_EDITOR && !BUILD_MODE
         AssetDatabase.RenameAsset(fromPath, newName);
         #else
         File.Move(fromPath, toPath);
