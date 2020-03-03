@@ -27,7 +27,7 @@ public class MatchStart : MonoBehaviour
     {
         MatchData.Instance.mapPrefab = mapPrefab;
         MatchData.Instance.teamDatas[0] = teamList1.SelectedItem;
-        MatchData.Instance.teamDatas[1] = teamList1.SelectedItem;
+        MatchData.Instance.teamDatas[1] = teamList2.SelectedItem;
         SceneManager.LoadScene("Arena");
     }
 

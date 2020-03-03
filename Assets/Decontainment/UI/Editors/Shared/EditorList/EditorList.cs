@@ -11,7 +11,7 @@ namespace Editor
         protected List<T> items = new List<T>();
 
         [SerializeField]
-        private GameObject listEntryPrefab = null;
+        protected GameObject listEntryPrefab = null;
 
         private int selectedIndex = -1;
 
@@ -144,12 +144,7 @@ namespace Editor
         protected virtual void SubHandleRename(string oldName, int oldIndex, int newIndex) {}
         protected virtual void SubHandleSelect(int oldIndex) {}
 
-        protected abstract void InitList();
-        protected abstract T CreateNewItem(string name);
-        protected abstract void DeleteItem(T item);
-        protected abstract void RenameItem(T item, string name);
-
-        private void CreateListEntry(T item, int siblingIndex = -1)
+        protected virtual void CreateListEntry(T item, int siblingIndex = -1)
         {
             GameObject listEntry = Instantiate(listEntryPrefab, transform);
             listEntry.GetComponent<ListEntry>().Init(item.ToString(), HandleSelect, HandleRename);
@@ -157,5 +152,10 @@ namespace Editor
                 listEntry.transform.SetSiblingIndex(siblingIndex);
             }
         }
+
+        protected abstract void InitList();
+        protected abstract T CreateNewItem(string name);
+        protected abstract void DeleteItem(T item);
+        protected abstract void RenameItem(T item, string name);
     }
 }

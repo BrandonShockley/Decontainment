@@ -120,7 +120,7 @@ GameObject:
   - component: {fileID: 2103377197428668913}
   - component: {fileID: 2103377197428668914}
   - component: {fileID: 2103377197428668915}
-  - component: {fileID: 844466755217637878}
+  - component: {fileID: 8130592399947145185}
   m_Layer: 5
   m_Name: List
   m_TagString: Untagged
@@ -206,7 +206,7 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
---- !u!114 &844466755217637878
+--- !u!114 &8130592399947145185
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -215,10 +215,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 2103377197428668925}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9b69dabf550bbf4fb15adab3a59826c, type: 3}
+  m_Script: {fileID: 11500000, guid: f2b98a861af94184fa4eb473390a6fef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   listEntryPrefab: {fileID: 2113454252695952241, guid: 9932af5569cd9254f9e7fbdb3d633f73,
+    type: 3}
+  botList: {fileID: 0}
+  builtInListEntryPrefab: {fileID: 4232517086952711512, guid: df6df047e7f32bf4592c094c6c830bc6,
     type: 3}
 --- !u!1 &2103377197485882146
 GameObject:

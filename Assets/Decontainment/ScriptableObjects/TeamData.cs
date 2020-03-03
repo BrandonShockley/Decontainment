@@ -22,11 +22,11 @@ public class TeamData : ScriptableObject
     public int BotCount
     {
         get {
-            #if UNITY_EDITOR && !BUILD_MODE
-            return builtInBotDatas.Length;
-            #else
-            return customBotNames.Length;
-            #endif
+            if (builtInBotDatas != null) {
+                return builtInBotDatas.Length;
+            } else {
+                return customBotNames.Length;
+            }
         }
     }
 
@@ -60,6 +60,15 @@ public class TeamData : ScriptableObject
         file.Close();
         return CreateNew(teamName, botNames);
         #endif
+    }
+
+    public TeamData Copy()
+    {
+        TeamData copy = ScriptableObject.CreateInstance<TeamData>();
+        copy.name = name;
+        copy.builtInBotDatas = builtInBotDatas;
+        copy.customBotNames = customBotNames;
+        return copy;
     }
 
     public string GetBotName(int index)
@@ -97,15 +106,13 @@ public class TeamData : ScriptableObject
 
     public BotData GetBotData(int index)
     {
-        #if UNITY_EDITOR && !BUILD_MODE
-        return builtInBotDatas[index];
-        #else
-        if (customBotNames != null && customBotNames[index] != "") {
+        if (builtInBotDatas != null) {
+            return builtInBotDatas[index];
+        } else if (customBotNames != null && customBotNames[index] != "") {
             return BotData.Load(BotDirectory.BotPath(customBotNames[index]));
         } else {
             return null;
         }
-        #endif
     }
 
     public void Save()

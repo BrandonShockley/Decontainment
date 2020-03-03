@@ -54,6 +54,8 @@ public static class TeamDirectory
     public const string EXTENSION = ".team";
     #endif
 
+    public static readonly string RESOURCES_PATH = "Teams";
+
     public static string TeamPath(string teamName)
     {
         #if !UNITY_EDITOR || BUILD_MODE
