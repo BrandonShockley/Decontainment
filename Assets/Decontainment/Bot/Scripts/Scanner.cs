@@ -30,7 +30,7 @@ namespace Bot
 
         void Awake()
         {
-            controller = GetComponent<Controller>();
+            controller = GetComponentInParent<Controller>();
             pc = GetComponent<PolygonCollider2D>();
         }
 
@@ -66,6 +66,14 @@ namespace Bot
                         : targetTeamID != controller.TeamID;
 
                     if (result.transform == transform.parent || !isTargetAllegiance) {
+                        --numResults;
+                    }
+                }
+            } else if (target == Target.PROJECTILES) {
+                // Only count projectiles traveling towards bot
+                foreach (Collider2D result in results) {
+                    Vector2 delta = transform.position - result.transform.position;
+                    if (Vector2.Dot(delta, result.transform.right) < 0) {
                         --numResults;
                     }
                 }

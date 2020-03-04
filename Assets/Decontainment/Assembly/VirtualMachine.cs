@@ -56,13 +56,14 @@ public class VirtualMachine
                 i = program.instructions[pc];
                 newPC = (pc + 1) % program.instructions.Count;
             }
+
             switch(i.opCode)
             {
                 // Control flow
                 case OpCode.NOP:
                     break;
                 case OpCode.BUN:
-                    newPC = GetArgValue(i.args[0]);
+                    newPC = GetArgValue(i.args[0]) % program.instructions.Count;
                     break;
                 case OpCode.BEQ:
                     if (GetArgValue(i.args[1]) == GetArgValue(i.args[2])) {

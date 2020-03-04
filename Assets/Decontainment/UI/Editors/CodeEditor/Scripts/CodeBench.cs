@@ -158,6 +158,7 @@ namespace Editor.Code
             if (codeList.Program != null) {
                 foreach (Label label in codeList.Program.constLabelList) {
                     Transform labelTokenContainer = Instantiate(labelTokenContainerPrefab, constLabelTokenList).transform;
+                    labelTokenContainer.GetComponent<LabelTokenContainer>().Init(codeList);
                     Argument arg = new Argument(Argument.Type.LABEL, label);
                     Token token = CreateToken(arg, labelTokenContainer);
                     token.transform.SetSiblingIndex(1);
