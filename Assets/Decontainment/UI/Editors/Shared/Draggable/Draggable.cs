@@ -139,6 +139,10 @@ namespace Editor
 
         public void OnBeginDrag(PointerEventData eventData)
         {
+            if (eventData.button != PointerEventData.InputButton.Left) {
+                return;
+            }
+
             onDragStart?.Invoke();
 
             SaveState();
