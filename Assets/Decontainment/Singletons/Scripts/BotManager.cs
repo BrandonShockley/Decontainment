@@ -57,7 +57,7 @@ class BotManager : SceneSingleton<BotManager>
                 ? TargetType.ALLY
                 : TargetType.ENEMY;
 
-            if (bots[i] != targeter && targetType == type) {
+            if (bots[i] != targeter && targetType == type && !bots[i].Health.Disabled) {
                 if (targetIndex == -1) {
                     targetIndex = i;
                     targetDistance = Util.Distance(targeter.transform.position, bots[i].transform.position);
@@ -84,6 +84,18 @@ class BotManager : SceneSingleton<BotManager>
         Controller target = bots[targetIndex];
         Vector2 look = target.transform.position - targeter.transform.position;
         return (int)Vector2.SignedAngle(targeter.transform.right, look);
+    }
+
+    public int GetTargetDistance(Controller targeter, int targetIndex)
+    {
+        if (targetIndex < 0 || targetIndex >= bots.Count) {
+            Debug.LogWarning("Bot " + targeter + " attempted to get target distance for invalid target index");
+            return 0;
+        }
+
+        Controller target = bots[targetIndex];
+        float dist = Vector2.Distance(targeter.transform.position, target.transform.position);
+        return (int)dist;
     }
 
     public void PropagateRegister(int registerNumber, int registerValue, int botTeamID) {

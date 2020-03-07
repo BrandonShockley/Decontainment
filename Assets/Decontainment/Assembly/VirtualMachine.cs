@@ -56,13 +56,14 @@ public class VirtualMachine
                 i = program.instructions[pc];
                 newPC = (pc + 1) % program.instructions.Count;
             }
+
             switch(i.opCode)
             {
                 // Control flow
                 case OpCode.NOP:
                     break;
                 case OpCode.BUN:
-                    newPC = GetArgValue(i.args[0]);
+                    newPC = GetArgValue(i.args[0]) % program.instructions.Count;
                     break;
                 case OpCode.BEQ:
                     if (GetArgValue(i.args[1]) == GetArgValue(i.args[2])) {
@@ -91,6 +92,11 @@ public class VirtualMachine
                     break;
                 case OpCode.BGE:
                     if (GetArgValue(i.args[1]) >= GetArgValue(i.args[2])) {
+                        newPC = GetArgValue(i.args[0]) % program.instructions.Count;
+                    }
+                    break;
+                case OpCode.BRN:
+                    if (GetArgValue(i.args[1]) > UnityEngine.Random.Range(0, 100)) {
                         newPC = GetArgValue(i.args[0]) % program.instructions.Count;
                     }
                     break;
@@ -148,6 +154,9 @@ public class VirtualMachine
                     break;
                 case OpCode.HED:
                     regs[i.args[0].val] = BotManager.Instance.GetTargetHeading(controller, GetArgValue(i.args[1]));
+                    break;
+                case OpCode.DIS:
+                    regs[i.args[0].val] = BotManager.Instance.GetTargetDistance(controller, GetArgValue(i.args[1]));
                     break;
                 case OpCode.SCN:
                     regs[i.args[0].val] = controller.Scan((Scanner.Target)GetArgValue(i.args[1]),

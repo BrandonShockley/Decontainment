@@ -38,6 +38,8 @@ namespace Editor.Code
             if (arg != null) {
                 arg.OnChange -= UpdateFrontend;
             }
+
+            codeList.SlotFields.Remove(this);
         }
 
         public void Init(Argument arg, CodeList codeList)

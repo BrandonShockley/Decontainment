@@ -7,6 +7,9 @@ using UnityEditor;
 
 namespace Bot
 {
+    // TODO: There are lots of similarities between this and TeamData
+    // Perhaps we could pull those out into an interface or abstract class
+    // If we add another player configurable scriptable object, we probably should
     [CreateAssetMenu(fileName = "BotData", menuName = "ScriptableObjects/BotData", order = 1)]
     public class BotData : ScriptableObject
     {
@@ -35,7 +38,7 @@ namespace Bot
         public string ProgramName
         {
             get {
-                #if UNITY_EDITOR
+                #if UNITY_EDITOR && !BUILD_MODE
                 if (builtInProgram == null) {
                     return null;
                 } else {
@@ -50,8 +53,8 @@ namespace Bot
                     builtInProgram = null;
                     customProgramName = null;
                 } else {
+                    #if UNITY_EDITOR && !BUILD_MODE
                     string path = ProgramDirectory.ProgramPath(value);
-                    #if UNITY_EDITOR
                     builtInProgram = AssetDatabase.LoadAssetAtPath<TextAsset>(path);
                     #else
                     customProgramName = value;
@@ -66,21 +69,21 @@ namespace Bot
         {
             BotData botData = ScriptableObject.CreateInstance<BotData>();
             botData.name = botName;
-            botData.customProgramName = programName;
-            botData.weaponData = weaponData;
-            botData.Save();
+            botData.ProgramName = programName;
+            botData.WeaponData = weaponData;
             return botData;
         }
 
         public static BotData Load(string path)
         {
-            #if UNITY_EDITOR
+            #if UNITY_EDITOR && !BUILD_MODE
             return AssetDatabase.LoadAssetAtPath<BotData>(path);
             #else
             StreamReader file = File.OpenText(path);
             string botName = Path.GetFileNameWithoutExtension(path);
             string programName = file.ReadLine();
             string weaponName = file.ReadLine();
+            file.Close();
             WeaponData weaponData = Resources.Load<WeaponData>(WeaponData.RESOURCES_DIR + "/" + weaponName);
             return CreateNew(botName, programName, weaponData);
             #endif
@@ -96,12 +99,12 @@ namespace Bot
                     programText = File.ReadAllText(ProgramDirectory.ProgramPath(customProgramName));
                 } catch {
                     Debug.LogWarning("Error opening program " + customProgramName + ". Using fallback program.");
-                    // TODO: When the error prompt ticket is complete (Trello #18), do a prompt here
                 }
             }
 
             if (programText == null) {
                 Debug.LogWarning("No program provided. Using fallback program.");
+                PromptSystem.Instance.PromptOtherAction("No program provided. Using fallback program.");
                 return FALLBACK_PROGRAM;
             } else {
                 Program program = Assembler.Assemble(customProgramName, programText);
@@ -118,7 +121,7 @@ namespace Bot
         {
             string path = BotDirectory.BotPath(name);
 
-            #if UNITY_EDITOR
+            #if UNITY_EDITOR && !BUILD_MODE && !BUILD_MODE
             BotData existingAsset = AssetDatabase.LoadAssetAtPath<BotData>(path);
             if (existingAsset == null) {
                 AssetDatabase.CreateAsset(this, path);
@@ -130,7 +133,11 @@ namespace Bot
             #else
             StreamWriter file = File.CreateText(path);
             file.WriteLine(customProgramName);
-            file.WriteLine(weaponData.name);
+            if (weaponData == null) {
+                file.WriteLine();
+            } else {
+                file.WriteLine(weaponData.name);
+            }
             file.Close();
             #endif
         }
@@ -139,7 +146,7 @@ namespace Bot
         {
             string path = BotDirectory.BotPath(name);
 
-            #if UNITY_EDITOR
+            #if UNITY_EDITOR && !BUILD_MODE
             AssetDatabase.DeleteAsset(path);
             #else
             File.Delete(path);
@@ -151,7 +158,7 @@ namespace Bot
             string fromPath = BotDirectory.BotPath(name);
             string toPath = BotDirectory.BotPath(newName);
 
-            #if UNITY_EDITOR
+            #if UNITY_EDITOR && !BUILD_MODE
             AssetDatabase.RenameAsset(fromPath, newName);
             #else
             File.Move(fromPath, toPath);

@@ -15,6 +15,7 @@ MonoBehaviour:
   listEntryPrefab: {fileID: 2216712257053310180, guid: d168590f589df7f488642bd2e6a40794,
     type: 3}
   botConfiguration: {fileID: 0}
+  programList: {fileID: 0}
 --- !u!1001 &4160906452313980412
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -65,7 +66,7 @@ PrefabInstance:
     - target: {fileID: 4642507544896834186, guid: b4370417e7f1d704c9bd1e390ae4507d,
         type: 3}
       propertyPath: m_textInfo.lineCount
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4642507544896834186, guid: b4370417e7f1d704c9bd1e390ae4507d,
         type: 3}
@@ -81,6 +82,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_textInfo.spaceCount
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4642507544896834186, guid: b4370417e7f1d704c9bd1e390ae4507d,
+        type: 3}
+      propertyPath: m_firstOverflowCharacterIndex
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5416142378147652006, guid: b4370417e7f1d704c9bd1e390ae4507d,
         type: 3}
@@ -111,11 +117,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_textInfo.pageCount
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8256923224865431430, guid: b4370417e7f1d704c9bd1e390ae4507d,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -40
       objectReference: {fileID: 0}
     - target: {fileID: 8256923224910060880, guid: b4370417e7f1d704c9bd1e390ae4507d,
         type: 3}

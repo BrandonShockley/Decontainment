@@ -73,12 +73,12 @@ namespace Bot
             }
         }
 
-        public static void CreateBot(GameObject prefab, BotData data, int teamID, Vector2 position, Vector2 look)
+        public static void CreateBot(GameObject prefab, BotData data, int teamID, Vector2 position, Quaternion rotation)
         {
             GameObject go = GameObject.Instantiate(prefab, position, Quaternion.identity);
             Controller controller = go.GetComponent<Controller>();
             controller.Init(data, teamID);
-            go.transform.right = look;
+            go.transform.rotation = rotation;
 
             BotManager.Instance.AddBot(controller);
         }

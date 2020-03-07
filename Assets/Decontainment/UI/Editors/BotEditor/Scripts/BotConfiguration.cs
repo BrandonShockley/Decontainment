@@ -17,8 +17,6 @@ namespace Editor.Bot
 
         private BotData _currentBot;
 
-        public event Action<BotData> OnBotSelected;
-
         public BotData CurrentBot
         {
             get { return _currentBot; }
@@ -36,7 +34,6 @@ namespace Editor.Bot
                     _currentBot.OnProgramChange += HandleProgramChanged;
                     HandleProgramChanged();
                 }
-                OnBotSelected?.Invoke(oldBot);
             }
         }
 
@@ -47,7 +44,7 @@ namespace Editor.Bot
 
         private void HandleProgramChanged()
         {
-            readonlyCodeList.Program = programList.FindProgram(_currentBot.ProgramName);
+            readonlyCodeList.Program = programList.Find(_currentBot.ProgramName);
         }
 
         private void HandleProgramDeleted(int index, Program program)

@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Decontainment/Scenes/Editor.unity
     guid: eb5e674a174233f4a84e4bcc04685ad7
   - enabled: 1
+    path: Assets/Decontainment/Scenes/CustomMatchMenu.unity
+    guid: f8bc5a9fda4ce2f4ea542fe168aabd7a
+  - enabled: 1
     path: Assets/Decontainment/Scenes/Arena.unity
     guid: 2fdc49fd2e8809a42866854adac65638
   m_configObjects: {}

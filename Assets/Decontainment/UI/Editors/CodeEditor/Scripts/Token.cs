@@ -100,7 +100,7 @@ namespace Editor.Code
 
             // Make sure we're not renaming to a preexisting label or an invalid name
             if (codeList.Program.labelMap.ContainsKey(newName) || newName == "") {
-                // TODO: Display a prompt when this happens (Trello #18)
+                PromptSystem.Instance.PromptInvalidLabelName(newName);
                 inputField.text = arg.label.name;
                 return false;
             }
