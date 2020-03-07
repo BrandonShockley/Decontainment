@@ -47,6 +47,11 @@ namespace Editor
 
             T newItem = CreateNewItem(newName);
             int index = items.InsertAlphabetically(newItem);
+
+            if (index <= selectedIndex) {
+                ++selectedIndex;
+            }
+
             CreateListEntry(newItem, index);
             SubAdd(index);
             OnItemAdded?.Invoke(index);
@@ -119,6 +124,10 @@ namespace Editor
 
                 if (index == selectedIndex) {
                     selectedIndex = newIndex;
+                } else if (index > selectedIndex && newIndex <= selectedIndex) {
+                    ++selectedIndex;
+                } else if (index < selectedIndex && newIndex > selectedIndex) {
+                    --selectedIndex;
                 }
 
                 SubHandleRename(oldName, index, newIndex);
