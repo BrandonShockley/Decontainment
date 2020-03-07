@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 public class Map : MonoBehaviour
 {
@@ -14,6 +15,10 @@ public class Map : MonoBehaviour
 
     void Start()
     {
+        #if UNITY_EDITOR && !BUILD_MODE
+        AssetDatabase.Refresh();
+        #endif
+
         // Spawn everyone
         for (int ti = 0; ti < MatchData.Instance.teamDatas.Length; ++ti) {
             TeamData teamData = MatchData.Instance.teamDatas[ti];

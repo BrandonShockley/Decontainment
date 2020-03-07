@@ -46,7 +46,7 @@ namespace Editor.Code
             newProgram.OnChange += () => SaveProgram(newProgram);
             SaveProgram(newProgram);
 
-            #if UNITY_EDITOR || BUILD_MODE
+            #if UNITY_EDITOR && !BUILD_MODE
             AssetDatabase.Refresh();
             #endif
 
