@@ -46,6 +46,10 @@ namespace Editor.Code
             newProgram.OnChange += () => SaveProgram(newProgram);
             SaveProgram(newProgram);
 
+            #if UNITY_EDITOR || BUILD_MODE
+            AssetDatabase.Refresh();
+            #endif
+
             return newProgram;
         }
 
@@ -59,8 +63,8 @@ namespace Editor.Code
         {
             string fromPath = ProgramDirectory.ProgramPath(program.name);
             string toPath = ProgramDirectory.ProgramPath(name);
-           #if UNITY_EDITOR && !BUILD_MODE
-            Debug.Log(AssetDatabase.RenameAsset(fromPath, name));
+            #if UNITY_EDITOR && !BUILD_MODE
+            AssetDatabase.RenameAsset(fromPath, name);
             #else
             File.Move(fromPath, toPath);
             #endif
