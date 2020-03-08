@@ -17,7 +17,7 @@ MonoBehaviour:
   beamGrowTime: 0.05
   beamDuration: 0.3
   beamFadeTime: 0.05
-  healthRegain: 1
+  healthRegain: 3
 --- !u!1001 &4234311348270267967
 PrefabInstance:
   m_ObjectHideFlags: 0

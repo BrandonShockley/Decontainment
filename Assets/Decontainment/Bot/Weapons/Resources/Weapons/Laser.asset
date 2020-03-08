@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectilePrefab: {fileID: 3802794176953701020, guid: fffbfa5d5f7209e4c818e872f0f7b3e7,
     type: 3}
-  cooldown: 1
+  cooldown: 2
   hardpointColor: {r: 1, g: 0, b: 0.8534627, a: 1}
   numShots: 1
   shotSpacing: 15

@@ -427,6 +427,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47aa08ae3cf98b744813eac24aada968, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  returnSceneName: CustomMatchMenu
 --- !u!4 &762514894
 Transform:
   m_ObjectHideFlags: 0
