@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shotSound: {fileID: 8300000, guid: ad47c1249e426c844af34b69d3aba624, type: 3}
-  maxDistance: 10
+  maxDistance: 10000
   beamGrowTime: 0.05
   beamDuration: 0.3
   beamFadeTime: 0.05

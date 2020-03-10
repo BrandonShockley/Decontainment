@@ -19,6 +19,9 @@ public abstract class Projectile : MonoBehaviour
         Projectile proj = go.GetComponent<Projectile>();
         proj.shooter = shooter;
         proj.transform.right = look;
+        if (proj.shooter.weaponData.operateInBotSpace) {
+            go.transform.parent = shooter.gameObject.transform;
+        }
         proj.sm.PlayClip(proj.shotSound);
         proj.Init();
         BotManager.Instance.Projectiles.Add(go.transform);
