@@ -83,7 +83,7 @@ namespace Bot
                 Amount -= damage;
                 sm.PlayClip(hitClip);
                 if (!Disabled) {
-                    StartCoroutine(InvulnerableRoutine());
+                    StartCoroutine(FlashRoutine());
                 }
             }
         }
@@ -104,9 +104,8 @@ namespace Bot
             col.enabled = false;
         }
 
-        private IEnumerator InvulnerableRoutine()
+        private IEnumerator FlashRoutine()
         {
-            vulnerable = false;
             iTimer = invulnerabilityDuration;
             while (iTimer > 0)
             {
@@ -114,7 +113,6 @@ namespace Bot
                 yield return new WaitForSeconds(flashInterval);
             }
             sr.enabled = true;
-            vulnerable = true;
         }
     }
 }

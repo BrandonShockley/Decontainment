@@ -5,6 +5,9 @@ using UnityEngine.SceneManagement;
 
 public class MatchManager : SceneSingleton<MatchManager>
 {
+    [SerializeField]
+    private string returnSceneName = null;
+
     void Awake()
     {
         BotManager.Instance.OnTeamDisable += (int teamID) =>
@@ -24,6 +27,6 @@ public class MatchManager : SceneSingleton<MatchManager>
     private IEnumerator ReturnToEditor()
     {
         yield return new WaitForSecondsRealtime(1);
-        SceneManager.LoadScene("Editor");
+        SceneManager.LoadScene(returnSceneName);
     }
 }
