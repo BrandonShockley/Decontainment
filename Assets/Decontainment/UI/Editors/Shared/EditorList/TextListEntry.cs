@@ -7,17 +7,18 @@ using UnityEngine.UI;
 
 namespace Editor
 {
-    public class ListEntry : MonoBehaviour, IPointerClickHandler
+    public class TextListEntry : MonoBehaviour, IListEntry, IPointerClickHandler
     {
         [SerializeField]
         private Color selectedColor = Color.white;
 
         private Color deselectedColor;
-        private Action onSelect;
 
         private Image image;
         private Renamable rn;
         private TMP_InputField inputField;
+
+        public event Action OnSelect;
 
         void Awake()
         {
@@ -28,10 +29,9 @@ namespace Editor
             deselectedColor = image.color;
         }
 
-        public void Init(string name, Action<int> handleSelect, Func<int, string, bool> handleRename)
+        public void Init(string name, Func<int, string, bool> handleRename)
         {
             inputField.text = name;
-            onSelect = () => handleSelect(transform.GetSiblingIndex());
             rn.onRename = (string newName) => handleRename(transform.GetSiblingIndex(), newName);
         }
 
@@ -45,7 +45,7 @@ namespace Editor
         public void Select()
         {
             image.color = selectedColor;
-            onSelect?.Invoke();
+            OnSelect?.Invoke();
         }
 
         public void Deselect()

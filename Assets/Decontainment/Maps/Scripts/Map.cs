@@ -1,6 +1,7 @@
 ﻿using Bot;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEditor;
 
@@ -12,6 +13,8 @@ public class Map : MonoBehaviour
     private Transform[] t1Spawns = new Transform[TeamData.TEAM_SIZE];
     [SerializeField]
     private GameObject botPrefab = null;
+    [SerializeField]
+    private GameObject previewLabelPrefab = null;
 
     void Start()
     {
@@ -29,6 +32,23 @@ public class Map : MonoBehaviour
                     Controller.CreateBot(botPrefab, botData, ti, spawn.position, spawn.rotation);
                 }
             }
+        }
+    }
+
+    public void SpawnPreviewLabels()
+    {
+        for (int i = 0; i < t0Spawns.Length; ++i) {
+            GameObject previewLabelGO = Instantiate(previewLabelPrefab, t0Spawns[i].position, Quaternion.identity);
+            TextMeshPro tmp = previewLabelGO.GetComponent<TextMeshPro>();
+            tmp.text = i.ToString();
+            tmp.color = Color.cyan;
+        }
+
+        for (int i = 0; i < t1Spawns.Length; ++i) {
+            GameObject previewLabelGO = Instantiate(previewLabelPrefab, t1Spawns[i].position, Quaternion.identity);
+            TextMeshPro tmp = previewLabelGO.GetComponent<TextMeshPro>();
+            tmp.text = i.ToString();
+            tmp.color = Color.red;
         }
     }
 }

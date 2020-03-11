@@ -291,6 +291,8 @@ MonoBehaviour:
   - {fileID: 3998424539620389745}
   botPrefab: {fileID: 3528470376585942942, guid: dcb872f8505c05f419fa3282048b6883,
     type: 3}
+  previewLabelPrefab: {fileID: 7412077100189600668, guid: f05404c72d3569f48b76dd96bb56985a,
+    type: 3}
 --- !u!1 &3998424540680634933
 GameObject:
   m_ObjectHideFlags: 0
