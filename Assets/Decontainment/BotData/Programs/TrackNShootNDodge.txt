@@ -1,5 +1,5 @@
 DodgeDist: 2
-ShootDistThreshold: 5
+ShootDistThreshold: 2
 ShootTurnThreshold: 5
 Start:
 TAR %0 Nearest Enemy
