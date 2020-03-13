@@ -1,32 +1,61 @@
 using Bot;
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class MatchManager : SceneSingleton<MatchManager>
+namespace Match
 {
-    [SerializeField]
-    private string returnSceneName = null;
-
-    void Awake()
+    public class MatchManager : SceneSingleton<MatchManager>
     {
-        BotManager.Instance.OnTeamDisable += (int teamID) =>
+        [SerializeField]
+        private string returnSceneName = null;
+        [SerializeField]
+        private float timeLimit = 60;
+
+        private float timeRemaining;
+
+        public event Action<int> OnVictory;
+        public event Action OnTimeUp;
+
+        public float TimeRemaining => timeRemaining;
+
+        void Awake()
         {
-            Debug.Log("Team " + teamID + " all disabled. Returning to editor.");
-            StartCoroutine(ReturnToEditor());
-        };
-    }
+            Time.timeScale = 1;
+            BotManager.Instance.OnTeamDisable += (int teamID) =>
+            {
+                Time.timeScale = 0;
+                Debug.Log("Team " + teamID + " all disabled. Returning to editor.");
+                OnVictory?.Invoke(teamID);
+                StartCoroutine(ReturnToEditor());
+            };
+        }
 
-    void Start()
-    {
-        Instantiate(MatchData.Instance.mapPrefab, Vector3.zero, Quaternion.identity);
-    }
+        void Start()
+        {
+            Instantiate(MatchData.Instance.mapPrefab, Vector3.zero, Quaternion.identity);
+            timeRemaining = timeLimit;
+        }
 
-    // TODO: This is a temp thing
-    // We should have a proper match results screen
-    private IEnumerator ReturnToEditor()
-    {
-        yield return new WaitForSecondsRealtime(1);
-        SceneManager.LoadScene(returnSceneName);
+        void FixedUpdate()
+        {
+            timeRemaining = Mathf.Max(timeRemaining - Time.fixedDeltaTime, 0);
+
+            if (timeRemaining <= 0) {
+                Time.timeScale = 0;
+                Debug.Log("Time is up. Returning to editor.");
+                OnTimeUp?.Invoke();
+                StartCoroutine(ReturnToEditor());
+            }
+        }
+
+        // TODO: This is a temp thing
+        // We should have a proper match results screen
+        private IEnumerator ReturnToEditor()
+        {
+            yield return new WaitForSecondsRealtime(3);
+            SceneManager.LoadScene(returnSceneName);
+        }
     }
 }
