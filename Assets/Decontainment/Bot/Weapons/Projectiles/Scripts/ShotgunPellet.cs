@@ -37,7 +37,7 @@ public class ShotgunPellet : Projectile
         rb = GetComponent<Rigidbody2D>();
     }
 
-    protected override void SubOnEnable()
+    protected override void SubOnGet()
     {
         col.enabled = false;
     }

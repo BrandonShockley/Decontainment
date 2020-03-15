@@ -9,7 +9,7 @@ public class MapList : ReadOnlyEditorList<GameObject>
 {
     protected override void InitList()
     {
-        GameObject[] mapPrefabs = Resources.LoadAll<GameObject>("MapPrefabs");
+        GameObject[] mapPrefabs = Resources.LoadAll<GameObject>(Map.MAP_PREFABS_DIR);
         items.AddRange(mapPrefabs);
     }
 
@@ -17,7 +17,7 @@ public class MapList : ReadOnlyEditorList<GameObject>
     {
         GameObject mapPreviewGO = Instantiate(listEntryPrefab, transform);
         MapPreview mapPreview = mapPreviewGO.GetComponent<MapPreview>();
-        mapPreview.Init(mapPrefab, Resources.Load<Sprite>("MapPreviews/" + mapPrefab.name));
+        mapPreview.Init(mapPrefab, Resources.Load<Sprite>(Map.MAP_PREVIEWS_DIR + "/" + mapPrefab.name));
         mapPreview.OnSelect += () => HandleSelect(mapPreview.transform.GetSiblingIndex());
     }
 }

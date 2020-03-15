@@ -80,8 +80,8 @@ namespace Bot
         public void TakeDamage(int damage)
         {
             if (vulnerable && !Disabled) {
-                Amount -= damage;
                 sm.PlayClip(hitClip);
+                Amount -= damage;
                 if (!Disabled) {
                     StartCoroutine(FlashRoutine());
                 }

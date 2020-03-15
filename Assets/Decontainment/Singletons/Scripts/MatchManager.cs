@@ -27,7 +27,8 @@ namespace Match
             {
                 Time.timeScale = 0;
                 Debug.Log("Team " + teamID + " all disabled. Returning to editor.");
-                OnVictory?.Invoke(teamID);
+                int victorTeamID = teamID == 0 ? 1 : 0;
+                OnVictory?.Invoke(victorTeamID);
                 StartCoroutine(ReturnToEditor());
             };
         }
@@ -54,7 +55,7 @@ namespace Match
         // We should have a proper match results screen
         private IEnumerator ReturnToEditor()
         {
-            yield return new WaitForSecondsRealtime(3);
+            yield return new WaitForSecondsRealtime(1.5f);
             SceneManager.LoadScene(returnSceneName);
         }
     }

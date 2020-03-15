@@ -7,6 +7,9 @@ using UnityEditor;
 
 public class Map : MonoBehaviour
 {
+    public static readonly string MAP_PREFABS_DIR = "MapPrefabs";
+    public static readonly string MAP_PREVIEWS_DIR = "MapPreviews";
+
     [SerializeField]
     private Transform[] t0Spawns = new Transform[TeamData.TEAM_SIZE];
     [SerializeField]

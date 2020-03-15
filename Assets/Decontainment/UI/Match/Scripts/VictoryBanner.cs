@@ -22,7 +22,7 @@ namespace Match
 
         private void HandleVictory(int teamID)
         {
-            tm.text = "Team " + teamID + " wins!";
+            tm.text = "Team " + (teamID + 1) + " wins!";
             StartCoroutine(GrowRoutine());
         }
 
@@ -34,7 +34,6 @@ namespace Match
 
         private IEnumerator GrowRoutine()
         {
-            yield return new WaitForSecondsRealtime(2);
             float timer = 0;
             while (timer < curve.keys[curve.length - 1].time) {
                 timer += Time.unscaledDeltaTime;
