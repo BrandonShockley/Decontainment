@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// Assumes this GameObject doesn't use a canvas group
-public class ToggleUI : MonoBehaviour
+public class DebugToggleUI : MonoBehaviour
 {
     [SerializeField]
     private KeyCode toggleKey = default;

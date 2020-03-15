@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Decontainment/Scenes/TitleScreen.unity
+    guid: 0e3238aec2cac5c418bbc693c62c4c07
+  - enabled: 1
     path: Assets/Decontainment/Scenes/Editor.unity
     guid: eb5e674a174233f4a84e4bcc04685ad7
   - enabled: 1
