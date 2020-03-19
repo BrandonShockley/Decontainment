@@ -22,6 +22,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1624623514183058101, guid: b4370417e7f1d704c9bd1e390ae4507d,
+        type: 3}
+      propertyPath: m_firstOverflowCharacterIndex
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1624623514183058101, guid: b4370417e7f1d704c9bd1e390ae4507d,
+        type: 3}
+      propertyPath: m_textInfo.lineCount
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1775292074574533828, guid: b4370417e7f1d704c9bd1e390ae4507d,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -35,12 +45,12 @@ PrefabInstance:
     - target: {fileID: 4642507544896834186, guid: b4370417e7f1d704c9bd1e390ae4507d,
         type: 3}
       propertyPath: m_firstOverflowCharacterIndex
-      value: 3
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 4642507544896834186, guid: b4370417e7f1d704c9bd1e390ae4507d,
         type: 3}
       propertyPath: m_textInfo.lineCount
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4642507544896834186, guid: b4370417e7f1d704c9bd1e390ae4507d,
         type: 3}

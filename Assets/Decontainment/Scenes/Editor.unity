@@ -917,7 +917,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.35686275, g: 0.38823533, b: 0.43137258, a: 1}
+  m_Color: {r: 0.2392157, g: 0.25882354, b: 0.28627452, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -1669,6 +1669,11 @@ PrefabInstance:
       propertyPath: m_text
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 5983542652416730874, guid: f1b22073a31e25c45a7045d044340844,
+        type: 3}
+      propertyPath: editorList
+      value: 
+      objectReference: {fileID: 1867537152}
     - target: {fileID: 7417143501582061018, guid: f1b22073a31e25c45a7045d044340844,
         type: 3}
       propertyPath: memberIndex
@@ -1684,6 +1689,31 @@ PrefabInstance:
       propertyPath: attributes
       value: 
       objectReference: {fileID: 971111925}
+    - target: {fileID: 8459811529819853050, guid: f1b22073a31e25c45a7045d044340844,
+        type: 3}
+      propertyPath: m_textInfo.characterCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8459811529819853050, guid: f1b22073a31e25c45a7045d044340844,
+        type: 3}
+      propertyPath: m_textInfo.spaceCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8459811529819853050, guid: f1b22073a31e25c45a7045d044340844,
+        type: 3}
+      propertyPath: m_textInfo.wordCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8459811529819853050, guid: f1b22073a31e25c45a7045d044340844,
+        type: 3}
+      propertyPath: m_textInfo.lineCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8459811529819853050, guid: f1b22073a31e25c45a7045d044340844,
+        type: 3}
+      propertyPath: m_textInfo.pageCount
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f1b22073a31e25c45a7045d044340844, type: 3}
 --- !u!114 &971111925 stripped
@@ -1893,6 +1923,11 @@ PrefabInstance:
       propertyPath: m_text
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 5983542652416730874, guid: f1b22073a31e25c45a7045d044340844,
+        type: 3}
+      propertyPath: editorList
+      value: 
+      objectReference: {fileID: 1867537152}
     - target: {fileID: 7417143501582061018, guid: f1b22073a31e25c45a7045d044340844,
         type: 3}
       propertyPath: memberIndex
@@ -1908,6 +1943,31 @@ PrefabInstance:
       propertyPath: attributes
       value: 
       objectReference: {fileID: 971111925}
+    - target: {fileID: 8459811529819853050, guid: f1b22073a31e25c45a7045d044340844,
+        type: 3}
+      propertyPath: m_textInfo.characterCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8459811529819853050, guid: f1b22073a31e25c45a7045d044340844,
+        type: 3}
+      propertyPath: m_textInfo.spaceCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8459811529819853050, guid: f1b22073a31e25c45a7045d044340844,
+        type: 3}
+      propertyPath: m_textInfo.wordCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8459811529819853050, guid: f1b22073a31e25c45a7045d044340844,
+        type: 3}
+      propertyPath: m_textInfo.lineCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8459811529819853050, guid: f1b22073a31e25c45a7045d044340844,
+        type: 3}
+      propertyPath: m_textInfo.pageCount
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f1b22073a31e25c45a7045d044340844, type: 3}
 --- !u!1 &1091142777
@@ -3583,6 +3643,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: MemberConfiguration1
       objectReference: {fileID: 0}
+    - target: {fileID: 5983542652416730874, guid: f1b22073a31e25c45a7045d044340844,
+        type: 3}
+      propertyPath: editorList
+      value: 
+      objectReference: {fileID: 1867537152}
     - target: {fileID: 7417143501582061018, guid: f1b22073a31e25c45a7045d044340844,
         type: 3}
       propertyPath: targetEditorList
@@ -3593,6 +3658,31 @@ PrefabInstance:
       propertyPath: attributes
       value: 
       objectReference: {fileID: 971111925}
+    - target: {fileID: 8459811529819853050, guid: f1b22073a31e25c45a7045d044340844,
+        type: 3}
+      propertyPath: m_textInfo.characterCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8459811529819853050, guid: f1b22073a31e25c45a7045d044340844,
+        type: 3}
+      propertyPath: m_textInfo.spaceCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8459811529819853050, guid: f1b22073a31e25c45a7045d044340844,
+        type: 3}
+      propertyPath: m_textInfo.wordCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8459811529819853050, guid: f1b22073a31e25c45a7045d044340844,
+        type: 3}
+      propertyPath: m_textInfo.lineCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8459811529819853050, guid: f1b22073a31e25c45a7045d044340844,
+        type: 3}
+      propertyPath: m_textInfo.pageCount
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f1b22073a31e25c45a7045d044340844, type: 3}
 --- !u!1001 &3943046881595811064
@@ -3917,6 +4007,11 @@ PrefabInstance:
       propertyPath: m_textInfo.pageCount
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3411500638203010315, guid: 189a4d0057dc6ee438002bf02b73971c,
+        type: 3}
+      propertyPath: editorList
+      value: 
+      objectReference: {fileID: 971111925}
     - target: {fileID: 4901871368683966899, guid: 189a4d0057dc6ee438002bf02b73971c,
         type: 3}
       propertyPath: botSelectorGO
@@ -3932,6 +4027,21 @@ PrefabInstance:
       propertyPath: programList
       value: 
       objectReference: {fileID: 150481945}
+    - target: {fileID: 4901871368875807916, guid: 189a4d0057dc6ee438002bf02b73971c,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0.2392157
+      objectReference: {fileID: 0}
+    - target: {fileID: 4901871368875807916, guid: 189a4d0057dc6ee438002bf02b73971c,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0.25882354
+      objectReference: {fileID: 0}
+    - target: {fileID: 4901871368875807916, guid: 189a4d0057dc6ee438002bf02b73971c,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0.28627452
+      objectReference: {fileID: 0}
     - target: {fileID: 4901871368875807918, guid: 189a4d0057dc6ee438002bf02b73971c,
         type: 3}
       propertyPath: m_Name

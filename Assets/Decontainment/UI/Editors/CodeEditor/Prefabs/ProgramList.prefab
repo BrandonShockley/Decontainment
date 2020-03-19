@@ -60,7 +60,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.23575, g: 0.246, b: 0.287, a: 1}
+  m_Color: {r: 0.35686275, g: 0.38823533, b: 0.43137258, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -408,7 +408,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.23575, g: 0.246, b: 0.287, a: 1}
+  m_Color: {r: 0.35686275, g: 0.38823533, b: 0.43137258, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -773,7 +773,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.35741177, g: 0.391451, b: 0.43400002, a: 1}
+  m_Color: {r: 0.24313726, g: 0.25882354, b: 0.28627452, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -866,7 +866,7 @@ PrefabInstance:
     - target: {fileID: 3673806923499832191, guid: d13cf2f2c92b9294d8d964dda72b6d19,
         type: 3}
       propertyPath: m_textInfo.lineCount
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3673806923499832191, guid: d13cf2f2c92b9294d8d964dda72b6d19,
         type: 3}
@@ -881,7 +881,7 @@ PrefabInstance:
     - target: {fileID: 3673806923499832191, guid: d13cf2f2c92b9294d8d964dda72b6d19,
         type: 3}
       propertyPath: m_firstOverflowCharacterIndex
-      value: 5
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 5975290776852894894, guid: d13cf2f2c92b9294d8d964dda72b6d19,
         type: 3}
