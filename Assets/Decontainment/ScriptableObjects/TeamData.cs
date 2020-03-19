@@ -17,6 +17,9 @@ public class TeamData : ScriptableObject
     /// Use this when creating teams at build runtime
     private string[] customBotNames;
 
+    [SerializeField]
+    private bool demoable = false;
+
     public event Action<int> OnBotChanged;
 
     public int BotCount
@@ -29,6 +32,7 @@ public class TeamData : ScriptableObject
             }
         }
     }
+    public bool Demoable => demoable;
 
     public static TeamData CreateNew(string teamName, string[] botNames)
     {
@@ -126,6 +130,7 @@ public class TeamData : ScriptableObject
         } else {
             existingAsset.builtInBotDatas = builtInBotDatas;
             existingAsset.customBotNames = customBotNames;
+            existingAsset.demoable = demoable;
         }
         #else
         StreamWriter file = File.CreateText(path);

@@ -15,9 +15,19 @@ namespace Match
 
         private float changeTimer;
         private GameObject map;
+        private List<TeamData> teams;
+        private GameObject[] mapPrefabs;
 
         void Start()
         {
+            teams = new List<TeamData>(Resources.LoadAll<TeamData>(TeamDirectory.RESOURCES_PATH));
+            for (int i = teams.Count - 1; i >= 0; --i) {
+                if (!teams[i].Demoable) {
+                    teams.RemoveAt(i);
+                }
+            }
+            mapPrefabs = Resources.LoadAll<GameObject>(Map.MAP_PREFABS_DIR);
+
             ResetMatch();
             BotManager.Instance.OnTeamDisable += (teamId) => ResetMatch();
         }
@@ -39,12 +49,10 @@ namespace Match
             }
 
             // Choose random builtin team
-            TeamData[] teams = Resources.LoadAll<TeamData>(TeamDirectory.RESOURCES_PATH);
-            MatchData.Instance.teamDatas[0] = teams[Random.Range(0, teams.Length)];
-            MatchData.Instance.teamDatas[1] = teams[Random.Range(0, teams.Length)];
+            MatchData.Instance.teamDatas[0] = teams[Random.Range(0, teams.Count)];
+            MatchData.Instance.teamDatas[1] = teams[Random.Range(0, teams.Count)];
 
             // Choose random map
-            GameObject[] mapPrefabs = Resources.LoadAll<GameObject>(Map.MAP_PREFABS_DIR);
             MatchData.Instance.mapPrefab = mapPrefabs[Random.Range(0, mapPrefabs.Length)];
             map = Instantiate(MatchData.Instance.mapPrefab, Vector3.zero, Quaternion.identity);
         }
