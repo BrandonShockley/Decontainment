@@ -264,9 +264,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b3573b8e9b433f4dadaee419bfb2d78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  toolTipContainer: {fileID: 7984365647478970598, guid: be5fc5ac14c501d408a332b22273a03e,
+  toolTipContainerPrefab: {fileID: 7984365647478970598, guid: be5fc5ac14c501d408a332b22273a03e,
     type: 3}
-  tipDelay: 100
+  hoverDelay: 0.5
 --- !u!1 &8781700198214451846
 GameObject:
   m_ObjectHideFlags: 0

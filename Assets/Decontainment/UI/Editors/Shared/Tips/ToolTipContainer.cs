@@ -17,7 +17,7 @@ namespace Editor
             rt = GetComponent<RectTransform>();
         }
 
-        public void setText(string text)
+        public void SetText(string text)
         {
             textObject.text = text;
             rt.sizeDelta = new Vector2(textObject.preferredWidth, 0);
