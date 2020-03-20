@@ -16,3 +16,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 6258af5b9a7515f4e93e892ed92ae177, type: 2}
   - {fileID: 0}
   - {fileID: 0}
+  demoable: 1

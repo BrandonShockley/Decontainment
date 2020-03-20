@@ -10,9 +10,9 @@ namespace Editor
     public class DisplaysTips : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         [SerializeField]
-        private GameObject toolTipContainerPrefab;
+        private GameObject toolTipContainerPrefab = null;
         [SerializeField]
-        private float hoverDelay;
+        private float hoverDelay = 0;
 
         private GameObject toolTipInstance;
         private GameObject canvas;
@@ -38,7 +38,7 @@ namespace Editor
 
         void Update()
         {
-            if (hovered) {
+            if (hovered && GlobalSettings.TooltipsEnabled) {
                 hoverTimer += Time.unscaledDeltaTime;
                 if (toolTipInstance == null && hoverTimer > hoverDelay) {
                     InstantiateTip();
