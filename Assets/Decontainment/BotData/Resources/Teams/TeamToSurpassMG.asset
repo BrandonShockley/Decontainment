@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 22374bc7af5c85b40b822ba5ca2f30ef, type: 3}
-  m_Name: EmptyTeam
+  m_Name: TeamToSurpassMG
   m_EditorClassIdentifier: 
   builtInBotDatas:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 482e53a63bc54734db05a60032f7bdaa, type: 2}
   - {fileID: 0}
   - {fileID: 0}
