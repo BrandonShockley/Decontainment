@@ -24,7 +24,7 @@ namespace Asm
         BLE, // Branch if less than or equal to
         BGT, // Branch if greater than
         BGE, // Branch if greater than or equal to
-        BCH, // Branch arg * 1 times out of a hundred 
+        BRN, // Branch arg * 1 times out of a hundred 
         CSR, // Call subroutine
         RSR, // Return from subroutine
 

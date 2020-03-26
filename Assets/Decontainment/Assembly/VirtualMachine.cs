@@ -56,13 +56,14 @@ public class VirtualMachine
                 i = program.instructions[pc];
                 newPC = (pc + 1) % program.instructions.Count;
             }
+
             switch(i.opCode)
             {
                 // Control flow
                 case OpCode.NOP:
                     break;
                 case OpCode.BUN:
-                    newPC = GetArgValue(i.args[0]);
+                    newPC = GetArgValue(i.args[0]) % program.instructions.Count;
                     break;
                 case OpCode.BEQ:
                     if (GetArgValue(i.args[1]) == GetArgValue(i.args[2])) {
@@ -94,7 +95,7 @@ public class VirtualMachine
                         newPC = GetArgValue(i.args[0]) % program.instructions.Count;
                     }
                     break;
-                case OpCode.BCH:
+                case OpCode.BRN:
                     if (GetArgValue(i.args[1]) > UnityEngine.Random.Range(0, 100)) {
                         newPC = GetArgValue(i.args[0]) % program.instructions.Count;
                     }

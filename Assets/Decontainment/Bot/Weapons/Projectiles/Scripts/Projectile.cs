@@ -2,7 +2,7 @@ using Bot;
 using UnityEngine;
 
 [RequireComponent(typeof(SoundModulator))]
-public abstract class Projectile : MonoBehaviour
+public abstract class Projectile : MonoBehaviour, IPoolable
 {
     protected Shooter shooter;
 
@@ -19,10 +19,26 @@ public abstract class Projectile : MonoBehaviour
         Projectile proj = go.GetComponent<Projectile>();
         proj.shooter = shooter;
         proj.transform.right = look;
+        if (proj.shooter.weaponData.operateInBotSpace) {
+            go.transform.parent = shooter.gameObject.transform;
+        }
         proj.sm.PlayClip(proj.shotSound);
         proj.Init();
-        BotManager.Instance.Projectiles.Add(go.transform);
+        BotManager.Instance.Projectiles.Add(proj);
         proj.managed = true;
+    }
+
+    public void OnGet()
+    {
+        SubOnGet();
+    }
+
+    public void OnFree()
+    {
+        if (managed) {
+            BotManager.Instance?.Projectiles.Remove(this);
+        }
+        SubOnFree();
     }
 
     protected virtual void Init() {}
@@ -34,21 +50,6 @@ public abstract class Projectile : MonoBehaviour
     }
 
     protected virtual void SubAwake() {}
-
-    protected void OnEnable()
-    {
-        SubOnEnable();
-    }
-
-    protected virtual void SubOnEnable() {}
-
-    protected void OnDestroy()
-    {
-        if (managed) {
-            BotManager.Instance?.Projectiles.Remove(transform);
-        }
-        SubOnDestroy();
-    }
-
-    protected virtual void SubOnDestroy() {}
+    protected virtual void SubOnGet() {}
+    protected virtual void SubOnFree() {}
 }

@@ -22,11 +22,11 @@ class BotManager : SceneSingleton<BotManager>
 
     private List<Controller> bots = new List<Controller>();
     private List<Controller>[] teams = new List<Controller>[2];
-    private List<Transform> projectiles = new List<Transform>();
+    private List<Projectile> projectiles = new List<Projectile>();
 
     public event Action<int> OnTeamDisable;
 
-    public List<Transform> Projectiles { get { return projectiles; } }
+    public List<Projectile> Projectiles { get { return projectiles; } }
 
     void Awake()
     {
@@ -47,6 +47,23 @@ class BotManager : SceneSingleton<BotManager>
         teams[bot.TeamID].Add(bot);
     }
 
+    public void ClearAll()
+    {
+        // Projectiles
+        for (int i = projectiles.Count - 1; i >= 0; --i) {
+            Pools.Instance.Free(projectiles[i].gameObject);
+        }
+
+        // Bots
+        foreach (List<Controller> team in teams) {
+            team.Clear();
+        }
+        foreach (Controller bot in bots) {
+            Destroy(bot.gameObject);
+        }
+        bots.Clear();
+    }
+
     /// Returns -1 if no valid targets
     public int FindTarget(Controller targeter, DistanceType distanceType, TargetType targetType)
     {
@@ -57,7 +74,7 @@ class BotManager : SceneSingleton<BotManager>
                 ? TargetType.ALLY
                 : TargetType.ENEMY;
 
-            if (bots[i] != targeter && targetType == type) {
+            if (bots[i] != targeter && targetType == type && !bots[i].Health.Disabled) {
                 if (targetIndex == -1) {
                     targetIndex = i;
                     targetDistance = Util.Distance(targeter.transform.position, bots[i].transform.position);

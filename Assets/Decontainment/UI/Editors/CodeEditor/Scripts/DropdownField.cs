@@ -41,9 +41,6 @@ namespace Editor.Code
                 }
             }
 
-            // Init value
-            HandleArgChange();
-
             // Register value change handlers
             Argument.Type argType = argSpec.regOnly ? Argument.Type.REGISTER : Argument.Type.IMMEDIATE;
             dropdown.onValueChanged.AddListener((int val) =>
@@ -57,6 +54,9 @@ namespace Editor.Code
                 codeList.Program.BroadcastArgumentChange();
             });
             arg.OnChange += HandleArgChange;
+
+            // Init value
+            HandleArgChange();
 
             // Resize to fit the max preferred width
             RectTransform dropdownRT = dropdown.GetComponent<RectTransform>();

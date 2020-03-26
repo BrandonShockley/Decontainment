@@ -7,6 +7,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 101784306646295270, guid: 58280c18903701343bec8500cbc4bc90,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6430141909026233381, guid: 58280c18903701343bec8500cbc4bc90,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -145,7 +150,7 @@ PrefabInstance:
     - target: {fileID: 8647798933790731455, guid: 58280c18903701343bec8500cbc4bc90,
         type: 3}
       propertyPath: m_Name
-      value: CodeView
+      value: CodeViewNoIP
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 58280c18903701343bec8500cbc4bc90, type: 3}

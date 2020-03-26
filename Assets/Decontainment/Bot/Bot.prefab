@@ -153,8 +153,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   vulnerable: 1
-  maxAmount: 5
-  invulnerabilityDuration: 1
+  maxAmount: 25
+  invulnerabilityDuration: 0.1
   flashInterval: 0.1
   healthBarPrefab: {fileID: 5326111278547466356, guid: 25d8bc85895107e4aa30ecf17c81dd0a,
     type: 3}

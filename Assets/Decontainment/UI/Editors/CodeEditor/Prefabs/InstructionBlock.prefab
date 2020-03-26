@@ -167,6 +167,7 @@ GameObject:
   - component: {fileID: 3013256520721507617}
   - component: {fileID: 2946558927213816030}
   - component: {fileID: 7863386629209381567}
+  - component: {fileID: 5103829306178882589}
   - component: {fileID: 8724200043152340285}
   - component: {fileID: 4324987571710731080}
   - component: {fileID: 5378581104950398171}
@@ -235,6 +236,21 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &5103829306178882589
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3789034097312089564}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b3573b8e9b433f4dadaee419bfb2d78, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  toolTipContainerPrefab: {fileID: 7984365647478970598, guid: be5fc5ac14c501d408a332b22273a03e,
+    type: 3}
+  hoverDelay: 0.5
 --- !u!114 &8724200043152340285
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -253,8 +269,6 @@ MonoBehaviour:
   dropdownFieldPrefab: {fileID: 9008722315217321488, guid: 6363867cc1a301b43b7b248d32b17c07,
     type: 3}
   slotFieldPrefab: {fileID: 6760883868350057258, guid: a77b4e9e1d87f7a49a5a49074c48605f,
-    type: 3}
-  headerPrefab: {fileID: 5942781556024676504, guid: 08b5d146b8aa0694c8ebbb08c1b006bf,
     type: 3}
 --- !u!114 &4324987571710731080
 MonoBehaviour:

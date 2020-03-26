@@ -67,6 +67,7 @@ namespace Editor.Code
         private void ChangeLabelValue(string newVal)
         {
             label.val = int.Parse(newVal);
+            codeList.Program.BroadcastConstLabelChange();
         }
     }
 }

@@ -1,0 +1,25 @@
+TooFar: 10
+TooClose: 8
+Start:
+TAR %0 Nearest Enemy
+HED %1 %0
+TRN Left %1 Async
+DIS %2 %0
+BGT MoveCloser %2 TooFar
+BLT MoveAway %2 TooClose
+SHT Async
+BUN Start
+MoveAway:
+SHT Async
+SCN %3 Obstacles $-180 $1 $180
+BNE CheckWalls %3 $0
+DRV Left $20 Async
+DRV Backward $10 Async
+BUN Start
+MoveCloser:
+SHT Async
+DRV Forward $1 Async
+BUN Start
+CheckWalls:
+DRV Left $1 Async
+BUN Start

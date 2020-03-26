@@ -26,6 +26,7 @@ namespace Bot
         /// Invulnerability timer
         private float iTimer;
 
+        private Collider2D col;
         private GameObject healthBarGO;
         private SoundModulator sm;
         private SpriteRenderer sr;
@@ -52,6 +53,7 @@ namespace Bot
 
         void Awake()
         {
+            col = GetComponent<Collider2D>();
             sm = GetComponent<SoundModulator>();
             sr = GetComponent<SpriteRenderer>();
 
@@ -78,10 +80,10 @@ namespace Bot
         public void TakeDamage(int damage)
         {
             if (vulnerable && !Disabled) {
-                Amount -= damage;
                 sm.PlayClip(hitClip);
+                Amount -= damage;
                 if (!Disabled) {
-                    StartCoroutine(InvulnerableRoutine());
+                    StartCoroutine(FlashRoutine());
                 }
             }
         }
@@ -99,11 +101,11 @@ namespace Bot
             srColor.g = Mathf.Max(srColor.g - disabledTint, 0);
             srColor.b = Mathf.Max(srColor.b - disabledTint, 0);
             sr.color = srColor;
+            col.enabled = false;
         }
 
-        private IEnumerator InvulnerableRoutine()
+        private IEnumerator FlashRoutine()
         {
-            vulnerable = false;
             iTimer = invulnerabilityDuration;
             while (iTimer > 0)
             {
@@ -111,7 +113,6 @@ namespace Bot
                 yield return new WaitForSeconds(flashInterval);
             }
             sr.enabled = true;
-            vulnerable = true;
         }
     }
 }
