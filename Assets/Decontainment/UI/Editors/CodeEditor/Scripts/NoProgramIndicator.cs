@@ -1,5 +1,4 @@
 using Asm;
-using Editor;
 using TMPro;
 using UnityEngine;
 
@@ -17,6 +16,11 @@ namespace Editor.Code
             tm = GetComponent<TextMeshProUGUI>();
 
             codeList.OnProgramChange += HandleProgramChange;
+        }
+
+        void Start()
+        {
+            HandleProgramChange(null);
         }
 
         private void HandleProgramChange(Program oldProgram)

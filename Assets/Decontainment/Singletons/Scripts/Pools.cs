@@ -2,6 +2,12 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+public interface IPoolable
+{
+    void OnGet();
+    void OnFree();
+}
+
 public class Pools : SceneSingleton<Pools>
 {
     [Serializable]
@@ -61,6 +67,11 @@ public class Pools : SceneSingleton<Pools>
             }
         }
         inUseObjToPrefabMap.Add(go, poolData);
+
+        foreach (IPoolable poolable in go.GetComponents<IPoolable>()) {
+            poolable.OnGet();
+        }
+
         return go;
     }
 
@@ -71,8 +82,12 @@ public class Pools : SceneSingleton<Pools>
             gameObject.transform.SetParent(poolData.parent);
             poolData.pool.Push(gameObject);
             inUseObjToPrefabMap.Remove(gameObject);
+
+            foreach (IPoolable poolable in gameObject.GetComponents<IPoolable>()) {
+                poolable.OnFree();
+            }
         } else {
-            Debug.LogError("Attempted to free non-pooled GameObject " + gameObject.ToString());
+            Debug.LogWarning("Attempted to free non-pooled GameObject " + gameObject.ToString());
         }
     }
 

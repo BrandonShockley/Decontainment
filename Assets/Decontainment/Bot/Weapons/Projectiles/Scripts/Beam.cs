@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Beam : Projectile 
+public abstract class Beam : Projectile
 {
     private static LayerMask MASK;
     private static Trigger doOnce;
@@ -79,7 +79,7 @@ public abstract class Beam : Projectile
             bool hit = false;
             do {
                 if (doOnce)
-                    yield return null;
+                    yield return new WaitForFixedUpdate();
 
                 RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, transform.right, maxDistance, MASK);
                 int hitIndex = -1;

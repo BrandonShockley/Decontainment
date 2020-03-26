@@ -659,6 +659,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: TeamList
       objectReference: {fileID: 0}
+    - target: {fileID: 2103377196954357853, guid: c390a65ed5fa41e48ab01b087e226896,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0.23921569
+      objectReference: {fileID: 0}
+    - target: {fileID: 2103377196954357853, guid: c390a65ed5fa41e48ab01b087e226896,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0.25882354
+      objectReference: {fileID: 0}
+    - target: {fileID: 2103377196954357853, guid: c390a65ed5fa41e48ab01b087e226896,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0.28627452
+      objectReference: {fileID: 0}
     - target: {fileID: 3443927173213072941, guid: c390a65ed5fa41e48ab01b087e226896,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -672,7 +687,7 @@ PrefabInstance:
     - target: {fileID: 3443927173213072941, guid: c390a65ed5fa41e48ab01b087e226896,
         type: 3}
       propertyPath: m_textInfo.lineCount
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3443927173213072941, guid: c390a65ed5fa41e48ab01b087e226896,
         type: 3}
@@ -692,7 +707,7 @@ PrefabInstance:
     - target: {fileID: 3443927173213072941, guid: c390a65ed5fa41e48ab01b087e226896,
         type: 3}
       propertyPath: m_firstOverflowCharacterIndex
-      value: 3
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 6226485244552808380, guid: c390a65ed5fa41e48ab01b087e226896,
         type: 3}
@@ -889,7 +904,7 @@ PrefabInstance:
     - target: {fileID: 2291002655150032324, guid: 706d2380e4e41f04db6429bdc2df6890,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 3.0000153
+      value: 3.0000305
       objectReference: {fileID: 0}
     - target: {fileID: 2291002655150032324, guid: 706d2380e4e41f04db6429bdc2df6890,
         type: 3}

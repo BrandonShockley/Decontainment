@@ -8,6 +8,7 @@ namespace Bot
         public const string RESOURCES_DIR = "Weapons";
 
         public GameObject projectilePrefab;
+        public bool operateInBotSpace;
         /// In seconds
         public float cooldown;
         public Color hardpointColor = Color.white;

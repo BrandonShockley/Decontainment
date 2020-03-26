@@ -27,12 +27,14 @@ public class MatchTeamList : TeamList
     // If we ever need to reorder stuff in the MatchTeamList, this will probably break.
     protected override void CreateListEntry(TeamData item, int siblingIndex = -1)
     {
-        GameObject listEntry;
+        GameObject listEntryGO;
         if (transform.childCount >= firstBuiltInIndex) {
-           listEntry = Instantiate(builtInListEntryPrefab, transform);
+           listEntryGO = Instantiate(builtInListEntryPrefab, transform);
         } else {
-           listEntry = Instantiate(listEntryPrefab, transform);
+           listEntryGO = Instantiate(listEntryPrefab, transform);
         }
-        listEntry.GetComponent<ListEntry>().Init(item.ToString(), HandleSelect, HandleRename);
+        TextListEntry listEntry = listEntryGO.GetComponent<TextListEntry>();
+        listEntry.Init(item.ToString(), HandleRename);
+        listEntry.OnSelect += () => HandleSelect(listEntry.transform.GetSiblingIndex());
     }
 }

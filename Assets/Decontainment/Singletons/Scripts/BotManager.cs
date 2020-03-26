@@ -22,11 +22,11 @@ class BotManager : SceneSingleton<BotManager>
 
     private List<Controller> bots = new List<Controller>();
     private List<Controller>[] teams = new List<Controller>[2];
-    private List<Transform> projectiles = new List<Transform>();
+    private List<Projectile> projectiles = new List<Projectile>();
 
     public event Action<int> OnTeamDisable;
 
-    public List<Transform> Projectiles { get { return projectiles; } }
+    public List<Projectile> Projectiles { get { return projectiles; } }
 
     void Awake()
     {
@@ -45,6 +45,23 @@ class BotManager : SceneSingleton<BotManager>
 
         bots.Add(bot);
         teams[bot.TeamID].Add(bot);
+    }
+
+    public void ClearAll()
+    {
+        // Projectiles
+        for (int i = projectiles.Count - 1; i >= 0; --i) {
+            Pools.Instance.Free(projectiles[i].gameObject);
+        }
+
+        // Bots
+        foreach (List<Controller> team in teams) {
+            team.Clear();
+        }
+        foreach (Controller bot in bots) {
+            Destroy(bot.gameObject);
+        }
+        bots.Clear();
     }
 
     /// Returns -1 if no valid targets

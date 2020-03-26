@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 public class MatchStart : MonoBehaviour
 {
     [SerializeField]
-    private GameObject mapPrefab = null;
+    private MapList mapList = null;
     [SerializeField]
     private TeamList teamList1 = null;
     [SerializeField]
@@ -19,23 +19,25 @@ public class MatchStart : MonoBehaviour
     {
         button = GetComponent<Button>();
 
-        teamList1.OnItemSelected += HandleTeamSelected;
-        teamList2.OnItemSelected += HandleTeamSelected;
+        teamList1.OnItemSelected += HandleSelected;
+        teamList2.OnItemSelected += HandleSelected;
+        mapList.OnItemSelected += HandleSelected;
     }
 
     public void StartMatch()
     {
-        MatchData.Instance.mapPrefab = mapPrefab;
+        MatchData.Instance.mapPrefab = mapList.SelectedItem;
         MatchData.Instance.teamDatas[0] = teamList1.SelectedItem;
         MatchData.Instance.teamDatas[1] = teamList2.SelectedItem;
         SceneManager.LoadScene("Arena");
     }
 
-    private void HandleTeamSelected(int prevIndex)
+    private void HandleSelected(int prevIndex)
     {
         bool team1Selected = teamList1.SelectedItem != null;
         bool team2Selected = teamList2.SelectedItem != null;
+        bool mapSelected = mapList.SelectedItem != null;
 
-        button.interactable = team1Selected && team2Selected;
+        button.interactable = team1Selected && team2Selected && mapSelected;
     }
 }

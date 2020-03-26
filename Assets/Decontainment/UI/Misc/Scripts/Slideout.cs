@@ -9,7 +9,7 @@ public class Slideout : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     [SerializeField]
     private Vector2 slideDeltaPos = Vector2.zero;
     [SerializeField]
-    private float slideSpeed = 1.0f;
+    private float slideDuration = 1.0f;
 
     private float interpolation;
     private bool hovered;
@@ -29,8 +29,7 @@ public class Slideout : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     void Update()
     {
-        float deltaDistance = slideSpeed * Time.unscaledDeltaTime;
-        float deltaInterpolation = deltaDistance / slideDeltaPos.magnitude;
+        float deltaInterpolation = Time.unscaledDeltaTime / slideDuration;
         if (float.IsNaN(deltaInterpolation)) {
             deltaInterpolation = 0;
         }
