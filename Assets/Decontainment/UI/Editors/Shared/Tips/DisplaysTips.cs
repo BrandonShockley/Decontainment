@@ -16,19 +16,31 @@ namespace Editor
 
         private GameObject toolTipInstance;
         private GameObject canvas;
-        DisplaysTips parent;
+        List<DisplaysTips> children;
         private bool hovered;
-        private bool isField;
         private string tipText;
         private float hoverTimer;
 
-        void Awake()
+        void Start()
         {
-            isField = (GetComponent<SlotField>() != null || GetComponent<DropdownField>() != null);
-            if (isField) {
-                parent = transform.parent.GetComponentInParent<DisplaysTips>();
-            }
+            children = new List<DisplaysTips>(GetComponentsInChildren<DisplaysTips>());
+            children.RemoveAt(0); // Remove self
             canvas = GameObject.FindGameObjectWithTag("MainCanvas");
+        }
+
+        void Update()
+        {
+            if (GlobalSettings.TooltipsEnabled && hovered && NoChildrenHovered()) {
+                hoverTimer += Time.unscaledDeltaTime;
+                if (toolTipInstance == null && hoverTimer > hoverDelay) {
+                    InstantiateTip();
+                }
+            } else {
+                hoverTimer = 0;
+                if (toolTipInstance != null) {
+                    Destroy(toolTipInstance);
+                }
+            }
         }
 
         public void Init(string text)
@@ -36,42 +48,22 @@ namespace Editor
             tipText = text;
         }
 
-        void Update()
-        {
-            if (hovered && GlobalSettings.TooltipsEnabled) {
-                hoverTimer += Time.unscaledDeltaTime;
-                if (toolTipInstance == null && hoverTimer > hoverDelay) {
-                    InstantiateTip();
-                }
-            }
-        }
-
         public void OnPointerEnter(PointerEventData eventData)
         {
             hovered = true;
-            hoverTimer = 0;
-
-            if (isField) {
-                // If entering a slot, destroy the instruction block tip
-                parent.OnPointerExit(eventData);
-            }
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
             hovered = false;
-
-            if (toolTipInstance != null) {
-                Destroy(toolTipInstance);
-            }
-
-            if (isField) {
-                // If exiting a slot, instruction block is now hovered over
-                parent.OnPointerEnter(eventData);
-            }
         }
 
-        public void InstantiateTip()
+        private bool NoChildrenHovered()
+        {
+            return children.TrueForAll((child) => !child.hovered);
+        }
+
+        private void InstantiateTip()
         {
             toolTipInstance = Instantiate(toolTipContainerPrefab, Input.mousePosition + Vector3.right * 10, Quaternion.identity, canvas.transform);
             toolTipInstance.GetComponent<ToolTipContainer>().SetText(tipText);

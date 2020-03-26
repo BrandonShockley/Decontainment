@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   entries:
   - color: {r: 0.007843138, g: 0.5058824, b: 0.7490196, a: 1}
-    opCategory: 0
-  - color: {r: 0.121568635, g: 0.62352943, b: 0.3372549, a: 1}
-    opCategory: 1
-  - color: {r: 0.48235294, g: 0.2059647, b: 0.43722835, a: 1}
-    opCategory: 2
-  - color: {r: 0.75, g: 0.15588236, b: 0, a: 1}
     opCategory: 3
+  - color: {r: 0.121568635, g: 0.62352943, b: 0.3372549, a: 1}
+    opCategory: 2
+  - color: {r: 0.48235294, g: 0.2059647, b: 0.43722835, a: 1}
+    opCategory: 1
+  - color: {r: 0.75, g: 0.15588236, b: 0, a: 1}
+    opCategory: 0
