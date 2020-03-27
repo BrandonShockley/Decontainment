@@ -1,0 +1,23 @@
+DodgeDist: 2
+ShootDistThreshold: 5
+ShootTurnThreshold: 5
+Start:
+TAR %0 Nearest Enemy
+HED %1 %0
+ABS %3 %1
+DIS %2 %0
+BGT NotTurntEnough %3 ShootTurnThreshold
+BGT NotCloseEnough %2 ShootDistThreshold
+SHT Sync
+BUN Dodge
+NotTurntEnough:
+TRN Left %1 Async
+BUN Dodge
+NotCloseEnough:
+SUB %2 %2 ShootDistThreshold
+DRV Forward %2 Async
+BUN Dodge
+Dodge:
+SCN %0 Projectiles $0 $20 $5
+BEQ Start %0 $0
+DRV Left DodgeDist Async

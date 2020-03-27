@@ -16,6 +16,6 @@ MonoBehaviour:
     type: 3}
   operateInBotSpace: 1
   cooldown: 2
-  hardpointColor: {r: 1, g: 0, b: 0.8534627, a: 1}
+  hardpointColor: {r: 0.8490566, g: 0.04405483, b: 0.7322523, a: 1}
   numShots: 1
   shotSpacing: 15

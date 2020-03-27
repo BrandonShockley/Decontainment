@@ -9,10 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 22374bc7af5c85b40b822ba5ca2f30ef, type: 3}
-  m_Name: Super team
+  m_Script: {fileID: 11500000, guid: 0820138dba3ce2e428a22f9b7a480245, type: 3}
+  m_Name: BotToSurpassMG
   m_EditorClassIdentifier: 
-  builtInBotDatas:
-  - {fileID: 11400000, guid: 05ed94aeaff74fc4b857a05e201ba64b, type: 2}
-  - {fileID: 0}
-  - {fileID: 0}
+  builtInProgram: {fileID: 4900000, guid: 8958815587e4507409688a2107c80621, type: 3}
+  weaponData: {fileID: 11400000, guid: 7c33543f37feab543816c934eebb823b, type: 2}

@@ -10,9 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 22374bc7af5c85b40b822ba5ca2f30ef, type: 3}
-  m_Name: BasicTeam
+  m_Name: Lancers
   m_EditorClassIdentifier: 
   builtInBotDatas:
-  - {fileID: 11400000, guid: 05ed94aeaff74fc4b857a05e201ba64b, type: 2}
-  - {fileID: 11400000, guid: 05ed94aeaff74fc4b857a05e201ba64b, type: 2}
-  - {fileID: 11400000, guid: 05ed94aeaff74fc4b857a05e201ba64b, type: 2}
+  - {fileID: 11400000, guid: 4a96b39d3653e7540b13a5d7e3e281e5, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  demoable: 1
