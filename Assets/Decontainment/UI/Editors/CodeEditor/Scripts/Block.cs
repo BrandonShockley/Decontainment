@@ -9,8 +9,6 @@ namespace Editor.Code
     {
         [SerializeField]
         protected float collapsedWidth = 44.0f;
-        [SerializeField]
-        protected Color dragOverColor = Color.white;
 
         protected CodeList codeList;
         protected Color origColor;
@@ -20,6 +18,8 @@ namespace Editor.Code
         protected Image bg;
         protected RectTransform rt;
         protected Divider myDivider;
+
+        public Divider MyDivider => myDivider;
 
         protected void Awake()
         {
@@ -33,6 +33,8 @@ namespace Editor.Code
         {
             this.myDivider = myDivider;
             this.codeList = codeList;
+
+            GetComponent<Selectable>().Init(codeList.SelectionManager);
 
             draggable.Init(codeList.Dividers, codeList.TrashSlots);
             draggable.filterFunc = (Draggable.Slot slot) => slot == myDivider;

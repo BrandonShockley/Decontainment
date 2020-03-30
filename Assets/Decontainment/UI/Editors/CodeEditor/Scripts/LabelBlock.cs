@@ -20,11 +20,7 @@ namespace Editor.Code
 
             Draggable draggable = GetComponent<Draggable>();
             draggable.onDragSuccess = Move;
-            draggable.onDragTrash = (Draggable.Slot slot) =>
-            {
-                codeList.Program.RemoveLabel(label);
-                Destroy(gameObject);
-            };
+            draggable.onDragTrash = Remove;
         }
 
         private void Move(Draggable.Slot slot)
@@ -61,6 +57,12 @@ namespace Editor.Code
             codeList.Program.BroadcastBranchLabelChange();
 
             // Reset frontend
+            Destroy(gameObject);
+        }
+
+        private void Remove(Draggable.Slot slot)
+        {
+            codeList.Program.RemoveLabel(label);
             Destroy(gameObject);
         }
     }

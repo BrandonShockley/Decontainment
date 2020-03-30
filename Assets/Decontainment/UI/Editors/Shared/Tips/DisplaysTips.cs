@@ -43,6 +43,13 @@ namespace Editor
             }
         }
 
+        void OnDestroy()
+        {
+            if (toolTipInstance != null) {
+                Destroy(toolTipInstance);
+            }
+        }
+
         public void Init(string text)
         {
             tipText = text;

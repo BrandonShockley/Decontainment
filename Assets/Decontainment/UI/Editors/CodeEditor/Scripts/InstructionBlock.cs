@@ -85,6 +85,21 @@ namespace Editor.Code
             }
         }
 
+        public void Remove()
+        {
+            if (lineNumber != -1) {
+                codeList.Program.instructions.RemoveAt(lineNumber);
+
+                // Adjust labels
+                foreach (Label label in codeList.Program.branchLabelList) {
+                    if (label.val > lineNumber) {
+                        --label.val; // TODO: This will need to be variable when we add dragging selected blocks
+                    }
+                }
+
+            }
+        }
+
         private void Insert(Draggable.Slot slot)
         {
             Divider targetDivider = (Divider)slot;
@@ -112,21 +127,6 @@ namespace Editor.Code
                 if (crossed || adjustedNewLineNumber < label.val) {
                     ++label.val; // TODO: This will need to be variable when we add dragging selected blocks
                 }
-            }
-        }
-
-        private void Remove()
-        {
-            if (lineNumber != -1) {
-                codeList.Program.instructions.RemoveAt(lineNumber);
-
-                // Adjust labels
-                foreach (Label label in codeList.Program.branchLabelList) {
-                    if (label.val > lineNumber) {
-                        --label.val; // TODO: This will need to be variable when we add dragging selected blocks
-                    }
-                }
-                
             }
         }
     }

@@ -214,6 +214,11 @@ PrefabInstance:
       propertyPath: codeList
       value: 
       objectReference: {fileID: 144337128}
+    - target: {fileID: 8256923224910060891, guid: b4370417e7f1d704c9bd1e390ae4507d,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8256923225373848830, guid: b4370417e7f1d704c9bd1e390ae4507d,
         type: 3}
       propertyPath: m_Name
@@ -351,6 +356,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 531155376}
     m_Modifications:
+    - target: {fileID: 613210912169998400, guid: aeb7eaf012c751745b72987635a7fcdd,
+        type: 3}
+      propertyPath: tab
+      value: 
+      objectReference: {fileID: 223298474}
     - target: {fileID: 734792550018290306, guid: aeb7eaf012c751745b72987635a7fcdd,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -523,6 +533,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: aeb7eaf012c751745b72987635a7fcdd, type: 3}
+--- !u!114 &223298474 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3414340495648812582, guid: 30fff58703ab8014f81a65db67434612,
+    type: 3}
+  m_PrefabInstance: {fileID: 887688095}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d19d57576c2c3e14180172e80b919bc9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &243437662 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7778551349502851045, guid: 8afb96f0b1c9c4251a6a8eee2ed5d629,
@@ -1107,6 +1129,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: TeamList
       objectReference: {fileID: 0}
+    - target: {fileID: 4165304984859626174, guid: 699c59b12b3dc1f48a51c507ef3ef1cf,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6760900603435013456, guid: 699c59b12b3dc1f48a51c507ef3ef1cf,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -1229,6 +1256,18 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 946514342}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &738151521 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3414340495648812582, guid: 30fff58703ab8014f81a65db67434612,
+    type: 3}
+  m_PrefabInstance: {fileID: 3943046881595811064}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d19d57576c2c3e14180172e80b919bc9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &887688095
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1241,11 +1280,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tab
       objectReference: {fileID: 0}
+    - target: {fileID: 2857675808423605360, guid: 30fff58703ab8014f81a65db67434612,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Focus
+      objectReference: {fileID: 0}
     - target: {fileID: 3414340495648812582, guid: 30fff58703ab8014f81a65db67434612,
         type: 3}
       propertyPath: container
       value: 
       objectReference: {fileID: 531155376}
+    - target: {fileID: 3414340495648812582, guid: 30fff58703ab8014f81a65db67434612,
+        type: 3}
+      propertyPath: tabManager
+      value: 
+      objectReference: {fileID: 2100341536}
     - target: {fileID: 4424907739243215539, guid: 30fff58703ab8014f81a65db67434612,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2855,11 +2904,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tab
       objectReference: {fileID: 0}
+    - target: {fileID: 2857675808423605360, guid: 30fff58703ab8014f81a65db67434612,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Focus
+      objectReference: {fileID: 0}
     - target: {fileID: 3414340495648812582, guid: 30fff58703ab8014f81a65db67434612,
         type: 3}
       propertyPath: container
       value: 
       objectReference: {fileID: 1444237927}
+    - target: {fileID: 3414340495648812582, guid: 30fff58703ab8014f81a65db67434612,
+        type: 3}
+      propertyPath: tabManager
+      value: 
+      objectReference: {fileID: 2100341536}
     - target: {fileID: 4424907739243215539, guid: 30fff58703ab8014f81a65db67434612,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3710,6 +3769,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2100341535}
+  - component: {fileID: 2100341536}
   m_Layer: 5
   m_Name: Editors
   m_TagString: Untagged
@@ -3741,6 +3801,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &2100341536
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2100341534}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb834a5fbb9fe8f4984a6a338e86d006, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  focusTab: {fileID: 0}
 --- !u!224 &2114715492 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3661238171107522587, guid: aeb7eaf012c751745b72987635a7fcdd,
@@ -3918,11 +3991,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tab
       objectReference: {fileID: 0}
+    - target: {fileID: 2857675808423605360, guid: 30fff58703ab8014f81a65db67434612,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Focus
+      objectReference: {fileID: 0}
     - target: {fileID: 3414340495648812582, guid: 30fff58703ab8014f81a65db67434612,
         type: 3}
       propertyPath: container
       value: 
       objectReference: {fileID: 1091142778}
+    - target: {fileID: 3414340495648812582, guid: 30fff58703ab8014f81a65db67434612,
+        type: 3}
+      propertyPath: tabManager
+      value: 
+      objectReference: {fileID: 2100341536}
+    - target: {fileID: 3414340495648812582, guid: 30fff58703ab8014f81a65db67434612,
+        type: 3}
+      propertyPath: focusOnStart
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4424907739243215539, guid: 30fff58703ab8014f81a65db67434612,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -4162,6 +4250,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5415853096819613863, guid: 1f5cf1ead83c9614ca38ba93283f6f6f,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5415853096819613868, guid: 1f5cf1ead83c9614ca38ba93283f6f6f,
         type: 3}
@@ -4447,6 +4540,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1091142778}
     m_Modifications:
+    - target: {fileID: 613210912169998400, guid: aeb7eaf012c751745b72987635a7fcdd,
+        type: 3}
+      propertyPath: tab
+      value: 
+      objectReference: {fileID: 738151521}
     - target: {fileID: 734792550018290306, guid: aeb7eaf012c751745b72987635a7fcdd,
         type: 3}
       propertyPath: m_textInfo.characterCount
