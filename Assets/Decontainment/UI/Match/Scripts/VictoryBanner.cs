@@ -18,17 +18,24 @@ namespace Match
 
             MatchManager.Instance.OnVictory += HandleVictory;
             MatchManager.Instance.OnTimeUp += HandleTimeUp;
+            MatchManager.Instance.OnAbort += HandleAbort;
         }
 
         private void HandleVictory(int teamID)
         {
-            tm.text = "Team " + (teamID + 1) + " wins!";
+            tm.text = "Team " + (teamID + 1) + " wins";
             StartCoroutine(GrowRoutine());
         }
 
         private void HandleTimeUp()
         {
-            tm.text = "Time's up!";
+            tm.text = "Time slice expired";
+            StartCoroutine(GrowRoutine());
+        }
+
+        private void HandleAbort()
+        {
+            tm.text = "Match aborted";
             StartCoroutine(GrowRoutine());
         }
 

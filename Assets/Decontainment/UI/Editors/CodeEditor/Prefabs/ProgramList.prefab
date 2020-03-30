@@ -626,12 +626,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 0
-    m_Right: 0
-    m_Top: 0
-    m_Bottom: 0
+    m_Left: 1
+    m_Right: 1
+    m_Top: 1
+    m_Bottom: 1
   m_ChildAlignment: 1
-  m_Spacing: 0
+  m_Spacing: 1
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 1
@@ -866,7 +866,7 @@ PrefabInstance:
     - target: {fileID: 3673806923499832191, guid: d13cf2f2c92b9294d8d964dda72b6d19,
         type: 3}
       propertyPath: m_textInfo.lineCount
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3673806923499832191, guid: d13cf2f2c92b9294d8d964dda72b6d19,
         type: 3}
@@ -881,7 +881,7 @@ PrefabInstance:
     - target: {fileID: 3673806923499832191, guid: d13cf2f2c92b9294d8d964dda72b6d19,
         type: 3}
       propertyPath: m_firstOverflowCharacterIndex
-      value: -1
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 5975290776852894894, guid: d13cf2f2c92b9294d8d964dda72b6d19,
         type: 3}
@@ -1206,12 +1206,12 @@ PrefabInstance:
     - target: {fileID: 3673806923499832191, guid: d13cf2f2c92b9294d8d964dda72b6d19,
         type: 3}
       propertyPath: m_firstOverflowCharacterIndex
-      value: -1
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 3673806923499832191, guid: d13cf2f2c92b9294d8d964dda72b6d19,
         type: 3}
       propertyPath: m_textInfo.lineCount
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5975290776852894894, guid: d13cf2f2c92b9294d8d964dda72b6d19,
         type: 3}
