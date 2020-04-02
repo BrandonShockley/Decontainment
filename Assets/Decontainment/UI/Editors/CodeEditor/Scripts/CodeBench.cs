@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Editor.Code
@@ -44,13 +45,11 @@ namespace Editor.Code
                 ResetConstLabelList();
 
                 if (oldProgram != null) {
-                    oldProgram.OnBranchLabelChange -= ResetBranchLabelList;
-                    oldProgram.OnConstLabelChange -= ResetConstLabelList;
+                    oldProgram.OnChange -= HandleProgramChange;
                 }
 
                 if (codeList.Program != null) {
-                    codeList.Program.OnBranchLabelChange += ResetBranchLabelList;
-                    codeList.Program.OnConstLabelChange += ResetConstLabelList;
+                    codeList.Program.OnChange += HandleProgramChange;
                 }
             };
         }
@@ -132,6 +131,16 @@ namespace Editor.Code
             codeList.Program.BroadcastConstLabelChange();
         }
 
+        private void HandleProgramChange(Program.Change change)
+        {
+            if (change.branchLabel) {
+                ResetBranchLabelList();
+            }
+            if (change.constLabel) {
+                ResetConstLabelList();
+            }
+        }
+
         private void ResetBranchLabelList()
         {
             for (int i = branchLabelTokenList.childCount - 1; i >= 0; --i) {
@@ -178,13 +187,14 @@ namespace Editor.Code
 
             // Create a clone to take its place upon being dragged
             Draggable draggable = instructionBlock.GetComponent<Draggable>();
-            Action oldOnDragStart = draggable.onDragStart;
-            draggable.onDragStart = () =>
+            Func<PointerEventData, bool> oldOnDragStart = draggable.onDragStart;
+            draggable.onDragStart = (eventData) =>
             {
                 InstructionBlock clone = CreateInstructionBlock(opCode, instructionBlock);
-                oldOnDragStart?.Invoke();
+                oldOnDragStart?.Invoke(eventData);
 
                 draggable.onDragCancel = () => Destroy(clone.gameObject);
+                return true;
             };
             Action<Draggable.Slot> oldOnDragSuccess = draggable.onDragSuccess;
             draggable.onDragSuccess = (Draggable.Slot slot) =>
@@ -209,13 +219,14 @@ namespace Editor.Code
             }
 
             Draggable draggable = token.GetComponent<Draggable>();
-            Action oldOnDragStart = draggable.onDragStart;
-            draggable.onDragStart = () =>
+            Func<PointerEventData, bool> oldOnDragStart = draggable.onDragStart;
+            draggable.onDragStart = (eventData) =>
             {
                 Token clone = CreateToken(arg, parent, token);
-                oldOnDragStart?.Invoke();
+                oldOnDragStart?.Invoke(eventData);
 
                 draggable.onDragCancel = () => Destroy(clone.gameObject);
+                return true;
             };
             Action<Draggable.Slot> oldOnDragSuccess = draggable.onDragSuccess;
             draggable.onDragSuccess = (Draggable.Slot slot) =>

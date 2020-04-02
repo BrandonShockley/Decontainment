@@ -52,16 +52,12 @@ namespace Editor.Code
                 _program = value;
 
                 if (oldProgram != null) {
-                    oldProgram.OnInstructionChange -= Reset;
-                    oldProgram.OnBranchLabelChange -= Reset;
-                    oldProgram.OnConstLabelChange -= Reset;
+                    oldProgram.OnChange -= HandleProgramChange;
                 }
 
                 Clear();
                 if (_program != null) {
-                    _program.OnInstructionChange += Reset;
-                    _program.OnBranchLabelChange += Reset;
-                    _program.OnConstLabelChange += Reset;
+                    _program.OnChange += HandleProgramChange;
                     Generate();
                 }
 
@@ -90,8 +86,7 @@ namespace Editor.Code
             cg = GetComponent<CanvasGroup>();
             csf = GetComponent<ContentSizeFitter>();
             rt = GetComponent<RectTransform>();
-
-            selectionManager = new SelectionManager(this);
+            selectionManager = GetComponent<SelectionManager>();
 
             initialCGBlocksRaycasts = cg.blocksRaycasts;
         }
@@ -102,47 +97,30 @@ namespace Editor.Code
                 return;
             }
 
-            if (Input.GetKeyDown(KeyCode.Delete) && selectionManager.BaseSelectionIndex != -1) {
-                // Delete selection
-                int startLineNumber = -1;
-                int endLineNumber = -1;
-                int startIndex = Math.Min(selectionManager.BaseSelectionIndex, selectionManager.SecondSelectionIndex);
-                int length = Math.Abs(selectionManager.BaseSelectionIndex - selectionManager.SecondSelectionIndex) + 1;
-
-                // Figure out what stuff we need to delete
-                List<Label> labels = new List<Label>();
-                for (int i = startIndex; i < startIndex + length; ++i) {
-                    if (Blocks[i].MyDivider.label != null) {
-                        labels.Add(Blocks[i].MyDivider.label);
-                    } else {
-                        int lineNumber = Blocks[i].MyDivider.lineNumber;
-                        if (startLineNumber == -1) {
-                            startLineNumber = lineNumber;
-                        }
-                        endLineNumber = lineNumber;
-                    }
-                }
-
-                // Delete it
-                if (startLineNumber != -1) {
-                    int linesLength = endLineNumber - startLineNumber + 1;
-                    Program.instructions.RemoveRange(startLineNumber, linesLength);
-
-                    // Adjust labels
-                    foreach (Label label in Program.branchLabelList) {
-                        if (label.val > endLineNumber) {
-                            label.val -= linesLength;
-                        }
-                    }
-                }
-                if (labels.Count != 0) {
-                    labels.ForEach((label) => Program.RemoveLabel(label));
-                }
-                Program.BroadcastInstructionChange();
+            if (Input.GetKeyDown(KeyCode.Delete) && selectionManager.RegionSelected) {
+                selectionManager.DeleteSelection();
+                Program.BroadcastMultiChange(new Program.Change(){ instruction = true, branchLabel = true });
             }
 
-            if (Input.GetKeyDown(KeyCode.C) && Input.GetKey(KeyCode.LeftControl)) {
-                PromptSystem.Instance.PromptOtherAction("Copied selection");
+            if (Input.GetKeyDown(KeyCode.X) && Input.GetKey(KeyCode.LeftControl) && selectionManager.RegionSelected) {
+                selectionManager.CopySelection();
+                selectionManager.DeleteSelection();
+                PromptSystem.Instance.PromptOtherAction("Selection cut");
+                Program.BroadcastMultiChange(new Program.Change(){ instruction = true, branchLabel = true });
+            }
+
+            if (Input.GetKeyDown(KeyCode.C) && Input.GetKey(KeyCode.LeftControl) && selectionManager.RegionSelected) {
+                selectionManager.CopySelection();
+                PromptSystem.Instance.PromptOtherAction("Selection copied");
+            }
+
+            if (Input.GetKeyDown(KeyCode.V) && Input.GetKey(KeyCode.LeftControl)) {
+                if (selectionManager.Pastable) {
+                    selectionManager.PasteBuffer();
+                    Program.BroadcastMultiChange(new Program.Change(){ instruction = true, branchLabel = true });
+                } else {
+                    PromptSystem.Instance.PromptInvalidAction("No selection to paste on");
+                }
             }
         }
 
@@ -174,6 +152,13 @@ namespace Editor.Code
         {
             Clear();
             Generate();
+        }
+
+        private void HandleProgramChange(Program.Change change)
+        {
+            if (change.instruction || change.branchLabel) {
+                Reset();
+            }
         }
 
         private void Clear()

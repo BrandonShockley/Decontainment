@@ -65,10 +65,11 @@ namespace Editor.Code
 
             // Configure callbacks n' stuff
             draggable.Init(codeList.SlotFields, codeList.TrashSlots);
-            draggable.onDragStart = () =>
+            draggable.onDragStart = (eventData) =>
             {
                 image.raycastTarget = false;
                 cg.blocksRaycasts = false;
+                return true;
             };
             draggable.onDragEnd = () =>
             {

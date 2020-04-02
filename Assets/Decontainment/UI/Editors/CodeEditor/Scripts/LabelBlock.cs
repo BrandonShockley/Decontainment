@@ -43,7 +43,7 @@ namespace Editor.Code
                     break;
                 } else if (l.val < label.val) {
                     insertionIndex = i + 1;
-                } else if (l.val == label.val) {
+                } else {
                     if (l == targetDivider.label) {
                         insertionIndex = i;
                         break;
@@ -63,6 +63,11 @@ namespace Editor.Code
         private void Remove(Draggable.Slot slot)
         {
             codeList.Program.RemoveLabel(label);
+            if (label.type == Label.Type.BRANCH) {
+                codeList.Program.BroadcastBranchLabelChange();
+            } else {
+                codeList.Program.BroadcastConstLabelChange();
+            }
             Destroy(gameObject);
         }
     }

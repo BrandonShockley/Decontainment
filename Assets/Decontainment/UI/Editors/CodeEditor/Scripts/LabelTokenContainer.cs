@@ -45,7 +45,15 @@ namespace Editor.Code
                 inputField.text = label.val.ToString();
             }
 
-            removeButton.onClick.AddListener(() => codeList.Program.RemoveLabel(label));
+            removeButton.onClick.AddListener(() =>
+            {
+                codeList.Program.RemoveLabel(label);
+                if (label.type == Label.Type.BRANCH) {
+                    codeList.Program.BroadcastBranchLabelChange();
+                } else {
+                    codeList.Program.BroadcastConstLabelChange();
+                }
+            });
         }
 
         public void Init(CodeList codeList)

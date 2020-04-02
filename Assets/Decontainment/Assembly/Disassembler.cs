@@ -20,10 +20,9 @@ namespace Asm
             int nextLabelIndex = 0;
             for (int lineNumber = 0; lineNumber < program.instructions.Count; ++lineNumber) {
                 // Write all branch labels for line
-                while (nextLabelIndex != program.branchLabelList.Count && program.branchLabelList[nextLabelIndex].val == lineNumber) {
+                for (; nextLabelIndex != program.branchLabelList.Count && program.branchLabelList[nextLabelIndex].val == lineNumber; ++nextLabelIndex) {
                     Label branchLabel = program.branchLabelList[nextLabelIndex];
                     programSB.Append(branchLabel.name + ":" + "\n");
-                    ++nextLabelIndex;
                 }
 
                 // Write instruction
@@ -58,7 +57,6 @@ namespace Asm
             for (; nextLabelIndex < program.branchLabelList.Count; ++nextLabelIndex) {
                 Label branchLabel = program.branchLabelList[nextLabelIndex];
                 programSB.Append(branchLabel.name + ":" + "\n");
-                ++nextLabelIndex;
             }
 
             return programSB.ToString();

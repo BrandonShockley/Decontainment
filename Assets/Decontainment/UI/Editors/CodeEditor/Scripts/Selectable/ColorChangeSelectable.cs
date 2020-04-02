@@ -22,12 +22,12 @@ namespace Editor.Code
             oldColor = image.color;
         }
 
-        public override void Select()
+        public override void SubSelect()
         {
             image.color = selectColor;
         }
 
-        public override void Deselect()
+        public override void SubDeselect()
         {
             image.color = oldColor;
         }
