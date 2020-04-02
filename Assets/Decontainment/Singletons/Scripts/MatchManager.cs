@@ -17,6 +17,7 @@ namespace Match
 
         public event Action<int> OnVictory;
         public event Action OnTimeUp;
+        public event Action OnAbort;
 
         public float TimeRemaining => timeRemaining;
 
@@ -51,8 +52,14 @@ namespace Match
             }
         }
 
-        // TODO: This is a temp thing
-        // We should have a proper match results screen
+        public void AbortMatch()
+        {
+            Time.timeScale = 0;
+            Debug.Log("Match aborted. Returning to editor.");
+            OnAbort?.Invoke();
+            StartCoroutine(ReturnToEditor());
+        }
+
         private IEnumerator ReturnToEditor()
         {
             yield return new WaitForSecondsRealtime(1.5f);
