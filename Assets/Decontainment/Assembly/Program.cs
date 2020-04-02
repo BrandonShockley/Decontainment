@@ -111,11 +111,6 @@ namespace Asm
         {
             ArgumentSpec.BRANCH_LABEL
         };
-        public static readonly ArgumentSpec[] ONE_INPUT_CONTROL_FLOW_SPECS = new ArgumentSpec[]
-        {
-            ArgumentSpec.BRANCH_LABEL,
-            ArgumentSpec.VAL1
-        };
         public static readonly ArgumentSpec[] TWO_INPUT_CONTROL_FLOW_SPECS = new ArgumentSpec[]
         {
             ArgumentSpec.BRANCH_LABEL,
