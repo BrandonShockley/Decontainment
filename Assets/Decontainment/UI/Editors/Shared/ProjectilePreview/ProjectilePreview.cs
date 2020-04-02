@@ -9,21 +9,21 @@ namespace Editor.Bot {
         [SerializeField]
         private GameObject botSelectorGO = null;
         [SerializeField]
-        private Image LaserImage = null;
+        private Image laserImage = null;
         [SerializeField]
-        private WeaponData Laser = null;
+        private WeaponData laser = null;
         [SerializeField]
-        private Image HealBeamImage = null;
+        private Image healBeamImage = null;
         [SerializeField]
-        private WeaponData HealBeam = null;
+        private WeaponData healBeam = null;
         [SerializeField]
-        private Image PulseImage = null;
+        private Image pulseImage = null;
         [SerializeField]
-        private WeaponData Pulse = null;
+        private WeaponData pulse = null;
         [SerializeField]
-        private GameObject BitThrowerImage = null;
+        private GameObject bitThrowerImage = null;
         [SerializeField]
-        private WeaponData BitThrower = null;
+        private WeaponData bitThrower = null;
 
         private BotData currentBot;
 
@@ -61,23 +61,23 @@ namespace Editor.Bot {
         private void HandleWeaponChanged() {
             ClearProjectileImage();
             if (currentBot != null && currentBot.WeaponData != null) {
-                if (currentBot.WeaponData == BitThrower) {
-                    BitThrowerImage.SetActive(true);
-                } else if (currentBot.WeaponData == HealBeam) {
-                    HealBeamImage.enabled = true;
-                } else if (currentBot.WeaponData == Laser) {
-                    LaserImage.enabled = true;
-                } else if (currentBot.WeaponData == Pulse) {
-                    PulseImage.enabled = true;
+                if (currentBot.WeaponData == bitThrower) {
+                    bitThrowerImage.SetActive(true);
+                } else if (currentBot.WeaponData == healBeam) {
+                    healBeamImage.enabled = true;
+                } else if (currentBot.WeaponData == laser) {
+                    laserImage.enabled = true;
+                } else if (currentBot.WeaponData == pulse) {
+                    pulseImage.enabled = true;
                 }
             }
         }
 
         private void ClearProjectileImage() {
-            LaserImage.enabled = false;
-            HealBeamImage.enabled = false;
-            BitThrowerImage.SetActive(false);
-            PulseImage.enabled = false;
+            laserImage.enabled = false;
+            healBeamImage.enabled = false;
+            bitThrowerImage.SetActive(false);
+            pulseImage.enabled = false;
         }
     }
 }
