@@ -30,7 +30,7 @@ namespace Editor.Code
                 Program program = Assembler.Assemble(Path.GetFileNameWithoutExtension(filePath), programText);
                 if (program != null) {
                     // Setup autosave
-                    program.OnChange += () => SaveProgram(program);
+                    program.OnChange += (c) => SaveProgram(program);
 
                     items.Add(program);
                 } else {
@@ -43,7 +43,7 @@ namespace Editor.Code
         {
             Program newProgram = new Program();
             newProgram.name = name;
-            newProgram.OnChange += () => SaveProgram(newProgram);
+            newProgram.OnChange += (c) => SaveProgram(newProgram);
             SaveProgram(newProgram);
 
             #if UNITY_EDITOR && !BUILD_MODE

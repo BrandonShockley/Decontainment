@@ -9,8 +9,6 @@ namespace Editor.Code
     {
         [SerializeField]
         protected float collapsedWidth = 44.0f;
-        [SerializeField]
-        protected Color dragOverColor = Color.white;
 
         protected CodeList codeList;
         protected Color origColor;
@@ -19,7 +17,25 @@ namespace Editor.Code
         protected Draggable draggable;
         protected Image bg;
         protected RectTransform rt;
+        protected Selectable selectable;
         protected Divider myDivider;
+
+        public Divider MyDivider => myDivider;
+
+        public void PreDrag()
+        {
+            myDivider?.gameObject.SetActive(false);
+            bg.raycastTarget = false;
+            cg.blocksRaycasts = false;
+            rt.sizeDelta = new Vector2(collapsedWidth, rt.sizeDelta.y);
+        }
+
+        public void PostDrag()
+        {
+            myDivider?.gameObject.SetActive(true);
+            bg.raycastTarget = true;
+            cg.blocksRaycasts = true;
+        }
 
         protected void Awake()
         {
@@ -27,6 +43,7 @@ namespace Editor.Code
             draggable = GetComponent<Draggable>();
             bg = GetComponent<Image>();
             rt = GetComponent<RectTransform>();
+            selectable = GetComponent<Selectable>();
         }
 
         protected void Init(Divider myDivider, CodeList codeList)
@@ -34,21 +51,23 @@ namespace Editor.Code
             this.myDivider = myDivider;
             this.codeList = codeList;
 
+            selectable.Init(codeList.SelectionManager);
+
             draggable.Init(codeList.Dividers, codeList.TrashSlots);
             draggable.filterFunc = (Draggable.Slot slot) => slot == myDivider;
-            draggable.onDragStart = () =>
+            draggable.onDragStart = (eventData) =>
             {
-                myDivider?.gameObject.SetActive(false);
-                bg.raycastTarget = false;
-                cg.blocksRaycasts = false;
-                rt.sizeDelta = new Vector2(collapsedWidth, rt.sizeDelta.y);
+                // NOTE: Having block handle drag logic for selectable isn't ideal
+                if (selectable.Selected) {
+                    selectable.OnDragStart(eventData);
+                    return false;
+                } else {
+                    PreDrag();
+                    return true;
+                }
+
             };
-            draggable.onDragEnd = () =>
-            {
-                myDivider?.gameObject.SetActive(true);
-                bg.raycastTarget = true;
-                cg.blocksRaycasts = true;
-            };
+            draggable.onDragEnd = PostDrag;
         }
     }
 }

@@ -1,3 +1,4 @@
+using Extensions;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,10 +7,10 @@ namespace Asm
 {
     public enum OpCategory
     {
-        CONTROL_FLOW,
-        DATA_MANIPULATION,
-        SENSING,
         ACTION,
+        SENSING,
+        DATA_MANIPULATION,
+        CONTROL_FLOW,
         _SIZE,
     }
 
@@ -24,7 +25,7 @@ namespace Asm
         BLE, // Branch if less than or equal to
         BGT, // Branch if greater than
         BGE, // Branch if greater than or equal to
-        BRN, // Branch arg * 1 times out of a hundred 
+        BRN, // Branch arg * 1 times out of a hundred
         CSR, // Call subroutine
         RSR, // Return from subroutine
 
@@ -193,45 +194,59 @@ namespace Asm
                 this.args[ai] = new Argument(argType, 0);
             }
         }
+
+        public Instruction ShallowCopy()
+        {
+            Argument[] newArgs = new Argument[args.Length];
+            for (int i = 0; i < args.Length; ++i) {
+                newArgs[i] = args[i].ShallowCopy();
+            }
+            return new Instruction(opCode, newArgs);
+        }
     }
 
     public class Program
     {
+        public struct Change
+        {
+            public bool argument;
+            public bool instruction;
+            public bool branchLabel;
+            public bool constLabel;
+        }
+
         public string name = "Unnamed";
         public List<Instruction> instructions = new List<Instruction>();
         public Dictionary<string, Label> labelMap = new Dictionary<string, Label>();
         public List<Label> branchLabelList = new List<Label>();
         public List<Label> constLabelList = new List<Label>();
 
-        public event Action OnChange;
-        public event Action OnArgumentChange;
-        public event Action OnInstructionChange;
-        public event Action OnBranchLabelChange;
-        public event Action OnConstLabelChange;
+        public event Action<Change> OnChange;
 
         public override string ToString() { return name; }
 
         public void BroadcastArgumentChange()
         {
-            OnArgumentChange?.Invoke();
-            OnChange?.Invoke();
+            OnChange?.Invoke(new Change(){ argument = true });
         }
         public void BroadcastInstructionChange()
         {
-            OnInstructionChange?.Invoke();
-            OnChange?.Invoke();
+            OnChange?.Invoke(new Change(){ instruction = true });
         }
         public void BroadcastBranchLabelChange()
         {
-            OnBranchLabelChange?.Invoke();
-            OnChange?.Invoke();
+            OnChange?.Invoke(new Change(){ branchLabel = true });
         }
         public void BroadcastConstLabelChange()
         {
-            OnConstLabelChange?.Invoke();
-            OnChange?.Invoke();
+            OnChange?.Invoke(new Change(){ constLabel = true });
+        }
+        public void BroadcastMultiChange(Change change)
+        {
+            OnChange?.Invoke(change);
         }
 
+        /// Removes from label map/list and instructions
         public void RemoveLabel(Label label)
         {
             labelMap.Remove(label.name);
@@ -246,14 +261,9 @@ namespace Asm
                         arg.label = null;
                         arg.type = Argument.Type.IMMEDIATE;
                         arg.val = 0;
+                        arg.BroadcastChange();
                     }
                 }
-            }
-
-            if (labelType == Label.Type.BRANCH) {
-                BroadcastBranchLabelChange();
-            } else {
-                BroadcastConstLabelChange();
             }
         }
     }

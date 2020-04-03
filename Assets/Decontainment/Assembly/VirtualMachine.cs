@@ -34,10 +34,10 @@ public class VirtualMachine
         get { return program; }
         set {
             if (program != null) {
-                program.OnInstructionChange -= BoundPC;
+                program.OnChange -= HandleProgramChange;
             }
             program = value;
-            program.OnInstructionChange += BoundPC;
+            program.OnChange += HandleProgramChange;
         }
     }
 
@@ -206,6 +206,13 @@ public class VirtualMachine
                 return arg.label.val;
             default:
                 return 0;
+        }
+    }
+
+    private void HandleProgramChange(Program.Change change)
+    {
+        if (change.instruction) {
+            BoundPC();
         }
     }
 

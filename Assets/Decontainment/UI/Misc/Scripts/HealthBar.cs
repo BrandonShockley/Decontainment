@@ -6,7 +6,11 @@ using UnityEngine.UI;
 
 public class HealthBar : MonoBehaviour
 {
+    [HideInInspector]
     public Health health;
+
+    [SerializeField]
+    private Vector2 offset = Vector2.zero;
 
     private RectTransform rt;
     private Slider s;
@@ -23,8 +27,8 @@ public class HealthBar : MonoBehaviour
         Vector2 normalizedViewPoint = Camera.main.WorldToViewportPoint(health.transform.position);
         Vector2 viewPoint = new Vector2(normalizedViewPoint.x * camRect.width, normalizedViewPoint.y * camRect.height)
             + new Vector2(camRect.xMin, camRect.yMin);
-        rt.anchorMin = viewPoint;
-        rt.anchorMax = viewPoint;
+        rt.anchorMin = viewPoint + offset;
+        rt.anchorMax = viewPoint + offset;
     }
 
     void OnDestroy()
@@ -36,6 +40,7 @@ public class HealthBar : MonoBehaviour
     {
         this.health = health;
         health.OnHealthChange += HandleHealthChange;
+        rt.anchoredPosition = Vector2.zero;
     }
 
     private void HandleHealthChange()

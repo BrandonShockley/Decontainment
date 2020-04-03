@@ -20,11 +20,7 @@ namespace Editor.Code
 
             Draggable draggable = GetComponent<Draggable>();
             draggable.onDragSuccess = Move;
-            draggable.onDragTrash = (Draggable.Slot slot) =>
-            {
-                codeList.Program.RemoveLabel(label);
-                Destroy(gameObject);
-            };
+            draggable.onDragTrash = Remove;
         }
 
         private void Move(Draggable.Slot slot)
@@ -47,7 +43,7 @@ namespace Editor.Code
                     break;
                 } else if (l.val < label.val) {
                     insertionIndex = i + 1;
-                } else if (l.val == label.val) {
+                } else {
                     if (l == targetDivider.label) {
                         insertionIndex = i;
                         break;
@@ -61,6 +57,17 @@ namespace Editor.Code
             codeList.Program.BroadcastBranchLabelChange();
 
             // Reset frontend
+            Destroy(gameObject);
+        }
+
+        private void Remove(Draggable.Slot slot)
+        {
+            codeList.Program.RemoveLabel(label);
+            if (label.type == Label.Type.BRANCH) {
+                codeList.Program.BroadcastBranchLabelChange();
+            } else {
+                codeList.Program.BroadcastConstLabelChange();
+            }
             Destroy(gameObject);
         }
     }

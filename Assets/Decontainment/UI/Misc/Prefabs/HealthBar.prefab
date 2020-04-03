@@ -174,7 +174,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a7e321b47e593948806525dc246d50a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  botHealth: {fileID: 0}
+  health: {fileID: 0}
+  offset: {x: 0, y: -0.05}
 --- !u!1 &5326111279591460378
 GameObject:
   m_ObjectHideFlags: 0

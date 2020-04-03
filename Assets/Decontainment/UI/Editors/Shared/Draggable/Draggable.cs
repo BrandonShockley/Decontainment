@@ -9,6 +9,33 @@ namespace Editor
 {
     public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
+        public struct State
+        {
+            public Transform parent;
+            public int siblingIndex;
+            public Vector2 anchor;
+            public Vector2 anchorPos;
+
+            public void Save(RectTransform rt)
+            {
+                parent = rt.parent;
+                siblingIndex = rt.GetSiblingIndex();
+                anchor = rt.anchorMin;
+                anchorPos = rt.anchoredPosition;
+            }
+            public void RestorePosition(RectTransform rt)
+            {
+                rt.anchorMin = anchor;
+                rt.anchorMax = anchor;
+                rt.anchoredPosition = anchorPos;
+            }
+            public void RestoreParent(RectTransform rt)
+            {
+                rt.SetParent(parent, false);
+                rt.SetSiblingIndex(siblingIndex);
+            }
+        }
+
         /// Extend to make a slot ui element
         public abstract class Slot : MonoBehaviour
         {
@@ -29,8 +56,8 @@ namespace Editor
             public abstract void HandleDragExit();
         }
 
-        /// Called upon drag start
-        public Action onDragStart;
+        /// Called upon drag start. Returns whether to continue with normal drag.
+        public Func<PointerEventData, bool> onDragStart;
         /// Called when drag ended, whether successful or not
         public Action onDragEnd;
         /// Called if drag manually cancelled or not successful
@@ -51,10 +78,7 @@ namespace Editor
         private List<Slot> trashSlots;
         private Slot bestSlot;
         private bool isTrashSlot;
-        private Transform origParent;
-        private int origIndex;
-        private Vector2 origAnchor;
-        private Vector2 origAnchorPos;
+        private State oldState;
 
         private Canvas canvas;
         private RectTransform rt;
@@ -63,7 +87,6 @@ namespace Editor
         {
             canvas = GetComponentInParent<Canvas>();
             rt = GetComponent<RectTransform>();
-            SaveState();
         }
 
         void Update()
@@ -78,7 +101,7 @@ namespace Editor
                     float minSqrDistance = float.PositiveInfinity;
                     foreach (Slot validSlot in validSlots) {
                         // Filtering results
-                        if (filterFunc != null && filterFunc(validSlot)) {
+                        if (!validSlot.gameObject.activeInHierarchy || (filterFunc != null && filterFunc(validSlot))) {
                             continue;
                         }
 
@@ -94,7 +117,7 @@ namespace Editor
                     }
                     foreach (Slot trashSlot in trashSlots) {
                         // Filtering results
-                        if (filterFunc != null && filterFunc(trashSlot)) {
+                        if (!trashSlot.gameObject.activeInHierarchy || (filterFunc != null && filterFunc(trashSlot))) {
                             continue;
                         }
 
@@ -139,13 +162,11 @@ namespace Editor
 
         public void OnBeginDrag(PointerEventData eventData)
         {
-            if (eventData.button != PointerEventData.InputButton.Left) {
+            if (eventData.button != PointerEventData.InputButton.Left || (onDragStart != null && !onDragStart(eventData))) {
                 return;
             }
 
-            onDragStart?.Invoke();
-
-            SaveState();
+            oldState.Save(rt);
             isDragging = true;
 
             transform.SetParent(canvas.transform, true);
@@ -177,7 +198,7 @@ namespace Editor
         {
             if (bestSlot != null) {
                 onDragEnd?.Invoke();
-                RestorePosition();
+                oldState.RestorePosition(rt);
                 if (isTrashSlot) {
                     onDragTrash?.Invoke(bestSlot);
                 } else {
@@ -192,31 +213,10 @@ namespace Editor
         private void CancelDrag()
         {
             onDragEnd?.Invoke();
-            RestorePosition();
-            RestoreParent();
+            oldState.RestorePosition(rt);
+            oldState.RestoreParent(rt);
             isDragging = false;
             onDragCancel?.Invoke();
-        }
-
-        private void SaveState()
-        {
-            origParent = transform.parent;
-            origIndex = transform.GetSiblingIndex();
-            origAnchor = rt.anchorMin;
-            origAnchorPos = rt.anchoredPosition;
-        }
-
-        private void RestorePosition()
-        {
-            rt.anchorMin = origAnchor;
-            rt.anchorMax = origAnchor;
-            rt.anchoredPosition = origAnchorPos;
-        }
-
-        private void RestoreParent()
-        {
-            transform.SetParent(origParent, false);
-            transform.SetSiblingIndex(origIndex);
         }
     }
 }

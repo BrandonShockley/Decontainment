@@ -20,6 +20,8 @@ namespace Editor.Code
         private RectTransform viewportRT = null;
         [SerializeField]
         private ScrollRect scrollRect = null;
+        [SerializeField]
+        private Tab tab = null;
 
         private bool initialCGBlocksRaycasts;
         private Transform[] instructionBlockTransforms;
@@ -28,6 +30,9 @@ namespace Editor.Code
         private List<Draggable.Slot> _dividers = new List<Draggable.Slot>();
         private List<Draggable.Slot> _slotFields = new List<Draggable.Slot>();
         private List<Draggable.Slot> _trashSlots = new List<Draggable.Slot>();
+        private List<Block> _blocks = new List<Block>();
+
+        private SelectionManager selectionManager;
 
         private Canvas canvas;
         private CanvasGroup cg;
@@ -47,25 +52,23 @@ namespace Editor.Code
                 _program = value;
 
                 if (oldProgram != null) {
-                    oldProgram.OnInstructionChange -= Reset;
-                    oldProgram.OnBranchLabelChange -= Reset;
-                    oldProgram.OnConstLabelChange -= Reset;
+                    oldProgram.OnChange -= HandleProgramChange;
                 }
 
                 Clear();
                 if (_program != null) {
-                    _program.OnInstructionChange += Reset;
-                    _program.OnBranchLabelChange += Reset;
-                    _program.OnConstLabelChange += Reset;
+                    _program.OnChange += HandleProgramChange;
                     Generate();
                 }
 
                 OnProgramChange?.Invoke(oldProgram);
             }
         }
-        public List<Draggable.Slot> Dividers { get { return _dividers; } }
-        public List<Draggable.Slot> SlotFields { get { return _slotFields; } }
-        public List<Draggable.Slot> TrashSlots { get { return _trashSlots; } }
+        public List<Draggable.Slot> Dividers => _dividers;
+        public List<Draggable.Slot> SlotFields => _slotFields;
+        public List<Draggable.Slot> TrashSlots => _trashSlots;
+        public List<Block> Blocks => _blocks;
+        public SelectionManager SelectionManager => selectionManager;
 
         void OnEnable()
         {
@@ -83,8 +86,42 @@ namespace Editor.Code
             cg = GetComponent<CanvasGroup>();
             csf = GetComponent<ContentSizeFitter>();
             rt = GetComponent<RectTransform>();
+            selectionManager = GetComponent<SelectionManager>();
 
             initialCGBlocksRaycasts = cg.blocksRaycasts;
+        }
+
+        void Update()
+        {
+            if (!tab.IsFocused) {
+                return;
+            }
+
+            if (Input.GetKeyDown(KeyCode.Delete) && selectionManager.RegionSelected) {
+                selectionManager.DeleteSelection();
+                Program.BroadcastMultiChange(new Program.Change(){ instruction = true, branchLabel = true });
+            }
+
+            if (Input.GetKeyDown(KeyCode.X) && Input.GetKey(KeyCode.LeftControl) && selectionManager.RegionSelected) {
+                selectionManager.CopySelection();
+                selectionManager.DeleteSelection();
+                PromptSystem.Instance.PromptOtherAction("Selection cut");
+                Program.BroadcastMultiChange(new Program.Change(){ instruction = true, branchLabel = true });
+            }
+
+            if (Input.GetKeyDown(KeyCode.C) && Input.GetKey(KeyCode.LeftControl) && selectionManager.RegionSelected) {
+                selectionManager.CopySelection();
+                PromptSystem.Instance.PromptOtherAction("Selection copied");
+            }
+
+            if (Input.GetKeyDown(KeyCode.V) && Input.GetKey(KeyCode.LeftControl)) {
+                if (selectionManager.Pastable) {
+                    selectionManager.PasteBuffer();
+                    Program.BroadcastMultiChange(new Program.Change(){ instruction = true, branchLabel = true });
+                } else {
+                    PromptSystem.Instance.PromptInvalidAction("No selection to paste on");
+                }
+            }
         }
 
         // Ensure that code blocks are always at least as wide as the viewport
@@ -109,10 +146,19 @@ namespace Editor.Code
             }
         }
 
+
+
         public void Reset()
         {
             Clear();
             Generate();
+        }
+
+        private void HandleProgramChange(Program.Change change)
+        {
+            if (change.instruction || change.branchLabel) {
+                Reset();
+            }
         }
 
         private void Clear()
@@ -120,14 +166,16 @@ namespace Editor.Code
             for (int i = transform.childCount - 1; i >= 0; --i) {
                 Destroy(transform.GetChild(i).gameObject);
             }
+
+            Dividers.Clear();
+            SlotFields.Clear();
+            Blocks.Clear();
+            selectionManager.Reset();
         }
 
         private void Generate()
         {
             cg.blocksRaycasts = initialCGBlocksRaycasts;
-
-            Dividers.Clear();
-            SlotFields.Clear();
 
             // Create code block for each instruction in program
             instructionBlockTransforms = new Transform[Program.instructions.Count];
@@ -141,14 +189,16 @@ namespace Editor.Code
 
                 // Create divider
                 Divider divider = Instantiate(dividerPrefab, transform, false).GetComponent<Divider>();
-                divider.Init(lineNumber);
+                divider.Init(lineNumber, selectionManager);
                 Dividers.Add(divider);
 
-                // Create code block
-                GameObject instructionBlock = Instantiate(instructionBlockPrefab, transform, false);
-                instructionBlock.GetComponent<InstructionBlock>().Init(lineNumber, instruction, divider, this);
+                // Create instruction block
+                GameObject instructionBlockGO = Instantiate(instructionBlockPrefab, transform, false);
+                InstructionBlock instructionBlock = instructionBlockGO.GetComponent<InstructionBlock>();
+                instructionBlock.Init(lineNumber, instruction, divider, this);
 
-                instructionBlockTransforms[lineNumber] = instructionBlock.transform;
+                Blocks.Add(instructionBlock);
+                instructionBlockTransforms[lineNumber] = instructionBlockGO.transform;
                 ++lineNumber;
             }
 
@@ -159,7 +209,7 @@ namespace Editor.Code
 
             // Create end divider
             Divider endDivider = Instantiate(dividerPrefab, transform, false).GetComponent<Divider>();
-            endDivider.Init(lineNumber);
+            endDivider.Init(lineNumber, selectionManager);
             Dividers.Add(endDivider);
 
             OnRectTransformDimensionsChange();
@@ -170,13 +220,16 @@ namespace Editor.Code
             Label label = Program.branchLabelList[nextLabelIndex];
 
             Divider labelDivider = Instantiate(dividerPrefab, transform, false).GetComponent<Divider>();
-            labelDivider.Init(label.val, label);
+            labelDivider.Init(label.val, selectionManager, label);
+
             Dividers.Add(labelDivider);
 
             // TODO: Need to test on bad devices to see if there's a performance hit when the code list is reset
             // NOTE: Maybe if there is, we can use pooling and continue to do a full reset
-            GameObject labelBlock = Instantiate(labelBlockPrefab, transform, false);
-            labelBlock.GetComponent<LabelBlock>().Init(label, labelDivider, this);
+            GameObject labelBlockGO = Instantiate(labelBlockPrefab, transform, false);
+            LabelBlock labelBlock = labelBlockGO.GetComponent<LabelBlock>();
+            labelBlock.Init(label, labelDivider, this);
+            Blocks.Add(labelBlock);
             ++nextLabelIndex;
         }
 

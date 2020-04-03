@@ -20,6 +20,7 @@ namespace Match
 
         void Start()
         {
+            Time.timeScale = 1;
             teams = new List<TeamData>(Resources.LoadAll<TeamData>(TeamDirectory.RESOURCES_PATH));
             for (int i = teams.Count - 1; i >= 0; --i) {
                 if (!teams[i].Demoable) {

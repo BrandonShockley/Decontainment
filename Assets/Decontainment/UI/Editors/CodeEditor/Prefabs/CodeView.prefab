@@ -193,6 +193,7 @@ GameObject:
   - component: {fileID: 5432692432273727049}
   - component: {fileID: 8802951697248366493}
   - component: {fileID: 4778006854806990053}
+  - component: {fileID: 887532783288334545}
   m_Layer: 5
   m_Name: CodeList
   m_TagString: Untagged
@@ -298,6 +299,21 @@ MonoBehaviour:
     type: 3}
   viewportRT: {fileID: 7338031590821116209}
   scrollRect: {fileID: 4124638294918339530}
+  tab: {fileID: 0}
+--- !u!114 &887532783288334545
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7070255997389662423}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba9ef77807462684b9fe97e202251d42, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  selectionDragContainerPrefab: {fileID: 6451052660190226828, guid: 72e4081c083f0394bb1dc315541f56a7,
+    type: 3}
 --- !u!1 &7992176428659204513
 GameObject:
   m_ObjectHideFlags: 0
