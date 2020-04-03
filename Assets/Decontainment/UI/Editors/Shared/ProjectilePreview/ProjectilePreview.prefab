@@ -273,14 +273,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   botSelectorGO: {fileID: 0}
   entries:
-  - weapon: {fileID: 0}
-    preview: {fileID: 0}
-  - weapon: {fileID: 0}
-    preview: {fileID: 0}
-  - weapon: {fileID: 0}
-    preview: {fileID: 0}
-  - weapon: {fileID: 0}
-    preview: {fileID: 0}
+  - weapon: {fileID: 11400000, guid: 49f1d6d20a4b3dc4e80977af7f57a204, type: 2}
+    preview: {fileID: 1619503209591349222}
+  - weapon: {fileID: 11400000, guid: a1fcdd241bce75949b5b54439b3e7a8b, type: 2}
+    preview: {fileID: 4919511467067145208}
+  - weapon: {fileID: 11400000, guid: 7b06a04191a3b40478ab88040ec75edb, type: 2}
+    preview: {fileID: 4663513411063457473}
+  - weapon: {fileID: 11400000, guid: 7c33543f37feab543816c934eebb823b, type: 2}
+    preview: {fileID: 7631973636678861477}
 --- !u!1 &3558322298940217587
 GameObject:
   m_ObjectHideFlags: 0

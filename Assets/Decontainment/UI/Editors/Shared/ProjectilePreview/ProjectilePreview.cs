@@ -11,8 +11,8 @@ namespace Editor.Bot
         [Serializable]
         private class Entry 
         {
-            public WeaponData weapon;
-            public GameObject preview;
+            public WeaponData weapon = null;
+            public GameObject preview = null;
         }
 
         [SerializeField]
@@ -21,7 +21,7 @@ namespace Editor.Bot
         [SerializeField]
         private Entry[] entries = new Entry[4];
 
-        public Dictionary<WeaponData, GameObject> map = new Dictionary<WeaponData, GameObject>();
+        private Dictionary<WeaponData, GameObject> map = new Dictionary<WeaponData, GameObject>();
 
         private BotData currentBot;
 
