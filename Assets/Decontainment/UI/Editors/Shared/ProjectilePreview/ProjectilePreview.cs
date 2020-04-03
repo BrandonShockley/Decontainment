@@ -1,51 +1,56 @@
 ﻿using Bot;
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
-namespace Editor.Bot {
-    public class ProjectilePreview : MonoBehaviour {
+namespace Editor.Bot 
+{
+    public class ProjectilePreview : MonoBehaviour 
+    {
+
+        [Serializable]
+        private class Entry 
+        {
+            public WeaponData weapon;
+            public GameObject preview;
+        }
+
         [SerializeField]
         private GameObject botSelectorGO = null;
+
         [SerializeField]
-        private Image laserImage = null;
-        [SerializeField]
-        private WeaponData laser = null;
-        [SerializeField]
-        private Image healBeamImage = null;
-        [SerializeField]
-        private WeaponData healBeam = null;
-        [SerializeField]
-        private Image pulseImage = null;
-        [SerializeField]
-        private WeaponData pulse = null;
-        [SerializeField]
-        private GameObject bitThrowerImage = null;
-        [SerializeField]
-        private WeaponData bitThrower = null;
+        private Entry[] entries = new Entry[4];
+
+        public Dictionary<WeaponData, GameObject> map = new Dictionary<WeaponData, GameObject>();
 
         private BotData currentBot;
 
         private IBotSelector botSelector;
 
-        void Awake() {
+        void Awake() 
+        {
             botSelector = botSelectorGO.GetComponent<IBotSelector>();
 
             botSelector.OnBotSelected += HandleBotSelected;
         }
 
-        void Start() {
+        void Start() 
+        {
+            foreach (Entry e in entries) {
+                map.Add(e.weapon, e.preview);
+            }
             HandleBotSelected();
         }
 
-        void OnDestroy() {
+        void OnDestroy() 
+        {
             if (currentBot != null) {
                 currentBot.OnWeaponChange -= HandleWeaponChanged;
             }
         }
 
-        private void HandleBotSelected() {
+        private void HandleBotSelected() 
+        {
             if (currentBot != null) {
                 currentBot.OnWeaponChange -= HandleWeaponChanged;
             }
@@ -58,26 +63,24 @@ namespace Editor.Bot {
             HandleWeaponChanged();
         }
 
-        private void HandleWeaponChanged() {
+        private void HandleWeaponChanged() 
+        {
             ClearProjectileImage();
             if (currentBot != null && currentBot.WeaponData != null) {
-                if (currentBot.WeaponData == bitThrower) {
-                    bitThrowerImage.SetActive(true);
-                } else if (currentBot.WeaponData == healBeam) {
-                    healBeamImage.enabled = true;
-                } else if (currentBot.WeaponData == laser) {
-                    laserImage.enabled = true;
-                } else if (currentBot.WeaponData == pulse) {
-                    pulseImage.enabled = true;
+                foreach (KeyValuePair<WeaponData, GameObject> entry in map) {
+                    if (currentBot.WeaponData == entry.Key) {
+                        entry.Value.SetActive(true);
+                        break;
+                    }
                 }
             }
         }
 
-        private void ClearProjectileImage() {
-            laserImage.enabled = false;
-            healBeamImage.enabled = false;
-            bitThrowerImage.SetActive(false);
-            pulseImage.enabled = false;
+        private void ClearProjectileImage() 
+        {
+            foreach (KeyValuePair<WeaponData, GameObject> entry in map) {
+                entry.Value.SetActive(false);
+            }
         }
     }
 }

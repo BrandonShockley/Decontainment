@@ -17,7 +17,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &6027182194927891043
 RectTransform:
   m_ObjectHideFlags: 0
@@ -52,7 +52,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1619503209591349222}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -272,14 +272,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   botSelectorGO: {fileID: 0}
-  LaserImage: {fileID: 6378344923584471083}
-  Laser: {fileID: 11400000, guid: 49f1d6d20a4b3dc4e80977af7f57a204, type: 2}
-  HealBeamImage: {fileID: 6076739488949817830}
-  HealBeam: {fileID: 11400000, guid: a1fcdd241bce75949b5b54439b3e7a8b, type: 2}
-  PulseImage: {fileID: 6062347056206662754}
-  Pulse: {fileID: 11400000, guid: 7b06a04191a3b40478ab88040ec75edb, type: 2}
-  BitThrowerImage: {fileID: 7631973636678861477}
-  BitThrower: {fileID: 11400000, guid: 7c33543f37feab543816c934eebb823b, type: 2}
+  entries:
+  - weapon: {fileID: 0}
+    preview: {fileID: 0}
+  - weapon: {fileID: 0}
+    preview: {fileID: 0}
+  - weapon: {fileID: 0}
+    preview: {fileID: 0}
+  - weapon: {fileID: 0}
+    preview: {fileID: 0}
 --- !u!1 &3558322298940217587
 GameObject:
   m_ObjectHideFlags: 0
@@ -443,7 +444,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4920484916184330646
 RectTransform:
   m_ObjectHideFlags: 0
@@ -478,7 +479,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4663513411063457473}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -516,7 +517,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8327080823410499082
 RectTransform:
   m_ObjectHideFlags: 0
@@ -551,7 +552,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4919511467067145208}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -587,7 +588,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &632617854819953583
 RectTransform:
   m_ObjectHideFlags: 0
