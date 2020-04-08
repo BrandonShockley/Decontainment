@@ -10,9 +10,10 @@ namespace Editor
     public class TextListEntry : MonoBehaviour, IListEntry, IPointerClickHandler
     {
         [SerializeField]
-        private Color selectedColor = Color.white;
+        private float selectedColorMultiplier = 1;
 
         private Color deselectedColor;
+        private bool selected;
 
         private Image image;
         private Renamable rn;
@@ -25,7 +26,10 @@ namespace Editor
             image = GetComponent<Image>();
             rn = GetComponent<Renamable>();
             inputField = GetComponent<TMP_InputField>();
+        }
 
+        void Start()
+        {
             deselectedColor = image.color;
         }
 
@@ -44,13 +48,19 @@ namespace Editor
 
         public void Select()
         {
-            image.color = selectedColor;
-            OnSelect?.Invoke();
+            if (!selected) {
+                selected = true;
+                image.color *= selectedColorMultiplier;
+                OnSelect?.Invoke();
+            }
         }
 
         public void Deselect()
         {
-            image.color = deselectedColor;
+            if (selected) {
+                selected = false;
+                image.color = deselectedColor;
+            }
         }
     }
 }

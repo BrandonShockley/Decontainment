@@ -16,6 +16,27 @@ namespace Asm
 
     public enum OpCode
     {
+        // Actions
+        DRV, // Drive
+        TRN, // Turn
+        SHT, // Shoot
+        SLP, // Sleep
+
+        // Sensing
+        TAR, // Target
+        HED, // Heading
+        DIS, // Distance
+        SCN, // Scan
+
+        // Data manipulation
+        SET, // Set
+        ADD, // Add
+        SUB, // Subtract
+        MUL, // Multiply
+        DIV, // Divide
+        MOD, // Modulo
+        ABS, // Absolute value
+
         // Control flow
         NOP,
         BUN, // Branch unconditionally
@@ -28,27 +49,6 @@ namespace Asm
         BRN, // Branch arg * 1 times out of a hundred
         CSR, // Call subroutine
         RSR, // Return from subroutine
-
-        // Data manipulation
-        SET, // Set
-        ADD, // Add
-        SUB, // Subtract
-        MUL, // Multiply
-        DIV, // Divide
-        MOD, // Modulo
-        ABS, // Absolute value
-
-        // Sensing
-        TAR, // Target
-        HED, // Heading
-        DIS, // Distance
-        SCN, // Scan
-
-        // Actions
-        DRV, // Drive
-        TRN, // Turn
-        SHT, // Shoot
-        SLP, // Sleep
 
         _SIZE,
     }
@@ -99,14 +99,25 @@ namespace Asm
         }
     }
 
+    public struct OpInfo
+    {
+        public readonly string descriptiveName;
+        public readonly string description;
+
+        public OpInfo(string descriptiveName, string description)
+        {
+            this.descriptiveName = descriptiveName;
+            this.description = description;
+        }
+    }
+
     public struct ArgumentSpec
     {
-        public static readonly ArgumentSpec BRANCH_LABEL = ArgumentSpec.MakeOpen("Branch destination");
-        public static readonly ArgumentSpec DEST_REG = ArgumentSpec.MakeRegOnly("Destination register");
-        public static readonly ArgumentSpec VAL = ArgumentSpec.MakeOpen("Value");
-        public static readonly ArgumentSpec VAL1 = ArgumentSpec.MakeOpen("Left value");
-        public static readonly ArgumentSpec VAL2 = ArgumentSpec.MakeOpen("Right value");
-        public static readonly ArgumentSpec SYNC_PRESETS = new ArgumentSpec("Concurrent", false, new string[]{ "Sync", "Async" });
+        public static readonly ArgumentSpec BRANCH_LABEL = ArgumentSpec.MakeOpen("Branch Destination", "Where to branch to in the program.");
+        public static readonly ArgumentSpec DEST_REG = ArgumentSpec.MakeRegOnly("Result Register", "Which register to store the result in.");
+        public static readonly ArgumentSpec VAL = ArgumentSpec.MakeOpen("Value", "");
+        public static readonly ArgumentSpec VAL1 = ArgumentSpec.MakeOpen("Left Value", "");
+        public static readonly ArgumentSpec VAL2 = ArgumentSpec.MakeOpen("Right Value", "");
 
         public static readonly ArgumentSpec[] NO_INPUT_CONTROL_FLOW_SPECS = new ArgumentSpec[]
         {
@@ -132,17 +143,21 @@ namespace Asm
         public static readonly ArgumentSpec[] HANDLING_TARGET_SENSING_SPECS = new ArgumentSpec[]
         {
             DEST_REG,
-            ArgumentSpec.MakeRegOnly("Target Index")
+            ArgumentSpec.MakeRegOnly("Target Handle", "")
         };
 
         /// Open arguments can take registers or immediate values
-        public static ArgumentSpec MakeOpen(string name)
+        public static ArgumentSpec MakeOpen(string name, string description)
         {
-            return new ArgumentSpec(name, false, null);
+            return new ArgumentSpec(name, false, null, description);
         }
-        public static ArgumentSpec MakeRegOnly(string name)
+        public static ArgumentSpec MakeRegOnly(string name, string description)
         {
-            return new ArgumentSpec(name, true, null);
+            return new ArgumentSpec(name, true, null, description);
+        }
+        public static ArgumentSpec MakeConcurrency(string description)
+        {
+            return new ArgumentSpec("Concurrency", false, new string[]{ "Sync", "Async" }, description);
         }
 
         public readonly string name;
@@ -150,11 +165,13 @@ namespace Asm
         /// Array of built-in presets
         /// Only valid if regOnly == false
         public readonly string[] presets;
-        public ArgumentSpec(string name, bool regOnly, string[] presets)
+        public readonly string description;
+        public ArgumentSpec(string name, bool regOnly, string[] presets, string description)
         {
             this.name = name;
             this.regOnly = regOnly;
             this.presets = presets;
+            this.description = description;
         }
     }
 

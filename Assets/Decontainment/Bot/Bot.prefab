@@ -105,7 +105,7 @@ MonoBehaviour:
   teamColors:
   - {r: 0, g: 1, b: 1, a: 1}
   - {r: 1, g: 0, b: 0, a: 1}
-  data: {fileID: 11400000, guid: 05ed94aeaff74fc4b857a05e201ba64b, type: 2}
+  data: {fileID: 0}
   clockInterval: 0.02
   teamID: 0
 --- !u!114 &5491903226993273825

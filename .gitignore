@@ -57,10 +57,17 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+build.zip
 
 # Crashlytics generated file
 crashlytics-build.properties
 
+# Testing directories
+Bots/*
+Programs/*
+Teams/*
+
+# Misc
 .vscode/*
 .collabignore
 .DS_Store

@@ -22,12 +22,12 @@ namespace Editor.Code
             oldColor = image.color;
         }
 
-        public override void SubSelect()
+        protected override void SubSelect()
         {
             image.color *= darkenMultiplier;
         }
 
-        public override void SubDeselect()
+        protected override void SubDeselect()
         {
             image.color = oldColor;
         }

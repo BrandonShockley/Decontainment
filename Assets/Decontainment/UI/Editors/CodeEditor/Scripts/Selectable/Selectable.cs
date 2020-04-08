@@ -42,7 +42,7 @@ namespace Editor.Code
             SubDeselect();
         }
 
-        public abstract void SubSelect();
-        public abstract void SubDeselect();
+        protected abstract void SubSelect();
+        protected abstract void SubDeselect();
     }
 }

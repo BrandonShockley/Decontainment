@@ -14,7 +14,7 @@ namespace Editor
         [SerializeField]
         private bool focusOnStart = false;
 
-        public bool IsFocused => tabManager.focusTab == this;
+        public bool IsFocused => tabManager != null && tabManager.focusTab == this;
 
         void Start()
         {
@@ -26,7 +26,9 @@ namespace Editor
         public void Focus()
         {
             container.SetAsLastSibling();
-            tabManager.focusTab = this;
+            if (tabManager != null) {
+                tabManager.focusTab = this;
+            }
         }
     }
 }

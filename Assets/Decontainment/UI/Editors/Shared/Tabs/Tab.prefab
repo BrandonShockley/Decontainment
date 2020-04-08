@@ -62,6 +62,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   container: {fileID: 0}
+  tabManager: {fileID: 0}
+  focusOnStart: 0
 --- !u!114 &2857675808423605360
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -106,7 +108,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 3414340495648812582}
-        m_MethodName: BringToTop
+        m_MethodName: Focus
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

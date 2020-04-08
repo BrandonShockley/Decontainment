@@ -62,7 +62,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57c7c532f3902f14888cbc455235c0b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selectedColor: {r: 0.30082193, g: 0.32547948, b: 0.36, a: 1}
+  selectedColorMultiplier: 0.837
 --- !u!114 &30054551322653143
 MonoBehaviour:
   m_ObjectHideFlags: 0
