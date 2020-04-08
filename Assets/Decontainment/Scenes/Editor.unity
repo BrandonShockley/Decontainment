@@ -349,6 +349,18 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 150481944}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &152535978 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6921845868725547500, guid: 189a4d0057dc6ee438002bf02b73971c,
+    type: 3}
+  m_PrefabInstance: {fileID: 4901871367604182126}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &172234585
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1427,6 +1439,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 30fff58703ab8014f81a65db67434612, type: 3}
+--- !u!114 &889441854 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7845220593518395425, guid: 189a4d0057dc6ee438002bf02b73971c,
+    type: 3}
+  m_PrefabInstance: {fileID: 4901871367604182126}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &899920243
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2019,6 +2043,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f1b22073a31e25c45a7045d044340844, type: 3}
+--- !u!1 &1022694979 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5863985063920456546, guid: 189a4d0057dc6ee438002bf02b73971c,
+    type: 3}
+  m_PrefabInstance: {fileID: 4901871367604182126}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1091142777
 GameObject:
   m_ObjectHideFlags: 0
@@ -3405,6 +3435,18 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 1003213357}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1637424641 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7830335101750369701, guid: 189a4d0057dc6ee438002bf02b73971c,
+    type: 3}
+  m_PrefabInstance: {fileID: 4901871367604182126}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &1641428565 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 428656906751816582, guid: f1b22073a31e25c45a7045d044340844,
@@ -4326,6 +4368,61 @@ PrefabInstance:
       propertyPath: editorList
       value: 
       objectReference: {fileID: 971111925}
+    - target: {fileID: 3503598474516078049, guid: 189a4d0057dc6ee438002bf02b73971c,
+        type: 3}
+      propertyPath: botSelectorGO
+      value: 
+      objectReference: {fileID: 4160906450836935648}
+    - target: {fileID: 3503598474516078049, guid: 189a4d0057dc6ee438002bf02b73971c,
+        type: 3}
+      propertyPath: laserImage
+      value: 
+      objectReference: {fileID: 152535978}
+    - target: {fileID: 3503598474516078049, guid: 189a4d0057dc6ee438002bf02b73971c,
+        type: 3}
+      propertyPath: healBeamImage
+      value: 
+      objectReference: {fileID: 889441854}
+    - target: {fileID: 3503598474516078049, guid: 189a4d0057dc6ee438002bf02b73971c,
+        type: 3}
+      propertyPath: pulseImage
+      value: 
+      objectReference: {fileID: 1637424641}
+    - target: {fileID: 3503598474516078049, guid: 189a4d0057dc6ee438002bf02b73971c,
+        type: 3}
+      propertyPath: bitThrowerImage
+      value: 
+      objectReference: {fileID: 1022694979}
+    - target: {fileID: 3503598474516078049, guid: 189a4d0057dc6ee438002bf02b73971c,
+        type: 3}
+      propertyPath: bitThrower
+      value: 
+      objectReference: {fileID: 11400000, guid: 7c33543f37feab543816c934eebb823b,
+        type: 2}
+    - target: {fileID: 3503598474516078049, guid: 189a4d0057dc6ee438002bf02b73971c,
+        type: 3}
+      propertyPath: healBeam
+      value: 
+      objectReference: {fileID: 11400000, guid: a1fcdd241bce75949b5b54439b3e7a8b,
+        type: 2}
+    - target: {fileID: 3503598474516078049, guid: 189a4d0057dc6ee438002bf02b73971c,
+        type: 3}
+      propertyPath: laser
+      value: 
+      objectReference: {fileID: 11400000, guid: 49f1d6d20a4b3dc4e80977af7f57a204,
+        type: 2}
+    - target: {fileID: 3503598474516078049, guid: 189a4d0057dc6ee438002bf02b73971c,
+        type: 3}
+      propertyPath: pulse
+      value: 
+      objectReference: {fileID: 11400000, guid: 7b06a04191a3b40478ab88040ec75edb,
+        type: 2}
+    - target: {fileID: 3503598474516078049, guid: 189a4d0057dc6ee438002bf02b73971c,
+        type: 3}
+      propertyPath: projectilePreviewWeaponMap
+      value: 
+      objectReference: {fileID: 11400000, guid: cac38946597db274d8ed2d6be24bd0d2,
+        type: 2}
     - target: {fileID: 4901871368683966899, guid: 189a4d0057dc6ee438002bf02b73971c,
         type: 3}
       propertyPath: botSelectorGO
@@ -4499,27 +4596,27 @@ PrefabInstance:
     - target: {fileID: 7194699277856830819, guid: 189a4d0057dc6ee438002bf02b73971c,
         type: 3}
       propertyPath: m_textInfo.characterCount
-      value: 0
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 7194699277856830819, guid: 189a4d0057dc6ee438002bf02b73971c,
         type: 3}
       propertyPath: m_textInfo.spaceCount
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7194699277856830819, guid: 189a4d0057dc6ee438002bf02b73971c,
         type: 3}
       propertyPath: m_textInfo.wordCount
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7194699277856830819, guid: 189a4d0057dc6ee438002bf02b73971c,
         type: 3}
       propertyPath: m_textInfo.lineCount
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7194699277856830819, guid: 189a4d0057dc6ee438002bf02b73971c,
         type: 3}
       propertyPath: m_textInfo.pageCount
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8869162674182660359, guid: 189a4d0057dc6ee438002bf02b73971c,
         type: 3}
