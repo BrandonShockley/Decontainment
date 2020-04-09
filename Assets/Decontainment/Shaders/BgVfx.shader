@@ -4,9 +4,11 @@
 		_Color ("Tint", Color) = (1,1,1,1)
 
 		_PulseMap ("Gradient Pulse Map (red channel)", 2D) = "white" {}
+		_MaxMap ("Max Map (red channel)", 2D) = "white" {}
 		_BackgroundColor ("Background Color", Color) = (1,1,1,1)
 		_PulseColor ("Pulse Color", Color) = (1,1,1,1)
 		_Speed ("Pulse Speed", Float) = 10
+		_Offset ("Pulse Offest", Float) = 0
 		_PulseWidth ("Pulse Width", Float) = 5
 
 
@@ -23,10 +25,10 @@
 	}
 
 	SubShader {
-		Tags { 
-			"Queue"="Transparent" 
-			"IgnoreProjector"="True" 
-			"RenderType"="Transparent" 
+		Tags {
+			"Queue"="Transparent"
+			"IgnoreProjector"="True"
+			"RenderType"="Transparent"
 			"PreviewType"="Plane"
 			"CanUseSpriteAtlas"="True"
 		}
@@ -53,29 +55,30 @@
 
 			// sampler2D _MainTex;
 			sampler2D _PulseMap;
+			sampler2D _MaxMap;
 			half4 _BackgroundColor;
 			half4 _PulseColor;
 			float _Speed;
+			float _Offset;
 			float _PulseWidth;
 
 
 			fixed4 frag(v2f IN) : SV_Target
 			{
-				fixed4 c = SampleSpriteTexture(IN.texcoord) * IN.color;
-				half4 bg = tex2D (_MainTex, IN.texcoord);
-				half4 pulseMap = tex2D (_PulseMap, IN.texcoord);
+				fixed4 bg = SampleSpriteTexture(IN.texcoord);
+				half4 pulseMap = tex2D(_PulseMap, IN.texcoord);
+				half4 maxMap = tex2D(_MaxMap, IN.texcoord);
 
-				float modTime = fmod(_Time.x * _Speed, 1);
-				float diff = abs(pulseMap.r - modTime);
-				float bonusBrightness = _PulseWidth / diff;
+				float modTime = fmod(_Time.x * _Speed + _Offset, maxMap.r);
+				float normDiff = abs(pulseMap.r - modTime) / maxMap.r;
+				normDiff = normDiff > .5 ? 1 - normDiff : normDiff;
+				float bonusBrightness = _PulseWidth / normDiff;
 
-				float3 isOverThreshold = step(bg.rgb, 0.05); //Threshold out black background
-				isOverThreshold = 1 - isOverThreshold;
-				float3 bgFinalColor = (bg.rgb * _BackgroundColor); // idk why there's a constant correction factor here
-				float3 pulseFinalColor = (isOverThreshold * bg.rbg * bonusBrightness * pulseMap.a * _PulseColor);
-				c.rgb = bgFinalColor + pulseFinalColor;
+				bool isOverThreshold = step(_BackgroundColor, bg.rgb); //Threshold out black background
+				float3 pulseFinalColor = isOverThreshold * bg.rgb * bonusBrightness * pulseMap.a * _PulseColor;
+				fixed4 finalColor = fixed4(bg * IN.color + pulseFinalColor, bg.a);
 
-				return c;
+				return finalColor;
 			}
 		ENDCG
 		}
