@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad618575da5d61145872e8036b9fcdeb, type: 3}
+  m_Name: Weapons
+  m_EditorClassIdentifier: 
+  blocks:
+  - type: 1
+    text: Weapons are how a bot interacts with the world. Offensive weapons deal damage,
+      while support weapons apply positive effects such as healing. Weapons are fired
+      with the SHT instruction. Each weapon has a cooldown period after it is used
+      that must expire before it can be used again.
+    image: {fileID: 0}
+    imageSize: {x: 0, y: 0}
+  - type: 4
+    text: 
+    image: {fileID: 0}
+    imageSize: {x: 0, y: 0}
+  - type: 0
+    text: Weapon Cooldowns
+    image: {fileID: 0}
+    imageSize: {x: 0, y: 0}
+  - type: 3
+    text: 
+    image: {fileID: 0}
+    imageSize: {x: 0, y: 0}
+  - type: 1
+    text: "- Pulse: 1 second\r\n- Bit_Thrower: 1 second\r\n- Laser: 2 seconds\r\n-
+      Heal_Beam: 2 seconds\r"
+    image: {fileID: 0}
+    imageSize: {x: 0, y: 0}

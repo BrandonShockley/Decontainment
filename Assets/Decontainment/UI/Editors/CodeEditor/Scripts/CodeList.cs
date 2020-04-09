@@ -188,7 +188,7 @@ namespace Editor.Code
                 }
 
                 // Create divider
-                Divider divider = Instantiate(dividerPrefab, transform, false).GetComponent<Divider>();
+                Divider divider = Instantiate(dividerPrefab, transform, false).GetComponentInChildren<Divider>();
                 divider.Init(lineNumber, selectionManager);
                 Dividers.Add(divider);
 
@@ -208,7 +208,7 @@ namespace Editor.Code
             }
 
             // Create end divider
-            Divider endDivider = Instantiate(dividerPrefab, transform, false).GetComponent<Divider>();
+            Divider endDivider = Instantiate(dividerPrefab, transform, false).GetComponentInChildren<Divider>();
             endDivider.Init(lineNumber, selectionManager);
             Dividers.Add(endDivider);
 
@@ -219,7 +219,7 @@ namespace Editor.Code
         {
             Label label = Program.branchLabelList[nextLabelIndex];
 
-            Divider labelDivider = Instantiate(dividerPrefab, transform, false).GetComponent<Divider>();
+            Divider labelDivider = Instantiate(dividerPrefab, transform, false).GetComponentInChildren<Divider>();
             labelDivider.Init(label.val, selectionManager, label);
 
             Dividers.Add(labelDivider);

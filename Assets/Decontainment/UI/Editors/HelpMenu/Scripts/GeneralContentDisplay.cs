@@ -12,6 +12,7 @@ namespace Editor.Help
 
             // Title
             GenerateText(titlePrefab, contentList.SelectedItem.name, "Title");
+            Instantiate(bigSpacerPrefab, transform);
 
             foreach (GeneralContent.Block block in contentList.SelectedItem.blocks) {
                 switch (block.type)

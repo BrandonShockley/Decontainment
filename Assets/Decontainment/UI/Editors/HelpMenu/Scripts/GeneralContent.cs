@@ -18,6 +18,7 @@ namespace Editor.Help
                 BIG_SPACER,
             }
             public Type type;
+            [TextArea]
             public string text;
             public Sprite image;
             public Vector2 imageSize;

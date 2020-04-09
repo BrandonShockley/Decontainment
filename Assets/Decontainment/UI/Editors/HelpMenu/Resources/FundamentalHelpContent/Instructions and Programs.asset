@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad618575da5d61145872e8036b9fcdeb, type: 3}
+  m_Name: Instructions and Programs
+  m_EditorClassIdentifier: 
+  blocks:
+  - type: 1
+    text: "An instruction is a single command given to a bot. Each instruction has
+      a set of parameters that affect its execution. For example, the parameters for
+      the ADD instruction are the register you want to store the result in and the
+      two values you want to add together.\r\n\r\nA program consists of a sequence
+      of instructions and a collection of labels. Instructions in a program are executed
+      one at a time.\r\n\r\nTo add an instruction to a program, drag the instruction
+      from the code bench to the part of the program you want to insert it at. A white
+      line will appear to indicate where the instruction will be inserted. To move
+      an instruction, drag it from its current place in the program and place it just
+      as you would a new instruction.\r"
+    image: {fileID: 0}
+    imageSize: {x: 0, y: 0}
+  - type: 3
+    text: 
+    image: {fileID: 0}
+    imageSize: {x: 0, y: 0}
+  - type: 2
+    text: 
+    image: {fileID: 21300000, guid: 048741154c945d4418b0cfa2255e3b36, type: 3}
+    imageSize: {x: 390, y: 86}
+  - type: 3
+    text: 
+    image: {fileID: 0}
+    imageSize: {x: 0, y: 0}
+  - type: 1
+    text: 'NOTE: In an empty program, you must drag the first instruction to the top
+      of the code view.'
+    image: {fileID: 0}
+    imageSize: {x: 0, y: 0}

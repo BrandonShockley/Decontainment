@@ -131,6 +131,8 @@ namespace Editor.Code
                     copiedInstructions.Add(i.ShallowCopy());
                 }
                 copySourceLine = startLineNumber;
+            } else {
+                copySourceLine = copiedBranchLabels[0].val;
             }
         }
 

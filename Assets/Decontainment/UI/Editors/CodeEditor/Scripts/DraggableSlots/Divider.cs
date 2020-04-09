@@ -9,6 +9,16 @@ namespace Editor.Code
         public int lineNumber;
         public Label label;
 
+        void OnEnable()
+        {
+            transform.parent.gameObject.SetActive(true);
+        }
+
+        void OnDisable()
+        {
+            transform.parent.gameObject.SetActive(false);
+        }
+
         public void Init(int lineNumber, SelectionManager selectionManager, Label label = null)
         {
             this.lineNumber = lineNumber;

@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad618575da5d61145872e8036b9fcdeb, type: 3}
+  m_Name: Advanced Editing
+  m_EditorClassIdentifier: 
+  blocks:
+  - type: 1
+    text: "The program editor supports selection. You can drag, cut, copy, and paste
+      selections of code blocks, even between programs. To start a selection, click
+      on a code block. Then hold shift and click on another code block. This will
+      select all code blocks in between the two.\r\n\r\nUpon pasting, any selected
+      blocks will be replaced. To paste between blocks, select the line separating
+      the two  \r\n\r\nDrag selections just as you would a normal code block.\r\nTo
+      cut a selection, press Ctrl + X.\r\nTo copy a selection, press Ctrl + C.\r\nTo
+      paste a selection, press Ctrl + V.\r\n"
+    image: {fileID: 0}
+    imageSize: {x: 0, y: 0}

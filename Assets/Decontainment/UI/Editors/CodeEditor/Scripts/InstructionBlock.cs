@@ -64,7 +64,7 @@ namespace Editor.Code
             bg.color = opCategoryColorMap.map[category];
 
             // Configure tips
-            OpInfo opInfo = InstructionMaps.opDescriptiveNameMap[instruction.opCode];
+            OpInfo opInfo = InstructionMaps.opInfoMap[instruction.opCode];
             GetComponent<DisplaysTips>().Init(opInfo.descriptiveName);
 
             // Create argument fields

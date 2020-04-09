@@ -13,7 +13,7 @@ namespace Editor.Help
             }
 
             OpCode opCode = contentList.SelectedItem.opCode;
-            OpInfo opInfo = InstructionMaps.opDescriptiveNameMap[opCode];
+            OpInfo opInfo = InstructionMaps.opInfoMap[opCode];
             ArgumentSpec[] argSpecs = InstructionMaps.opArgSpecMap[opCode];
 
             // Title
@@ -38,7 +38,7 @@ namespace Editor.Help
                     if (argSpec.regOnly) {
                         argSpecText += "Register";
                     } else if (argSpec.presets == null) {
-                        argSpecText += "Value";
+                        argSpecText += "Number";
                     } else {
                         argSpecText += "(";
                         for (int pi = 0; pi < argSpec.presets.Length; ++pi) {

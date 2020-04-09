@@ -13,8 +13,14 @@ MonoBehaviour:
   m_Name: Labels
   m_EditorClassIdentifier: 
   blocks:
-  - type: 0
-    text: I'm a header!
+  - type: 1
+    text: "A label is a constant value that can be substituted for any instruction
+      parameter that takes a number. To use a label as a parameter, drag the label\u2019s
+      token from the code bench to the instruction\u2019s parameter slot.\r\n\r\n-
+      Add a label to a program by pressing the plus button next to the label type
+      header in the code bench.\r\n - Remove a label by pressing the minus button
+      next to the label\u2019s token in the code bench.\r\n - Rename a label by right
+      clicking on it in the code bench.\r"
     image: {fileID: 0}
     imageSize: {x: 0, y: 0}
   - type: 4
@@ -22,14 +28,50 @@ MonoBehaviour:
     image: {fileID: 0}
     imageSize: {x: 0, y: 0}
   - type: 0
-    text: Another header
+    text: Branch Labels
+    image: {fileID: 0}
+    imageSize: {x: 0, y: 0}
+  - type: 3
+    text: 
+    image: {fileID: 0}
+    imageSize: {x: 0, y: 0}
+  - type: 1
+    text: A branch label is a label whose value can be changed by dragging the corresponding
+      block around the program. Use these as the branch destinations of branch instructions.
+    image: {fileID: 0}
+    imageSize: {x: 0, y: 0}
+  - type: 3
+    text: 
     image: {fileID: 0}
     imageSize: {x: 0, y: 0}
   - type: 2
     text: 
-    image: {fileID: 21300000, guid: b1fb7d5ed8fc37641b44929beb20ad0d, type: 3}
-    imageSize: {x: 100, y: 100}
-  - type: 1
-    text: Small text above an image
+    image: {fileID: 21300000, guid: a310589108ecbe041aeabaffb6b2e4d2, type: 3}
+    imageSize: {x: 224, y: 180}
+  - type: 4
+    text: 
     image: {fileID: 0}
     imageSize: {x: 0, y: 0}
+  - type: 0
+    text: Constant Labels
+    image: {fileID: 0}
+    imageSize: {x: 0, y: 0}
+  - type: 3
+    text: 
+    image: {fileID: 0}
+    imageSize: {x: 0, y: 0}
+  - type: 1
+    text: A constant label is a label whose value can be assigned manually in the
+      code bench. Use these to hold constant values that are used in multiple places.
+      That way, if you need to tweak all of the values, you can simply change the
+      label value.
+    image: {fileID: 0}
+    imageSize: {x: 0, y: 0}
+  - type: 3
+    text: 
+    image: {fileID: 0}
+    imageSize: {x: 0, y: 0}
+  - type: 2
+    text: 
+    image: {fileID: 21300000, guid: 8fe413091358b55469eed0d835db8cc0, type: 3}
+    imageSize: {x: 224, y: 50}

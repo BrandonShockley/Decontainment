@@ -7,14 +7,16 @@ namespace Editor.Code
     {
         [SerializeField]
         private Color selectColor = Color.white;
+        [SerializeField]
+        private Image image = null;
 
         private Color oldColor;
 
-        private Image image;
-
         void Awake()
         {
-            image = GetComponent<Image>();
+            if (image == null) {
+                image = GetComponent<Image>();
+            }
         }
 
         void Start()

@@ -52,7 +52,7 @@ namespace Editor.Code
             {
                 arg.val = int.Parse(val);
                 arg.BroadcastChange();
-                codeList.Program.BroadcastArgumentChange();
+                codeList.Program?.BroadcastArgumentChange();
             });
 
             arg.OnChange += UpdateFrontend;
@@ -66,7 +66,7 @@ namespace Editor.Code
 
             arg.CopyValues(newArg);
             arg.BroadcastChange();
-            codeList.Program.BroadcastArgumentChange();
+            codeList.Program?.BroadcastArgumentChange();
         }
 
         public Argument ReleaseArg()
@@ -76,7 +76,7 @@ namespace Editor.Code
             arg.type = Argument.Type.IMMEDIATE;
             arg.val = int.Parse(inputField.text);
             arg.BroadcastChange();
-            codeList.Program.BroadcastArgumentChange();
+            codeList.Program?.BroadcastArgumentChange();
 
             return releasedArg;
         }

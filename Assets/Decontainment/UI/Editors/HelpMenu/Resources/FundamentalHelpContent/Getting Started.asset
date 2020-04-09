@@ -1,0 +1,105 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad618575da5d61145872e8036b9fcdeb, type: 3}
+  m_Name: Getting Started
+  m_EditorClassIdentifier: 
+  blocks:
+  - type: 1
+    text: Decontainment is an autonomous bot fighting game. You program and configure
+      teams of bots and have them face off against one another in matches. The last
+      team standing wins. Get a feel for the bot building process by following these
+      instructions.
+    image: {fileID: 0}
+    imageSize: {x: 0, y: 0}
+  - type: 4
+    text: 
+    image: {fileID: 0}
+    imageSize: {x: 0, y: 0}
+  - type: 0
+    text: Make a test program
+    image: {fileID: 0}
+    imageSize: {x: 0, y: 0}
+  - type: 3
+    text: 
+    image: {fileID: 0}
+    imageSize: {x: 0, y: 0}
+  - type: 1
+    text: "1. Open the program editor and press the \u201CNew\u201D button to make
+      a new program.\r\n2. Rename it by right clicking on its name in the list.\r\n3.
+      Select it from the list.\r\n4. Drag a TRN instruction block from the code bench
+      to the TOP of the code view.\r\n5. Give the degrees field a value of 90.\r"
+    image: {fileID: 0}
+    imageSize: {x: 0, y: 0}
+  - type: 4
+    text: 
+    image: {fileID: 0}
+    imageSize: {x: 0, y: 0}
+  - type: 0
+    text: Make a test bot
+    image: {fileID: 0}
+    imageSize: {x: 0, y: 0}
+  - type: 3
+    text: 
+    image: {fileID: 0}
+    imageSize: {x: 0, y: 0}
+  - type: 1
+    text: "1. Open the bot editor and press the \u201CNew\u201D button to make a new
+      bot.\r\n2. Rename it if you\u2019d like.\r\n3. Select it from the list.\r\n4.
+      Give it the test program you made.\r"
+    image: {fileID: 0}
+    imageSize: {x: 0, y: 0}
+  - type: 4
+    text: 
+    image: {fileID: 0}
+    imageSize: {x: 0, y: 0}
+  - type: 0
+    text: Make a test team
+    image: {fileID: 0}
+    imageSize: {x: 0, y: 0}
+  - type: 3
+    text: 
+    image: {fileID: 0}
+    imageSize: {x: 0, y: 0}
+  - type: 1
+    text: "1. Open the team editor and press the \u201CNew\u201D button to make a
+      new team.\r\n2. Rename it if you\u2019d like.\r\n3. Select it from the list.\r\n4.
+      Set each member to your test bot.\r"
+    image: {fileID: 0}
+    imageSize: {x: 0, y: 0}
+  - type: 4
+    text: 
+    image: {fileID: 0}
+    imageSize: {x: 0, y: 0}
+  - type: 0
+    text: Test your team
+    image: {fileID: 0}
+    imageSize: {x: 0, y: 0}
+  - type: 3
+    text: 
+    image: {fileID: 0}
+    imageSize: {x: 0, y: 0}
+  - type: 1
+    text: "1. Open the custom match menu.\r\n2. Select your team for both team 1 and
+      team 2.\r\n3. Select the \u201Csys_null\u201D map.\r\n4. Start the match.\r"
+    image: {fileID: 0}
+    imageSize: {x: 0, y: 0}
+  - type: 4
+    text: 
+    image: {fileID: 0}
+    imageSize: {x: 0, y: 0}
+  - type: 1
+    text: "All bots should spin clockwise until the match ends. You can press the
+      abort button to stop the match early.\r\n\r\nThis is the general flow of Decontainment.
+      Build teams of bots and test them against other teams. See if you can build
+      a team that can beat the built-in bots.\r\n"
+    image: {fileID: 0}
+    imageSize: {x: 0, y: 0}

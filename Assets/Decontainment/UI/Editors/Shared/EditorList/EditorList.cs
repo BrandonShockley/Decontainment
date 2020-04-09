@@ -59,6 +59,7 @@ namespace Editor
 
             SubDelete(removalIndex, item);
             OnItemDeleted?.Invoke(removalIndex, item);
+            HandleSelect(-1);
         }
 
         protected bool HandleRename(int index, string name)

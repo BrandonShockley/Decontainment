@@ -7,7 +7,7 @@ namespace Asm
     public static class InstructionMaps
     {
         /// OpCode to descriptive string map
-        public static Dictionary<OpCode, OpInfo> opDescriptiveNameMap = new Dictionary<OpCode, OpInfo>()
+        public static Dictionary<OpCode, OpInfo> opInfoMap = new Dictionary<OpCode, OpInfo>()
         {
             {OpCode.NOP, new OpInfo("No operation", "Does nothing for a cycle.")},
             {OpCode.BUN, new OpInfo("Branch unconditionally", "Always branch to the given destination.")},
@@ -176,7 +176,7 @@ namespace Asm
             }
 
             // Validate sizes of maps
-            Debug.Assert(opDescriptiveNameMap.Count == (int)OpCode._SIZE);
+            Debug.Assert(opInfoMap.Count == (int)OpCode._SIZE);
             Debug.Assert(opArgSpecMap.Count == (int)OpCode._SIZE);
             Debug.Assert(opCodeOpCategoryMap.Count == (int)OpCode._SIZE);
             Debug.Assert(opCategoryOpCodesMap.Count == (int)OpCategory._SIZE);

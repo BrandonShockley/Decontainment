@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad618575da5d61145872e8036b9fcdeb, type: 3}
+  m_Name: Registers
+  m_EditorClassIdentifier: 
+  blocks:
+  - type: 1
+    text: "A register is a container that holds a number. Bots use them to store and
+      retrieve data. Registers can be substituted for any instruction parameter that
+      takes a number. Some instructions save a value to a register. There are ten
+      total registers labelled R0 through R9.\r\n\r\nTo use a register as a parameter,
+      drag the register\u2019s token from the code bench to the instruction\u2019s
+      parameter slot.\r"
+    image: {fileID: 0}
+    imageSize: {x: 0, y: 0}
+  - type: 3
+    text: 
+    image: {fileID: 0}
+    imageSize: {x: 0, y: 0}
+  - type: 2
+    text: 
+    image: {fileID: 21300000, guid: 03426205772b1524fbc1e673adcfa742, type: 3}
+    imageSize: {x: 224, y: 76}
+  - type: 4
+    text: 
+    image: {fileID: 0}
+    imageSize: {x: 0, y: 0}
+  - type: 0
+    text: Local Registers
+    image: {fileID: 0}
+    imageSize: {x: 0, y: 0}
+  - type: 3
+    text: 
+    image: {fileID: 0}
+    imageSize: {x: 0, y: 0}
+  - type: 1
+    text: A local register is a register that only one bot can use. Each bot has five
+      local registers of its own labelled R0 through R4. Use these for local processing
+      of data.
+    image: {fileID: 0}
+    imageSize: {x: 0, y: 0}
+  - type: 4
+    text: 
+    image: {fileID: 0}
+    imageSize: {x: 0, y: 0}
+  - type: 0
+    text: Shared Registers
+    image: {fileID: 0}
+    imageSize: {x: 0, y: 0}
+  - type: 3
+    text: 
+    image: {fileID: 0}
+    imageSize: {x: 0, y: 0}
+  - type: 1
+    text: A shared register is a register that every bot on the team can access. For
+      example, if Bot A puts the number 7 into shared register 5 and Bot B later adds
+      shared register 5 with 10, the result will be 17. There are five shared registers
+      labelled R5 through R9. Use these for communication between bots.
+    image: {fileID: 0}
+    imageSize: {x: 0, y: 0}

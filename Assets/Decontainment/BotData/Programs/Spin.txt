@@ -1,0 +1,3 @@
+SleepTicks: 100
+Degrees: 90
+TRN Left $90 Sync

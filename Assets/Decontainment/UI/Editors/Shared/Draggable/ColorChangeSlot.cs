@@ -8,14 +8,16 @@ namespace Editor
     {
         [SerializeField]
         private Color dragOverColor = Color.white;
+        [SerializeField]
+        private Image image = null;
 
         private Color origColor;
 
-        private Image image;
-
         void Awake()
         {
-            image = GetComponent<Image>();
+            if (image == null) {
+                image = GetComponent<Image>();
+            }
         }
 
         public override void HandleDragEnter()
