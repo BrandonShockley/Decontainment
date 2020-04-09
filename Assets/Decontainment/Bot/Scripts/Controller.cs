@@ -109,9 +109,9 @@ namespace Bot
             shooter.async = async;
         }
 
-        public int Scan(Scanner.Target target, float direction, float range, float width)
+        public int Scan(Scanner.Target target, float direction, float width, float range)
         {
-            return scanner.Scan(target, direction, range, width);
+            return scanner.Scan(target, direction, width, range);
         }
 
         private void HandleDisabled()

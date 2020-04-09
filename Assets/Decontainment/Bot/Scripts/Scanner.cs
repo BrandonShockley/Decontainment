@@ -35,7 +35,7 @@ namespace Bot
         }
 
         /// Returns the number of objects the scan finds
-        public int Scan(Target target, float direction, float range, float width)
+        public int Scan(Target target, float direction, float width, float range)
         {
             // Construct arc collider
             int numPoints = Mathf.CeilToInt(width / idealDegreesPerPoint) + 1;
