@@ -24,7 +24,7 @@ namespace Editor.Code
 
         public void PreDrag()
         {
-            myDivider?.gameObject.SetActive(false);
+            myDivider?.transform.parent.gameObject.SetActive(false);
             bg.raycastTarget = false;
             cg.blocksRaycasts = false;
             rt.sizeDelta = new Vector2(collapsedWidth, rt.sizeDelta.y);
@@ -32,7 +32,7 @@ namespace Editor.Code
 
         public void PostDrag()
         {
-            myDivider?.gameObject.SetActive(true);
+            myDivider?.transform.parent.gameObject.SetActive(true);
             bg.raycastTarget = true;
             cg.blocksRaycasts = true;
         }

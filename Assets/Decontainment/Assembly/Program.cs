@@ -36,6 +36,7 @@ namespace Asm
         DIV, // Divide
         MOD, // Modulo
         ABS, // Absolute value
+        RNG, // Random number generate
 
         // Control flow
         NOP,
@@ -68,6 +69,8 @@ namespace Asm
 
         public event Action OnChange;
 
+        private Argument() {}
+
         public Argument(Type type, int val)
         {
             this.type = type;
@@ -83,7 +86,7 @@ namespace Asm
 
         public Argument ShallowCopy()
         {
-            return (Argument)this.MemberwiseClone();
+            return new Argument() { type = type, val = val, label = label };
         }
 
         public void CopyValues(Argument arg)
@@ -212,7 +215,7 @@ namespace Asm
             }
         }
 
-        public Instruction ShallowCopy()
+        public Instruction DeepCopy()
         {
             Argument[] newArgs = new Argument[args.Length];
             for (int i = 0; i < args.Length; ++i) {

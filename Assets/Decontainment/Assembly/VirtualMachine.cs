@@ -145,6 +145,10 @@ public class VirtualMachine
                     regs[i.args[0].val] = Math.Abs(GetArgValue(i.args[1]));
                     if (i.args[0].val > NUM_LOCAL_REGS) { BotManager.Instance.PropagateRegister(i.args[0].val, regs[i.args[0].val], controller.TeamID); }
                     break;
+                case OpCode.RNG:
+                    regs[i.args[0].val] = UnityEngine.Random.Range(0, GetArgValue(i.args[1]));
+                    if (i.args[0].val > NUM_LOCAL_REGS) { BotManager.Instance.PropagateRegister(i.args[0].val, regs[i.args[0].val], controller.TeamID); }
+                    break;
 
                 // Sensing
                 case OpCode.TAR:

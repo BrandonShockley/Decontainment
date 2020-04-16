@@ -11,12 +11,12 @@ namespace Editor.Code
 
         void OnEnable()
         {
-            transform.parent.gameObject.SetActive(true);
+            // transform.parent.gameObject.SetActive(true);
         }
 
         void OnDisable()
         {
-            transform.parent.gameObject.SetActive(false);
+            // transform.parent.gameObject.SetActive(false);
         }
 
         public void Init(int lineNumber, SelectionManager selectionManager, Label label = null)

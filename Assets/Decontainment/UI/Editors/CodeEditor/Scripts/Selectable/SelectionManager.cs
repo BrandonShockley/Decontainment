@@ -128,7 +128,7 @@ namespace Editor.Code
             if (startLineNumber != -1) {
                 copiedInstructions.Clear();
                 foreach (Instruction i in codeList.Program.instructions.GetRange(startLineNumber, numLines)) {
-                    copiedInstructions.Add(i.ShallowCopy());
+                    copiedInstructions.Add(i.DeepCopy());
                 }
                 copySourceLine = startLineNumber;
             } else {
@@ -199,10 +199,10 @@ namespace Editor.Code
         /// Pastes at targetDivider or selection if targetDivider not given
         public void PasteBuffer(Divider targetDivider = null)
         {
-            // Make a shallow copy of the copied instructions in case we paste again later
+            // Make a copy of the copied instructions in case we paste again later
             List<Instruction> copiedInstructionsCopy = new List<Instruction>();
             foreach (Instruction i in copiedInstructions) {
-                copiedInstructionsCopy.Add(i.ShallowCopy());
+                copiedInstructionsCopy.Add(i.DeepCopy());
             }
 
             int numLines = 0;

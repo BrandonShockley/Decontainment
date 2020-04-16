@@ -28,6 +28,7 @@ namespace Asm
             {OpCode.DIV, new OpInfo("Divide", "Set the result register to the quotient of the two given values.")},
             {OpCode.MOD, new OpInfo("Modulo", "Set the result register to the remainder of division of the two given values.")},
             {OpCode.ABS, new OpInfo("Absolute value", "Set the result register to the absolute value of the given value.")},
+            {OpCode.RNG, new OpInfo("Generate random number", "Set the result register to a random number between 0 and the given value, non-inclusive.")},
 
             {OpCode.TAR, new OpInfo("Acquire target", "Choose a target based on the given filters and save a handle to it in the result register.")},
             {OpCode.HED, new OpInfo("Acquire heading to target", "Set the result register to the degrees left required to turn to face the given target.")},
@@ -71,6 +72,12 @@ namespace Asm
             {OpCode.DIV, ArgumentSpec.TWO_INPUT_DATA_MANIPULATION_SPECS},
             {OpCode.MOD, ArgumentSpec.TWO_INPUT_DATA_MANIPULATION_SPECS},
             {OpCode.ABS, ArgumentSpec.ONE_INPUT_DATA_MANIPULATION_SPECS},
+            {OpCode.RNG, new ArgumentSpec[]
+                {
+                    ArgumentSpec.DEST_REG,
+                    new ArgumentSpec("Max", false, null, "Maximum value of generated random number, non-inclusive.")
+                }
+            },
 
             {OpCode.TAR, new ArgumentSpec[]
                 {
@@ -142,6 +149,7 @@ namespace Asm
             {OpCode.DIV, OpCategory.DATA_MANIPULATION},
             {OpCode.MOD, OpCategory.DATA_MANIPULATION},
             {OpCode.ABS, OpCategory.DATA_MANIPULATION},
+            {OpCode.RNG, OpCategory.DATA_MANIPULATION},
 
             {OpCode.TAR, OpCategory.SENSING},
             {OpCode.HED, OpCategory.SENSING},
