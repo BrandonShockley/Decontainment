@@ -4085,7 +4085,7 @@ PrefabInstance:
     - target: {fileID: 3673806923499832191, guid: d13cf2f2c92b9294d8d964dda72b6d19,
         type: 3}
       propertyPath: m_text
-      value: Chen
+      value: Brooklyn Chen
       objectReference: {fileID: 0}
     - target: {fileID: 3673806923499832191, guid: d13cf2f2c92b9294d8d964dda72b6d19,
         type: 3}
